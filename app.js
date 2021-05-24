@@ -40,6 +40,10 @@ app.use(express.static(path.join(__dirname, "public")));
 const appRouter = require("./routes/application-routes.js");
 app.use(appRouter);
 
+// Setup our routes
+const authRouter = require("./routes/auth-routes.js");
+app.use(authRouter);
+
 // Start the server running.
 app.listen(port, function () {
     console.log(`App listening on port ${port}!`);
