@@ -29,7 +29,8 @@ router.post("/newAccount", function(req, res) {
         birthday: birthday,
         description: description
     }
-    console.log(user);
+
+    //console.log(user);
 
 });
 
