@@ -4,7 +4,9 @@
     <li>{{this.stuff}}</li>
     {{/each}}
 
-    <h2>Welcome to blog</h2>
+    {{#if message}}
+    <p>{{message}}</p>
+    {{/if}}
 
     <h3>Login</h3>
     <form action="./login" method="POST">

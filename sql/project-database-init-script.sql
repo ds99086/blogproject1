@@ -19,10 +19,6 @@ DROP TABLE IF EXISTS articles;
 DROP TABLE IF EXISTS users;
 
 
-
-
-
-
 CREATE TABLE users (
 	userID INTEGER NOT NULL PRIMARY KEY,
 	username VARCHAR(100),

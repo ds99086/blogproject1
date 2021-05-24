@@ -4,8 +4,8 @@ const router = express.Router();
 
 
 // The DAO that handles CRUD operations for users.
-//const userDao = require("../modules/users-dao.js");
-//const { createUser } = require("../modules/users-dao.js");
+const userDao = require("../modules/user-dao.js");
+//const { createUser } = require("../modules/test-dao.js");
 //const { addUserToLocals } = require("../middleware/auth-middleware.js");
 //const messagesDao = require("../modules/messages-dao.js");
 
@@ -15,19 +15,23 @@ router.get("/newAccount", function(req, res) {
 });
 
 
-router.post("/newAccount", function(req, res) {
-    const username = req.body.username;
-    const password = req.body.password;
-    const name = req.body.name;
-    const birthday = req.body.birthday;
-    const description = req.body.description;
+router.post("/newAccount", async function(req, res) {
 
     const user = {
-        username: username,
-        password: password,
-        name: name,
-        birthday: birthday,
-        description: description
+        username: req.body.username,
+        password: req.body.password,
+        fname: req.body.fname,
+        lname: req.body.lname,
+        birthday: req.body.birthday,
+        description: req.body.description
+    };
+
+    try {
+        await userDao.createUser(user);
+        res.redirect("/home?message=Account creation successful. Please login using your new credentials.");
+    }
+    catch (err) {
+        res.redirect("/newAccount?message=That username was already taken!");
     }
 
     //console.log(user);
