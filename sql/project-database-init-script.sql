@@ -13,10 +13,13 @@
 --Drop existing tables to reinitialise the data base.
 --Commented out for safety.
 
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS articles;
-DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS votes;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS users;
+
+
+
 
 
 
@@ -66,19 +69,20 @@ INSERT INTO users VALUES
    (2, 'theAdmiral', 'password', 'Grace', 'Hopper', '1906-12-09'),
    (3, 'don', 'password', 'Donald', 'Knuth', '1938-01-10');
 
---articles(articleID, title, publishDate, lastEditDate, bodyContentOrLinkToContent, *authorID*)
-INSERT INTO category VALUES
+---articles(articleID, title, publishDate, lastEditDate, bodyContentOrLinkToContent, *authorID*)
+INSERT INTO articles VALUES
    (1, 'How I beat the Nazis', '1950-04-18', '1950-04-19', 'This is some article text https://en.wikipedia.org/wiki/Alan_Turing', 1),
    (2, 'Coding on Boats: A how to guide', '1960-08-08', '1960-08-08', 'This is some article text https://en.wikipedia.org/wiki/Grace_Hopper', 2),
    (3, 'Why I quit email an dyou should too', '1984-03-28', '1984-03-28', 'This is some article text https://www-cs-faculty.stanford.edu/~knuth/email.html', 3);
---comments(commentID, commentDate, commentText, commentLevel, parentComment, *authorID*, *parentArticleID* )
-INSERT INTO item VALUES
+
+   --comments(commentID, commentDate, commentText, commentLevel, parentComment, *authorID*, *parentArticleID* )
+INSERT INTO comments VALUES
    (1, '2010-04-20', 'This is the first comment', 0, null, 2, 1),
    (2, '2011-04-20', 'This is the second comment', 0, null, 2, 2),
-   (3, '2012-04-20', 'This is the third comment', 0, null, 2, 3),
+   (3, '2012-04-20', 'This is the third comment', 0, null, 2, 3);
 
 --votes(*userID*, *commentID*, voteValue)
-INSERT INTO purchases VALUES
+INSERT INTO votes VALUES
    (1,1,1),
    (1,2,-1),
    (2,3,1);
