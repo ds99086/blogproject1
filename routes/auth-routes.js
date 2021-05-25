@@ -18,7 +18,7 @@ router.get("/newAccount", function(req, res) {
 router.post("/newAccount", async function(req, res) {
     const user = {
         username: req.body.username,
-        password: passwordSec.hashPassword(req.body.password),
+        password: passwordSec.newHashPassword(req.body.password),
         fname: req.body.fname,
         lname: req.body.lname,
         birthday: req.body.birthday,
