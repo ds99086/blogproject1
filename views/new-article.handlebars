@@ -3,3 +3,133 @@
 <div class="container">
     <p>this is the area for writting new article</p>
 </div>
+
+<br><Br>
+
+<div>
+    <h1>WYSIWYG Editor</h1>
+</div>
+
+    <div class="editor">
+                <div class="toolbar">
+                    <!--First row of buttons in the editor-->
+                    <!--Currently button svg images come from https://www.flaticon.com/packs/font-awesome-->
+                    <div class="line">
+                        
+                        <div class="box">
+                        <span class="btn icon smaller" data-action="bold" data-tag-name="b" title="Bold">
+                            <img loading="lazy" src="./icons/editor_icon_bold.svg" alt="toggle text bold button">
+                        </span>
+                        <span class="btn icon smaller" data-action="italic" data-tag-name="i" title="Italic">
+                            <img loading="lazy" src="./icons/editor_icon_italics.svg" alt="toggle text italics">
+                        </span>
+                        <span class="btn icon smaller" data-action="underline" data-tag-name="u" title="Underline">
+                            <img loading="lazy" src="./icons/editor_icon_underline.svg" alt="toggle text underline">
+                        </span>
+                        <span class="btn icon smaller" data-action="strikeThrough" data-tag-name="strike" title="Strike through">
+                            <img loading="lazy" src="./icons/editor_icon_strikethrough.svg" alt="toggle text strikethrough button">
+                        </span>
+                        </div>
+                        
+                        <div class="box">
+                        <span class="btn icon has-submenu">
+                            <img loading="lazy" src="./icons/editor_icon_textalign_left.svg" alt="text align sub-menu">
+                            <div class="submenu">
+                            <span class="btn icon" data-action="justifyLeft" data-style="textAlign:left" title="Justify left">
+                                <img loading="lazy" src="./icons/editor_icon_textalign_left.svg" alt="text align left button">  
+                            </span>
+                            <span class="btn icon" data-action="justifyCenter" data-style="textAlign:center" title="Justify center">
+                                <img loading="lazy" src="./icons/editor_icon_textalign_center.svg" alt="text align center button">  
+                            </span>
+                            <span class="btn icon" data-action="justifyRight" data-style="textAlign:right" title="Justify right">
+                                <img loading="lazy" src="./icons/editor_icon_textalign_right.svg" alt="text align right button">  
+                            </span>
+                            <span class="btn icon" data-action="formatBlock" data-style="textAlign:justify" title="Justify block">
+                                <img loading="lazy" src="./icons/editor_icon_textalign_justify.svg" alt="text align justify button">  
+                            </span>
+                            </div>
+                        </span>
+                        <span class="btn icon" data-action="insertOrderedList" data-tag-name="ol" title="Insert ordered list">
+                            <img loading="lazy" src="./icons/editor_icon_list_ordered.svg" alt="insert ordered list button">  
+                        </span>
+                        <span class="btn icon" data-action="insertUnorderedList" data-tag-name="ul" title="Insert unordered list">
+                            <img loading="lazy" src="./icons/editor_icon_list_unordered.svg" alt="insert unordered list button">  
+                        </span>
+                        <span class="btn icon" data-action="outdent" title="Outdent">
+                            <img loading="lazy" src="./icons/editor_icon_outdent.svg" alt="outdent button">  
+                        </span>
+                        <span class="btn icon" data-action="indent" title="Indent">
+                            <img loading="lazy" src="./icons/editor_icon_indent.svg" alt="indent button">  
+                        </span>
+                        
+                        </div>
+                        <div class="box">
+                        <span class="btn icon" data-action="insertHorizontalRule" title="Insert horizontal rule">
+                            <img loading="lazy" src="./icons/editor_icon_horizontalrule.svg" alt="Insert horizontal rule button">  
+                        </span>
+                        </div>
+                        
+                    </div>
+
+                    <!--Second row of buttons in the editor-->
+                    <div class="line">
+                        
+                        <div class="box">
+                        <span class="btn icon smaller" data-action="undo" title="Undo">
+                            <img loading="lazy" src="./icons/editor_icon_undo.svg" alt="undo button">
+                        </span>
+                        <span class="btn icon" data-action="removeFormat" title="Remove format">
+                            <img loading="lazy" src="./icons/editor_icon_remove_format.svg" alt="remove formatting button">  
+                        </span>
+                        </div>
+                        
+                        <div class="box">
+                        <span class="btn icon smaller" data-action="createLink" title="Insert Link">
+                            <img loading="lazy" src="./icons/editor_icon_link.svg" alt="create hyperlink button">
+                        </span>
+                        <span class="btn icon smaller" data-action="unlink" data-tag-name="a" title="Unlink">
+                            <img loading="lazy" src="./icons/editor_icon_link_break.svg" alt="break hyperlink button">
+                        </span>
+                        </div>
+                        
+                        <div class="box">
+                        <span class="btn icon" data-action="code" title="Show HTML-Code">
+                            <img loading="lazy" src="./icons/editor_icon_code.svg" alt="Reveal HTML Code button">
+                        </span>
+                        </div>
+
+                        <div class = "box">
+                            <span class="btn icon" data-action="setH1" title="Set text as Heading Level 1" >
+                                <img loading="lazy" src="./icons/editor_icon_heading.svg" alt="toggle heading button">
+                            </span>
+                            <span class="btn icon" data-action="save" title="Set text as Heading Level 2" >
+                                <img loading="lazy" src="./icons/editor_icon_save.svg" alt="save button">
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="content-area">
+                <div class="visuell-view" contenteditable>
+                    <h1>This is some text in the content area</h1>
+                </div>
+                <textarea class="html-view"></textarea>
+                </div>
+            </div>
+            
+            <div class="modal">
+                <div class="modal-bg"></div>
+                <div class="modal-wrapper">
+                <div class="close">✖</div>
+                <div class="modal-content" id="modalCreateLink">
+                    <h3>Insert Link</h3>
+                    <input type="text" id="linkValue" placeholder="Link (example: https://berglabs.com/)">
+                    <div class="row">
+                    <input type="checkbox" id="new-tab">
+                    <label for="new-tab">Open in new Tab?</label>
+                    </div>
+                    <button class="done">Done</button>
+                </div>
+                </div>
+            </div>

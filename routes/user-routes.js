@@ -18,10 +18,10 @@ router.get("/logout", async function(req, res) {
 
 
 //route to new aritile
-router.get("/new-aritile", async function(req, res) {
+router.get("/new-article", async function(req, res) {
 
-
-    res.render("new-aritile");
+    res.locals.WYSIWYG = true;
+    res.render("new-article");
 });
 
 
