@@ -17,10 +17,10 @@ router.get("/logout", async function(req, res) {
 });
 
 
-//route to new ariticle
+//route to new aritile
 router.get("/new-article", async function(req, res) {
 
-
+    res.locals.WYSIWYG = true;
     res.render("new-article");
 });
 

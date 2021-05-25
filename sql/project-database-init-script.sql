@@ -25,7 +25,9 @@ CREATE TABLE users (
     passwordFieldToUpdate VARCHAR(100),
     firstName VARCHAR(100),
 	lastName VARCHAR(100),
-	dateOfBirth DATE
+	dateOfBirth DATE,
+    avatarImage VARCHAR(500),
+    authToken VARCHAR(128)
 	);
 
 CREATE TABLE articles (
@@ -59,8 +61,8 @@ CREATE TABLE votes (
 	FOREIGN KEY (commentID) REFERENCES comments (commentID)
 	);
 	
---users(userID, username, passwordFieldsToUpdate, firstName, lastName, dateOfBirth)
-INSERT INTO users VALUES
+--users(userID, username, passwordFieldToUpdate, firstName, lastName, dateOfBirth)
+INSERT INTO users (userID, username, passwordFieldToUpdate, firstName, lastName, dateOfBirth) VALUES
    (1, 'enigmaCracker', 'password', 'Alan', 'Turing', '1912-06-23'),
    (2, 'theAdmiral', 'password', 'Grace', 'Hopper', '1906-12-09'),
    (3, 'don', 'password', 'Donald', 'Knuth', '1938-01-10');
@@ -82,3 +84,5 @@ INSERT INTO votes VALUES
    (1,1,1),
    (1,2,-1),
    (2,3,1);
+   
+   SELECT passwordFieldToUpdate FROM users WHERE username = 'User_604';
