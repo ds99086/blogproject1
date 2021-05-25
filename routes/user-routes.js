@@ -19,7 +19,7 @@ router.get("/logout", async function(req, res) {
 
 //route to new aritile
 router.get("/new-article", async function(req, res) {
-
+    res.locals.title = "WYSIWYG Editor"
     res.locals.WYSIWYG = true;
     res.render("new-article");
 });
