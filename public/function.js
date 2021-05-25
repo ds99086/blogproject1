@@ -60,7 +60,6 @@ window.addEventListener("load", function() {
     // in the window.addEventListener call the avatar live update function
     userAvatarChangeLiveUpdate();
 
-
 });
 
 
