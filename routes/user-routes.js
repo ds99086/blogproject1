@@ -17,13 +17,20 @@ router.get("/logout", async function(req, res) {
 });
 
 
-//route to new aritile
-router.get("/new-aritile", async function(req, res) {
+//route to new ariticle
+router.get("/new-article", async function(req, res) {
 
 
-    res.render("new-aritile");
+    res.render("new-article");
 });
 
+
+//route to user ariticles
+router.get("/user-article", async function(req, res) {
+
+
+    res.render("user0articles");
+});
 
 
 
