@@ -5,6 +5,18 @@ async function retrieveUserByUsername(id) {
     return username_availability_obj;
 }
 
+function userAvatarChangeLiveUpdate(){
+    //get user choice of avatar, show the avatar picture live in the div
+    const user_avatar_update_div = document.querySelector(".AvatarDiv");
+    const user_avatar_choice_input = document.querySelector("#avatarID");
+    user_avatar_update_div.innerHTML = `<img src="/images/Avatars/${user_avatar_choice_input.value}.png" class="avatarIcon">`
+    user_avatar_choice_input.onchange = function(){changeAvatarIcon()};
+    function changeAvatarIcon(){
+        let user_avatar_choice_input = document.querySelector("#avatarID");
+        user_avatar_update_div.innerHTML = `<img src="/images/Avatars/${user_avatar_choice_input.value}.png" class="avatarIcon">`
+    }
+}
+
 
 window.addEventListener("load", function() {
 
@@ -22,15 +34,8 @@ username_input.addEventListener('input', async function(event) {
         username_alert_message.innerHTML = `Username is  available`;
         //console.log("available");
     }
-    
-    
-    
-    
-
-    
-    
-})
-
 });
 
+    userAvatarChangeLiveUpdate();
 
+});
