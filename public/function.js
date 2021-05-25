@@ -17,10 +17,10 @@ username_input.addEventListener('input', async function(event) {
 
     if (response.username_availability == false) {
         username_alert_message.innerHTML = `Username is not available`;
-        console.log("not available");
+        //console.log("not available");
     } else {
         username_alert_message.innerHTML = `Username is  available`;
-        console.log("available");
+        //console.log("available");
     }
     
     
