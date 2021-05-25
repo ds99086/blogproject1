@@ -165,6 +165,12 @@ div.card > .card-footer {
 .nav .nav-button.active {
     color: #231F20;
 }
+
+
+/* On larger screens, we should not see the hamburger button*/
+.navigation_hamburger {
+    display:none;
+}
 /*****************************************************************/
 
 

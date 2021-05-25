@@ -25,6 +25,13 @@ router.get("/new-article", async function(req, res) {
 });
 
 
+//route to user ariticles
+router.get("/user-articles", async function(req, res) {
+
+
+    res.render("user-articles");
+});
+
 
 
 module.exports = router;
