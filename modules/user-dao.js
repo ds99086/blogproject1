@@ -9,15 +9,22 @@ async function createUser(user) {
     INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth) VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday})`);
 }
 
-async function retrieveUserWithCredentials(username, password) {
-    const db = await dbPromise;
+// async function retrieveUserWithCredentials(username, password) {
+//     const db = await dbPromise;
+  
+//     if (await checkHashPassword(username, password)) {
+//         retrieveUserByUsername(username);
+//     }
 
-    const user = await db.get(SQL`
-        select * from users
-        where username = ${username} and passwordFieldToUpdate = ${password}`);
+//     console.log(checkPassword);
+//     console.log(await getUserPassword(username));
 
-        return user;
-}
+//     const user = await db.get(SQL`
+//         select * from users
+//         where username = ${username} and passwordFieldToUpdate = ${password}`);
+
+//         return user;
+// }
 
 //does not include user profile image for now. 
 //user must be json object
@@ -67,13 +74,13 @@ async function getUserPassword(username) {
     const hashPassword = await db.get(SQL`SELECT passwordFieldToUpdate FROM users WHERE username = ${username}`);
     return hashPassword.passwordFieldToUpdate;
 }
+
 // Export functions.
 module.exports = {
     createUser,
     retrieveAllUsers,
     updateUser,
     deleteUser,
-    retrieveUserWithCredentials,
     retrieveUserByUsername,
     getUserPassword
 };

@@ -5,7 +5,8 @@ const router = express.Router();
 
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
-const passwordSec = require("../modules/passwordSec");
+const passwordSec = require("../modules/passwordSec.js");
+//const { getUserPassword } = require("../modules/user-dao.js");
 //const { createUser } = require("../modules/test-dao.js");
 //const { addUserToLocals } = require("../middleware/auth-middleware.js");
 //const messagesDao = require("../modules/messages-dao.js");
@@ -43,15 +44,20 @@ router.get("/login", function(req, res) {
 router.post("/login", async function (req, res) {
     const username = req.body.username;
     const password = req.body.password;
-    const user = await userDao.retrieveUserWithCredentials(username, password);
+
+    const passwordCorrect = await passwordSec.checkHashPassword(username, password);
+        
+    // const user = await userDao.retrieveUserWithCredentials(username, password);
 
     //console.log(user);
-    if (user) {
+    if (passwordCorrect) {
         //Auth success - give that user an authToken, save the token in a cookie, and redirect to the homepage.
+        
+        const user = await userDao.retrieveUserByUsername(username);
         const authToken = uuid();
         user.authToken = authToken;
 
-        console.log(user);
+        //console.log(user);
 
         await userDao.updateUser(user);
         res.cookie("authToken", authToken);
