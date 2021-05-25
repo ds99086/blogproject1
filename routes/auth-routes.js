@@ -38,4 +38,11 @@ router.post("/newAccount", async function(req, res) {
 
 });
 
+//route to login page
+router.get("/login", async function(req, res) {
+
+
+    res.render("login");
+});
+
 module.exports = router;

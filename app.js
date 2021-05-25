@@ -44,6 +44,10 @@ app.use(appRouter);
 const authRouter = require("./routes/auth-routes.js");
 app.use(authRouter);
 
+// Setup user routes
+const userRouter = require("./routes/user-routes.js");
+app.use(userRouter);
+
 // Start the server running.
 app.listen(port, function () {
     console.log(`App listening on port ${port}!`);
