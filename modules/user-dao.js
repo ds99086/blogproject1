@@ -4,6 +4,9 @@ const dbPromise = require("./database.js");
 async function createUser(user) {
     
     const db = await dbPromise;
+
+
+    
     const result = await db.run(SQL`
     INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth) VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday})`);
 
@@ -20,6 +23,7 @@ async function retrieveUserWithCredentials(username, password) {
 }
 
 //does not include user profile image for now. 
+//user must be json object
 async function updateUser(user) {
     const db = await dbPromise;
 
@@ -32,22 +36,30 @@ async function updateUser(user) {
 
 
 async function retrieveAllUsers() {
+    const db = await dbPromise;
+    const users = await db.all(SQL`select * from users`);
 
-    return null;
+    return users;
 }
 
-async function retrieveUserByUsername(id) {
+async function retrieveUserByUsername(username) {
     const db = await dbPromise;
 
     const user = await db.get(SQL`
         select * from users
-        where username = ${id}`);
+        where username = ${username}`);
 
     return user;
 }
 
 
-async function deleteUser(id) {
+async function deleteUser(username) {
+    const db = await dbPromise;
+    
+    await db.run(SQL`
+        delete from users
+        where username = ${username}`);
+
 }
 
 async function getUserPassword(username) {

@@ -11,16 +11,20 @@
         <div class="flex-col mb" id="new_acount_username_div">
             <label for="new_acount_username">Username:</label>
             <input type="text" name="new-account-username" id="new_acount_username" required>
-        
-        <p id="username_alert_message"></p>
-        
+            <p id="username_alert_message"></p>
         </div>
         
-
         <div class="flex-col mb">
-            <label for="txtPassword">Password:</label>
-            <input type="password" name="password" id="txtPassword" required>
+            <label for="new_account_password1">Password:</label>
+            <input type="password" name="password1" id="new_account_password1" required>
         </div>
+        
+        <div class="flex-col mb">
+            <label for="new_account_password2">Re-enter your password:</label>
+            <input type="password" name="password2" id="new_account_password2" required>
+            <p id="password_alert_message"></p>
+        </div>
+
 
         <div class="flex-col mb">
             <label for="txtFName">First name:</label>
@@ -47,7 +51,7 @@
         <br>
 
         <div class="flex-row justify-sb align-center">
-            <button type="submit">Create account</button>
+            <button type="submit" id="create_account_btn">Create account</button>
         </div>
 
     </form>
