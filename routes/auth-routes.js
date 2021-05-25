@@ -1,4 +1,4 @@
-//const { v4: uuid } = require("uuid");
+//nodconst { v4: uuid } = require("uuid");
 const express = require("express");
 const router = express.Router();
 
@@ -14,9 +14,7 @@ router.get("/newAccount", function(req, res) {
     res.render("new-account");
 });
 
-
 router.post("/newAccount", async function(req, res) {
-
     const user = {
         username: req.body.username,
         password: req.body.password,
@@ -28,14 +26,63 @@ router.post("/newAccount", async function(req, res) {
 
     try {
         await userDao.createUser(user);
-        res.redirect("/home?message=Account creation successful. Please login using your new credentials.");
+        res.redirect("/login?message=Account creation successful. Please login using your new credentials.");
     }
     catch (err) {
         res.redirect("/newAccount?message=That username was already taken!");
     }
+});
 
-    //console.log(user);
+router.get("/login", function(req, res) {
+
+    res.locals.message = req.query.message;
+    res.render("login");
 
 });
+
+//used uuid as authToken
+router.post("/login", async function (req, res) {
+    const username = req.body.username;
+    const password = req.body.password;
+    const user = await userDao.retrieveUserWithCredentials(username, password);
+
+    if (user) {
+        // Auth success - give that user an authToken, save the token in a cookie, and redirect to the homepage.
+        // const authToken = uuid();
+        // user.authToken = authToken;
+        // await userDao.updateUser(user);
+        // res.cookie("authToken", authToken);
+        res.locals.user = user;
+        res.redirect("/");
+    } else {
+        res.locals.user = null;
+        res.redirect("./login?message=Authentication failed!");
+    }
+
+});
+
+router.get("/checkUsername", async function (req, res) {
+    const input_username = req.query.input_username;
+    const username_availability = await userDao.retrieveUserByUsername(input_username);
+    
+    if (username_availability) {
+        const response = {
+            username_availability: false
+        }
+
+        res.json(response);
+
+    } else {
+        //console.log("This username is good to go!");
+        const response = {
+            username_availability: true
+        }
+
+        res.json(response);
+    }
+    
+
+});
+
 
 module.exports = router;
