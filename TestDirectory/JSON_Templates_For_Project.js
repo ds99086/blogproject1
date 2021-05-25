@@ -59,7 +59,7 @@ const comment = {
 * Vote Json: I think we will rarely need to use this, except perhaps in the front end for creating a vote and passing it to the backend for checking.
 */
 const vote = {
-    commentID: 101,
-    userID: 2,
+    voteCommentID: 101,
+    voteUserID: 2,
     voteValue: 1
 };
