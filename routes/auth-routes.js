@@ -1,4 +1,4 @@
-//nodconst { v4: uuid } = require("uuid");
+const { v4: uuid } = require("uuid");
 const express = require("express");
 const router = express.Router();
 
@@ -35,10 +35,8 @@ router.post("/newAccount", async function(req, res) {
 });
 
 router.get("/login", function(req, res) {
-
     res.locals.message = req.query.message;
     res.render("login");
-
 });
 
 //used uuid as authToken
@@ -48,18 +46,17 @@ router.post("/login", async function (req, res) {
     const user = await userDao.retrieveUserWithCredentials(username, password);
 
     if (user) {
-        // Auth success - give that user an authToken, save the token in a cookie, and redirect to the homepage.
-        // const authToken = uuid();
-        // user.authToken = authToken;
-        // await userDao.updateUser(user);
-        // res.cookie("authToken", authToken);
+        //Auth success - give that user an authToken, save the token in a cookie, and redirect to the homepage.
+        const authToken = uuid();
+        user.authToken = authToken;
+        await userDao.updateUser(user);
+        res.cookie("authToken", authToken);
         res.locals.user = user;
         res.redirect("/");
     } else {
         res.locals.user = null;
         res.redirect("./login?message=Authentication failed!");
     }
-
 });
 
 router.get("/checkUsername", async function (req, res) {
@@ -70,7 +67,6 @@ router.get("/checkUsername", async function (req, res) {
         const response = {
             username_availability: false
         }
-
         res.json(response);
 
     } else {
@@ -78,16 +74,12 @@ router.get("/checkUsername", async function (req, res) {
         const response = {
             username_availability: true
         }
-
         res.json(response);
     }
-    
-
 });
 
 //route to login page
 router.get("/login", async function(req, res) {
-
 
     res.render("login");
 });
