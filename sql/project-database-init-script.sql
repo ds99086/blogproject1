@@ -84,3 +84,5 @@ INSERT INTO votes VALUES
    (1,1,1),
    (1,2,-1),
    (2,3,1);
+   
+   SELECT passwordFieldToUpdate FROM users WHERE username = 'User_604';
