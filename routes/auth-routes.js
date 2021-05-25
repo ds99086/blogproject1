@@ -17,8 +17,8 @@ router.get("/newAccount", function(req, res) {
 
 router.post("/newAccount", async function(req, res) {
     const user = {
-        username: req.body.username,
-        password: passwordSec.hashPassword(req.body.password),
+        username: req.body.new_account_username,
+        password: await passwordSec.newHashPassword(req.body.password1),
         fname: req.body.fname,
         lname: req.body.lname,
         birthday: req.body.birthday,
@@ -45,10 +45,14 @@ router.post("/login", async function (req, res) {
     const password = req.body.password;
     const user = await userDao.retrieveUserWithCredentials(username, password);
 
+    //console.log(user);
     if (user) {
         //Auth success - give that user an authToken, save the token in a cookie, and redirect to the homepage.
         const authToken = uuid();
         user.authToken = authToken;
+
+        console.log(user);
+
         await userDao.updateUser(user);
         res.cookie("authToken", authToken);
         res.locals.user = user;
