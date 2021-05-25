@@ -7,7 +7,6 @@ async function createUser(user) {
     const result = await db.run(SQL`
     INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth) VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday})`);
 
-    //userData.id = result.lastID;
     console.log("created user");
 }
 
@@ -51,6 +50,12 @@ async function retrieveUserByUsername(id) {
 async function deleteUser(id) {
 }
 
+async function getUserPassword(username) {
+    //console.log(`Getting the password of ${username}`);
+    const db = await dbPromise;
+    const hashPassword = await db.get(SQL`SELECT passwordFieldToUpdate FROM users WHERE username = ${username}`);
+    return hashPassword.passwordFieldToUpdate;
+}
 // Export functions.
 module.exports = {
     createUser,
@@ -58,5 +63,6 @@ module.exports = {
     updateUser,
     deleteUser,
     retrieveUserWithCredentials,
-    retrieveUserByUsername
+    retrieveUserByUsername,
+    getUserPassword
 };

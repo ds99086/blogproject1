@@ -5,6 +5,7 @@ const router = express.Router();
 
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
+const passwordSec = require("../modules/passwordSec");
 //const { createUser } = require("../modules/test-dao.js");
 //const { addUserToLocals } = require("../middleware/auth-middleware.js");
 //const messagesDao = require("../modules/messages-dao.js");
@@ -17,7 +18,7 @@ router.get("/newAccount", function(req, res) {
 router.post("/newAccount", async function(req, res) {
     const user = {
         username: req.body.username,
-        password: req.body.password,
+        password: passwordSec.hashPassword(req.body.password),
         fname: req.body.fname,
         lname: req.body.lname,
         birthday: req.body.birthday,
@@ -84,5 +85,11 @@ router.get("/checkUsername", async function (req, res) {
 
 });
 
+//route to login page
+router.get("/login", async function(req, res) {
+
+
+    res.render("login");
+});
 
 module.exports = router;
