@@ -26,10 +26,10 @@ router.get("/new-article", async function(req, res) {
 
 
 //route to user ariticles
-router.get("/user-article", async function(req, res) {
+router.get("/user-articles", async function(req, res) {
 
 
-    res.render("user0articles");
+    res.render("user-articles");
 });
 
 
