@@ -52,7 +52,8 @@ async function retrieveUserByUsername(username) {
     return user;
 }
 
-
+//need to update
+//delete user will also delete user's articles and comments
 async function deleteUser(username) {
     const db = await dbPromise;
     

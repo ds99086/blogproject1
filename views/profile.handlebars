@@ -1,6 +1,13 @@
 {{> user-navi-bar }}
 
 <div class="container">
+    <div class="AvatarDiv">
+        <img src="/images/Avatars/{{user.avatarImage}}}.png" class="avatarIcon">
+    </div>
+    <h1>Hello, {{user.username}}!</h1>
+
+
+
     <h2>Update your information:</h2>
 
 <form action="./updateUserName" method="POST">

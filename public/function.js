@@ -27,6 +27,8 @@ window.addEventListener("load", function() {
     const password_alert_message = document.getElementById("password_alert_message");
     const create_account_button = document.getElementById("create_account_btn");
     
+    //this this checking whether we are on the new account page
+    //then add event listener to monitor the input
     if (username_alert_message) {
         username_input.addEventListener('input', async function(event){
             const user_input = username_input.value;
@@ -37,11 +39,8 @@ window.addEventListener("load", function() {
             } else {
                 username_alert_message.innerHTML = `Username is  available`;
             }
-        })
-    };
-    
-    if (password_alert_message && create_account_button) {
-        
+        });
+
         create_account_button.disabled = true;
         password2_input.addEventListener('input', async function(event){
             const password1_value = password1_input.value;
@@ -55,7 +54,8 @@ window.addEventListener("load", function() {
             }
 
         })
-    }
+    };  
+ 
 
     // in the window.addEventListener call the avatar live update function
     userAvatarChangeLiveUpdate();
