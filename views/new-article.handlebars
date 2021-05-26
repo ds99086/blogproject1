@@ -1,15 +1,20 @@
 {{> user-navi-bar }}
 
-<div class="container">
-    <p>this is the area for writting new article</p>
-</div>
-
-<br><Br>
-
 <div>
     <h1>WYSIWYG Editor</h1>
 </div>
-
+    <form method="post" action="./articleChanges">
+    <input type="hidden" id="articleContent" name="articleContent">
+    <div style="border: solid 1px black; padding: 10px; margin: auto; width: 400px">
+        <h2>Basic Aritcle Information</h2>
+        <label for="articleTitle">Article Title:</label>
+        <input type="text" name="articleTitle" id="articleTitleBox" value="TestArticleX"><br><br>
+        <label for="articlePubDate">Date of Publication:</label>
+        <input type="date"  name="articlePubDate" id="articlePubDateBox" value="2021-01-01"><br><br>
+        <label for="articleAuthorID">Article Author ID:</label>
+        <input type="number" name="articleAuthorID" id="articleAuthorIDBox" value="1">
+    </div>
+    
     <div class="editor">
                 <div class="toolbar">
                     <!--First row of buttons in the editor-->
@@ -111,8 +116,12 @@
 
                 </div>
                 <div class="content-area">
-                <div class="visuell-view" contenteditable>
-                    <h1>This is some text in the content area</h1>
+                <div class="visuell-view" id="editorContent" style="overflow: auto" contenteditable>
+                    {{#if returnText}}
+                    {{{returnText}}}
+                    {{else}}
+                    <h1>You can write your article here</h1>
+                    {{/if}}
                 </div>
                 <textarea class="html-view"></textarea>
                 </div>
@@ -133,3 +142,16 @@
                 </div>
                 </div>
             </div>
+
+            <div>
+                <h2>Create New Article Button</h2>
+                <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Create New Article</button>
+            </div>
+            </form>
+            <form method="POST" action="./editArticle">
+            <div>
+                <h2>Load Article by ID</h2>
+                <input type="number" name="articleID" id="articleIDBox" text="number of article here"><br>
+                <button type="submit" id="loadArticle" onclick="alert('Loading an existing article')">Loading an Article by Number</button>
+            </div>
+            </form>
