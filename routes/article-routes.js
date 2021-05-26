@@ -1,15 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const articleDao = require("../modules/article-dao");
-const { retrieveUserWithCredentials } = require("../modules/user-dao");
+const { retrieveUserWithAuthToken } = require("../modules/user-dao");
+
 
 
 router.post("/articleChanges", async function(req, res) {
+
+    const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+    
     const article = {
         articleID: null,
         articleTitle: req.body.articleTitle,
         articlePubDate: req.body.articlePubDate,
-        articleAuthorID: req.body.articleAuthorID,
+        articleAuthorID: user.userID,
         articleContent: req.body.articleContent
     }
     const newArticle = await articleDao.writeNewArticle(article);

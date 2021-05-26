@@ -6,6 +6,8 @@ window.addEventListener("load", function () {
     const username_alert_message = document.getElementById("username_alert_message");
     const password_alert_message = document.getElementById("password_alert_message");
     const create_account_button = document.getElementById("create_account_btn");
+    
+    const writeNewArticlePageElements = document.querySelector(".editor")
 
     //this this checking whether we are on the new account page
     //then add event listener to monitor the input
@@ -33,11 +35,45 @@ window.addEventListener("load", function () {
         userAvatarChangeLiveUpdate();
     };
 
+    //check whether we are on article writing page.
+    //if so, get the username and userID by cookie
+    // if(writeNewArticlePageElements!=undefined){
+    //     const usernameArea = document.querySelector(".articleAuthorusername")
+    //     console.log(usernameArea)
+
+    //     const authToken = getCookie("authToken");
+    //     console.log(authToken)
+    //     const usernameAndID = await retrieveUserByAuthToken(authToken);
+    //     console.log(usernameAndID)
+        
+    //     usernameArea.setAttribute("value", `${usernameAndID.username}`)
+
+    // }
+
 
     // in the window.addEventListener call the avatar live update function
 
 
 });
+
+// async function retrieveUserByAuthToken(authToken){
+//     let response = await fetch(`./checkAuthToken?authToken=${authToken}`);
+//     let usernameAndIDObj = await response.json();
+//     return usernameAndIDObj;
+// }
+
+// //get cookie by attribute from client side
+// function getCookie(cname) {
+//     const name = `${cname}=`;
+//     const decodedCookie = decodeURIComponent(document.cookie); 
+//     const cookieArray = decodedCookie.split(";");
+//     for(let i = 0; i <cookieArray.length; i++) {
+//         let cookie = cookieArray[i].trim(); 
+//         if (cookie.indexOf(name) === 0) {
+//             return cookie.substring(name.length); }
+//     }
+//     return undefined; 
+// }
 
 async function retrieveUserByUsername(id) {
     let response = await fetch(`./checkUsername?input_username=${id}`);
