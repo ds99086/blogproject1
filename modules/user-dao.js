@@ -30,18 +30,25 @@ async function createUser(user) {
 //user must be json object
 async function updateUser(user) {
 
-    //console.log("I am in the update function");
+    // console.log("updateUser function received user");
+    // console.log(user);
+
     const db = await dbPromise;
-    //console.log("updating users");
+
+    //issue datbase not updating. not data type issue. 
     await db.run(SQL`
         update users
         set username = ${user.username}, 
-        passwordFieldToUpdate = ${user.password},
-        firstName = ${user.fname}, 
+        passwordFieldToUpdate = ${user.passwordFieldToUpdate},
+        firstName = 'Allie', 
         lastName = ${user.lname}, 
-        dateOfBirth = ${user.birthday}, 
+        
+        dateOfBirth = ${user.dateOfBirth}, 
         authToken = ${user.authToken}
-        where userID = ${user.id}`);
+        where userID = ${user.userID}`
+        );
+
+    // console.log("completed updating database");
 }
 
 
@@ -72,6 +79,7 @@ async function getUserPassword(username) {
     //console.log(`Getting the password of ${username}`);
     const db = await dbPromise;
     const hashPassword = await db.get(SQL`SELECT passwordFieldToUpdate FROM users WHERE username = ${username}`);
+    
     return hashPassword.passwordFieldToUpdate;
 }
 
