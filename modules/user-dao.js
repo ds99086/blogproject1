@@ -9,39 +9,28 @@ async function createUser(user) {
     INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth) VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday})`);
 }
 
-// async function retrieveUserWithCredentials(username, password) {
-//     const db = await dbPromise;
-  
-//     if (await checkHashPassword(username, password)) {
-//         retrieveUserByUsername(username);
-//     }
-
-//     console.log(checkPassword);
-//     console.log(await getUserPassword(username));
-
-//     const user = await db.get(SQL`
-//         select * from users
-//         where username = ${username} and passwordFieldToUpdate = ${password}`);
-
-//         return user;
-// }
-
 //does not include user profile image for now. 
 //user must be json object
 async function updateUser(user) {
 
-    //console.log("I am in the update function");
+    // console.log("updateUser function received user");
+     //console.log(user);
+
     const db = await dbPromise;
-    //console.log("updating users");
+
+    //issue datbase not updating. not data type issue. 
     await db.run(SQL`
         update users
         set username = ${user.username}, 
-        passwordFieldToUpdate = ${user.password},
-        firstName = ${user.fname}, 
-        lastName = ${user.lname}, 
-        dateOfBirth = ${user.birthday}, 
+        passwordFieldToUpdate = ${user.passwordFieldToUpdate},
+        firstName = ${user.firstName}, 
+        lastName = ${user.lastName}, 
+        dateOfBirth = ${user.dateOfBirth}, 
         authToken = ${user.authToken}
-        where userID = ${user.id}`);
+        where userID = ${user.userID}`
+        );
+
+    // console.log("completed updating database");
 }
 
 
@@ -72,7 +61,18 @@ async function getUserPassword(username) {
     //console.log(`Getting the password of ${username}`);
     const db = await dbPromise;
     const hashPassword = await db.get(SQL`SELECT passwordFieldToUpdate FROM users WHERE username = ${username}`);
+    
     return hashPassword.passwordFieldToUpdate;
+}
+
+async function retrieveUserWithAuthToken(authToken) {
+    const db = await dbPromise;
+
+    const user = await db.get(SQL`
+        select * from users
+        where authToken = ${authToken}`);
+
+    return user;
 }
 
 // Export functions.
@@ -82,5 +82,6 @@ module.exports = {
     updateUser,
     deleteUser,
     retrieveUserByUsername,
-    getUserPassword
+    getUserPassword,
+    retrieveUserWithAuthToken
 };

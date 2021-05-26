@@ -11,9 +11,9 @@ router.get("/profile-setting", async function(req, res) {
 
 
 router.get("/logout", async function(req, res) {
+    
 
-
-    res.redirect("home");
+    res.redirect("/");
 });
 
 
