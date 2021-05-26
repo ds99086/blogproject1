@@ -40,7 +40,7 @@ async function updateUser(user) {
         update users
         set username = ${user.username}, 
         passwordFieldToUpdate = ${user.passwordFieldToUpdate},
-        firstName = 'Allie', 
+        firstName = '${user.fname}', 
         lastName = ${user.lname}, 
         
         dateOfBirth = ${user.dateOfBirth}, 
