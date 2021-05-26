@@ -52,7 +52,7 @@ router.post("/login", async function (req, res) {
         
         const user = await userDao.retrieveUserByUsername(username); 
         // console.log("Before updating with authToken");
-        // console.log(user);
+        //console.log(user);
         
         const authToken = uuid();
         user.authToken = authToken;
@@ -64,12 +64,13 @@ router.post("/login", async function (req, res) {
         // console.log("After updating with authToken, call the same user const");
         // console.log(user);
 
-        // const checkuser = await userDao.retrieveUserByUsername(username);
+        const checkuser = await userDao.retrieveUserByUsername(username);
         
         // console.log("After updating with authToken, call the same user with ANOTHER const");
         // console.log(checkuser);
 
         res.cookie("authToken", authToken);
+
         res.locals.user = user;
         res.redirect("/");
     } else {

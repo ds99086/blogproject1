@@ -9,29 +9,12 @@ async function createUser(user) {
     INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth) VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday})`);
 }
 
-// async function retrieveUserWithCredentials(username, password) {
-//     const db = await dbPromise;
-  
-//     if (await checkHashPassword(username, password)) {
-//         retrieveUserByUsername(username);
-//     }
-
-//     console.log(checkPassword);
-//     console.log(await getUserPassword(username));
-
-//     const user = await db.get(SQL`
-//         select * from users
-//         where username = ${username} and passwordFieldToUpdate = ${password}`);
-
-//         return user;
-// }
-
 //does not include user profile image for now. 
 //user must be json object
 async function updateUser(user) {
 
     // console.log("updateUser function received user");
-    // console.log(user);
+     //console.log(user);
 
     const db = await dbPromise;
 
@@ -40,9 +23,8 @@ async function updateUser(user) {
         update users
         set username = ${user.username}, 
         passwordFieldToUpdate = ${user.passwordFieldToUpdate},
-        firstName = '${user.fname}', 
-        lastName = ${user.lname}, 
-        
+        firstName = ${user.firstName}, 
+        lastName = ${user.lastName}, 
         dateOfBirth = ${user.dateOfBirth}, 
         authToken = ${user.authToken}
         where userID = ${user.userID}`
@@ -83,6 +65,16 @@ async function getUserPassword(username) {
     return hashPassword.passwordFieldToUpdate;
 }
 
+async function retrieveUserWithAuthToken(authToken) {
+    const db = await dbPromise;
+
+    const user = await db.get(SQL`
+        select * from users
+        where authToken = ${authToken}`);
+
+    return user;
+}
+
 // Export functions.
 module.exports = {
     createUser,
@@ -90,5 +82,6 @@ module.exports = {
     updateUser,
     deleteUser,
     retrieveUserByUsername,
-    getUserPassword
+    getUserPassword,
+    retrieveUserWithAuthToken
 };
