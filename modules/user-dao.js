@@ -52,6 +52,16 @@ async function retrieveUserByUsername(username) {
     return user;
 }
 
+async function retrieveUserByUserID(userID) {
+    const db = await dbPromise;
+
+    const user = await db.get(SQL`
+        select * from users
+        where userID = ${userID}`);
+
+    return user;
+}
+
 
 async function deleteUser(username) {
     const db = await dbPromise;
@@ -76,5 +86,6 @@ module.exports = {
     deleteUser,
     retrieveUserWithCredentials,
     retrieveUserByUsername,
+    retrieveUserByUserID,
     getUserPassword
 };
