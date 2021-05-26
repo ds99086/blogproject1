@@ -201,3 +201,44 @@ form .form-group {
     width: 80px;
 }
 /*****************************************************************/
+
+/* Articles */
+/*****************************************************************/
+#articles { 
+    grid-area: articles; 
+}
+
+.article {
+    margin: 0.25em;
+    padding: 0.5em;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.button {
+    width: 100%;
+    text-align: center;
+    color: white;
+    background-color: teal;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+}
+
+.article-load {
+    margin-top: 2em;
+    background-color: darkgreen;
+}
+
+.panel {
+    padding: 1em;
+    border: 1px solid salmon;
+    border-radius: 15px;
+    margin: 0.25em;
+}
+
+.panel > h2 {
+    text-align: center;
+}
+/*****************************************************************/
