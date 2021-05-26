@@ -36,22 +36,24 @@ app.use(cookieParser());
 const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
 
-
 // Setup our middleware
 const { addUserToLocals } = require("./middleware/auth-middleware.js");
 app.use(addUserToLocals);
 
+//SETUP OUR ROUTERS
+// Setup general application routes
 // Setup routes
 const appRouter = require("./routes/application-routes.js");
 app.use(appRouter);
-
-// Setup our routes
+// Setup authentication routes
 const authRouter = require("./routes/auth-routes.js");
 app.use(authRouter);
-
 // Setup user routes
 const userRouter = require("./routes/user-routes.js");
 app.use(userRouter);
+// Setup article routes
+const articleRouter = require("./routes/article-routes.js");
+app.use(articleRouter);
 
 // Start the server running.
 app.listen(port, function () {
