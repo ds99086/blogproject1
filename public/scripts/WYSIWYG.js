@@ -1,3 +1,5 @@
+
+
 window.addEventListener("load", function () {
 
     // define vars
@@ -9,8 +11,17 @@ window.addEventListener("load", function () {
     const htmlView = contentArea.getElementsByClassName('html-view')[0];
     const modal = document.getElementsByClassName('modal')[0];
 
+    const newArticleButton = document.getElementById("makeNewArticle");
+    const loadArticleButton = document.getElementById("loadArticle");
+
     // add active tag event
     document.addEventListener('selectionchange', selectionChange);
+    newArticleButton.addEventListener('click', function() {
+        saveArticle()}
+        );
+    loadArticleButton.addEventListener('click', loadArticle);
+
+
 
     // add toolbar button actions
     for(let i = 0; i < buttons.length; i++) {
@@ -165,4 +176,20 @@ window.addEventListener("load", function () {
     
     return parentTagActive(elem.parentNode);
     }
+
+    function processEditor() {
+        console.log("process function called");
+        document.getElementById("articleContent").value = document.getElementById("editorContent").innerHTML;
+        return true;
+      }
+
+    function saveArticle() {
+        console.log("trying to save editor contents")
+        processEditor();
+    }
+
+    function loadArticle() {
+        return null;
+    }
+
 });

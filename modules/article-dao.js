@@ -1,4 +1,5 @@
 const SQL = require("sql-template-strings");
+const { stringify } = require("uuid");
 const dbPromise = require("./database.js");
 const userDao = require("./user-dao.js");
 
@@ -32,8 +33,9 @@ async function readArticleInfobyID(articleID) {
 async function writeNewArticle(articleObject) {
     const db = await dbPromise;
     const result = await db.run(SQL`
-    INSERT INTO articles (title, publishDate, lastEditDate, bodyContentOrLinkToContent, authorID) VALUES(${articleObject.articleTitle}, ${articleObject.password}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ${articleObject.articleAuthorID})`);
-    console.log("created article"+result.message);
+    INSERT INTO articles (title, publishDate, lastEditDate, bodyContentOrLinkToContent, authorID) 
+        VALUES(${articleObject.articleTitle}, ${articleObject.articlePubDate}, CURRENT_TIMESTAMP, ${articleObject.articleContent}, ${articleObject.articleAuthorID})`);
+    console.log("created article "+result.lastID);
     return result;
 }
 
@@ -51,7 +53,8 @@ async function readAuthor(articleID) {
 
 function checkIsArticle(article) {
     let value = true;
-    if article.articleID.
+    //if article.articleID.
+    return value;
 }
 
 //Export funcitons
