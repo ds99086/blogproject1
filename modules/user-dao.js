@@ -95,16 +95,7 @@ module.exports = {
     updateUser,
     deleteUser,
     retrieveUserByUsername,
-<<<<<<< HEAD
-    retrieveUserByUserID,
-    getUserPassword
-=======
     getUserPassword,
-<<<<<<< HEAD
     retrieveUserWithAuthToken,
     retrieveCommentsbyArticleID
-=======
-    retrieveUserWithAuthToken
->>>>>>> master
->>>>>>> master
 };
