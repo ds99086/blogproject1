@@ -23,7 +23,8 @@ router.post("/newAccount", async function(req, res) {
         fname: req.body.fname,
         lname: req.body.lname,
         birthday: req.body.birthday,
-        description: req.body.description
+        description: req.body.description,
+        avatarImage: req.body.avatars
     };
 
     try {
@@ -72,7 +73,7 @@ router.post("/login", async function (req, res) {
         res.cookie("authToken", authToken);
 
         res.locals.user = user;
-        res.redirect("/");
+        res.redirect("/?message=Welcome Back!");
     } else {
         res.locals.user = null;
         res.redirect("./login?message=Authentication failed!");
