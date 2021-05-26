@@ -23,19 +23,12 @@ async function updateUser(user) {
     await db.run(SQL`
         update users
         set username = ${user.username}, 
-<<<<<<< HEAD
-        passwordFieldToUpdate = ${user.password},
-        firstName = ${user.fname}, 
-        lastName = ${user.lname}, 
-        dateOfBirth = ${user.birthday}, 
-        avatarImage = ${user.avatarImage},
-=======
         passwordFieldToUpdate = ${user.passwordFieldToUpdate},
         firstName = ${user.firstName}, 
         lastName = ${user.lastName}, 
         dateOfBirth = ${user.dateOfBirth}, 
->>>>>>> master
-        authToken = ${user.authToken}
+        authToken = ${user.authToken},
+        avatarImage = ${user.avatarImage}
         where userID = ${user.userID}`
         );
 

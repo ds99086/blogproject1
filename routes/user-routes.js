@@ -4,19 +4,21 @@ const router = express.Router();
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
 const passwordSec = require("../modules/passwordSec.js");
+const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 
-router.get("/profile-setting", async function (req, res) {
+router.get("/profile-setting", verifyAuthenticated, async function (req, res) {
 
 
     res.render("profile");
 });
 
 
-router.get("/logout", async function (req, res) {
+router.get("/logout", verifyAuthenticated, async function (req, res) {
 
-    //get the user by cookies
-
+    const user = res.locals.user;
     //delete user's authToken
+    user.authToken = "";
+    await userDao.updateUser(user);
 
     //clear cookies
     res.clearCookie("authToken");
@@ -24,13 +26,12 @@ router.get("/logout", async function (req, res) {
     res.locals.user = null;
 
     //redirect to home page with the message
-    res.redirect("./?message=Successfully logged out!");
+    res.redirect("/?message=Successfully logged out!");
 });
 
 
-
 //route to new aritile
-router.get("/new-article", async function (req, res) {
+router.get("/new-article", verifyAuthenticated, async function (req, res) {
 
     res.locals.WYSIWYG = true;
     res.render("new-article");
@@ -38,18 +39,17 @@ router.get("/new-article", async function (req, res) {
 
 
 //route to user ariticles
-router.get("/user-articles", async function (req, res) {
+router.get("/user-articles", verifyAuthenticated, async function (req, res) {
 
 
     res.render("user-articles");
 });
 
-router.post("/updateUseDetails", async function (req, res) {
+router.post("/updateUseDetails", verifyAuthenticated, async function (req, res) {
 
     //get the user details by cookies
     //missing the middleware for now
     const user = res.locals.user;
-
 
     const userNewName = req.body.new_account_username;
     const userNewPassword = req.body.password2;
@@ -57,37 +57,34 @@ router.post("/updateUseDetails", async function (req, res) {
     const userNewLastName = req.body.lname;
     const userNewBirthday = req.body.birthday;
     const userNewDescription = req.body.description;
-    const userNewAvatar = req.body.avatars;
 
-    if(userNewName != "") {user.username = userNewName};
-    if(userNewPassword != "") {user.password = await passwordSec.newHashPassword(userNewPassword)};
-    if(userNewFirstName != "") {user.fname = userNewFirstName};
-    if(userNewLastName != "") {user.lname = userNewLastName};
-    if(userNewBirthday != "") {user.birthday = userNewBirthday};
-    if(userNewDescription != "") {user.description = userNewDescription};
-    if(userNewAvatar != "") {user.avatarImage = userNewAvatar};
+    if (userNewName != "") { user.username = userNewName };
+    if (userNewPassword != "") { user.password = await passwordSec.newHashPassword(userNewPassword) };
+    if (userNewFirstName != "") { user.fname = userNewFirstName };
+    if (userNewLastName != "") { user.lname = userNewLastName };
+    if (userNewBirthday != "") { user.birthday = userNewBirthday };
+    if (userNewDescription != "") { user.description = userNewDescription };
 
     await userDao.updateUser(user);
-    
+
     res.redirect("profile-setting");
 });
 
 
-router.post("/updateUserAvatar", async function (req, res) {
+router.post("/updateUserAvatar", verifyAuthenticated, async function (req, res) {
 
     //get the user details by cookies
     //missing the middleware for now
     const user = res.locals.user;
-    
+
     user.avatarImage = req.body.avatars;
     await userDao.updateUser(user);
-    
+
     res.redirect("profile-setting");
 });
 
 
-router.post("/deleteAccount", async function (req, res) {
-
+router.post("/deleteAccount", verifyAuthenticated, async function (req, res) {
 
     //get the user details by cookies
     //missing the middleware for now
@@ -96,7 +93,6 @@ router.post("/deleteAccount", async function (req, res) {
     await userDao.deleteUser(user.username);
 
     res.redirect("/?message=account deleted");
-
 
 });
 
