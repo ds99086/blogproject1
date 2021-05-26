@@ -1,108 +1,70 @@
 {{> user-navi-bar }}
 
 <div class="container">
-    <div class="AvatarDiv">
-        <img src="/images/Avatars/{{user.avatarImage}}}.png" class="avatarIcon">
+    <div>
+        <img src="/images/Avatars/1.png" class="avatarIcon">
     </div>
     <h1>Hello, {{user.username}}!</h1>
 
-
     <h2>Update your information:</h2>
 
-<form action="./updateUserName" method="POST">
+    <form action="./updateUseDetails" method="POST">
+        <div class="flex-col mb" id="new_acount_username_div">
+            <label for="new_acount_username">Username:</label>
+            <input type="text" name="new_account_username" id="new_acount_username">
+            <p id="username_alert_message"></p>
+        </div>
+
         <div class="flex-col mb">
-            <label for="txtUsername">Username:</label>
-            <input type="text" name="username" id="txtUsername" required>
+            <label for="new_account_password1">Password:</label>
+            <input type="password" name="password1" id="new_account_password1">
         </div>
 
-        <div class="flex-row justify-sb align-center">
-            <button type="submit">Update your username!</button>
-        </div>
-</form>
-
-<form action="./updateUserPassword" method="POST">
         <div class="flex-col mb">
-            <label for="txtUsername">Password:</label>
-            <input type="password" name="password" id="txtPassword" required>
+            <label for="new_account_password2">Re-enter your password:</label>
+            <input type="password" name="password2" id="new_account_password2">
+            <p id="password_alert_message"></p>
         </div>
 
-        <div class="flex-row justify-sb align-center">
-            <button type="submit">Update your password!</button>
-        </div>
-</form>
-
-<form action="./updateFirstName" method="POST">
         <div class="flex-col mb">
             <label for="txtFName">First name:</label>
-            <input type="text" name="fname" id="txtFName" required>
+            <input type="text" name="fname" id="txtFName">
         </div>
 
-        <div class="flex-row justify-sb align-center">
-            <button type="submit">Update your first name!</button>
-        </div>
-</form>
-
-<form action="./updatelastName" method="POST">
         <div class="flex-col mb">
             <label for="txtLName">Last name:</label>
-            <input type="text" name="lname" id="txtLName" required>
+            <input type="text" name="lname" id="txtLName">
         </div>
 
-        <div class="flex-row justify-sb align-center">
-            <button type="submit">Update your last name!</button>
-        </div>
-</form>
-
-<form action="./updateBirthday" method="POST">
         <div>
             <label for="txtdob">Birthday:</label>
-            <input type="date"  name="birthday" id="txtdob" required>
+            <input type="date" name="birthday" id="txtdob">
         </div>
 
-        <div class="flex-row justify-sb align-center">
-            <button type="submit">Update your birthday!</button>
+        <div class="flex-col mb">
+            <label for="txtDescription">Re-introduction about you!:</label>
+            <input type="text" name="description" id="txtDescription">
         </div>
-</form>
-
-<form action="./updateAvatar" method="POST">
-        <div>
-            <label for="avatarID">Avatar:</label>
-            <select name="avatars" id="avatarID")>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-            </select>
+        
+        <div class="flex-row justify-center align-center">
+            <button type="submit">Update your profile!</button>
         </div>
 
-        <div class="AvatarDiv">
-            
-        </div>
-
-        <div class="flex-row justify-sb align-center">
+    </form>
+    <br>
+     <form action="./updateUserAvatar" method="POST">
+     
+        {{> avatar }}
+        <div class="flex-row justify-center align-center">
             <button type="submit">Update your Avatar!</button>
         </div>
-            
-        
-</form>
-<br>
+     </form>
 
-<form action="./deleteAccount" method="POST">
+    <br>
+
+    <form action="./deleteAccount" method="POST">
         <div class="flex-row justify-center align-center">
-            <button type="submit">Delete your account!</button>
+            <button type="submit"  onclick="return confirm('Are you sure?')">Delete your account!</button>
         </div>
-</form>
-
-
+    </form>
 </div>

@@ -6,7 +6,8 @@ async function createUser(user) {
     const db = await dbPromise;
     
     const result = await db.run(SQL`
-    INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth) VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday})`);
+        INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth, avatarImage) 
+        VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday}, ${user.avatarImage})`);
 }
 
 // async function retrieveUserWithCredentials(username, password) {
@@ -40,6 +41,7 @@ async function updateUser(user) {
         firstName = ${user.fname}, 
         lastName = ${user.lname}, 
         dateOfBirth = ${user.birthday}, 
+        avatarImage = ${user.avatarImage},
         authToken = ${user.authToken}
         where userID = ${user.id}`);
 }
