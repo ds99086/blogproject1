@@ -5,7 +5,8 @@ const router = express.Router();
 
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
-const passwordSec = require("../modules/passwordSec");
+const passwordSec = require("../modules/passwordSec.js");
+const { getUserPassword } = require("../modules/user-dao.js");
 //const { createUser } = require("../modules/test-dao.js");
 //const { addUserToLocals } = require("../middleware/auth-middleware.js");
 //const messagesDao = require("../modules/messages-dao.js");
@@ -17,12 +18,13 @@ router.get("/newAccount", function(req, res) {
 
 router.post("/newAccount", async function(req, res) {
     const user = {
-        username: req.body.username,
-        password: passwordSec.newHashPassword(req.body.password),
+        username: req.body.new_account_username,
+        password: await passwordSec.newHashPassword(req.body.password1),
         fname: req.body.fname,
         lname: req.body.lname,
         birthday: req.body.birthday,
-        description: req.body.description
+        description: req.body.description,
+        avatarImage: req.body.avatars
     };
 
     try {
@@ -43,16 +45,35 @@ router.get("/login", function(req, res) {
 router.post("/login", async function (req, res) {
     const username = req.body.username;
     const password = req.body.password;
-    const user = await userDao.retrieveUserWithCredentials(username, password);
 
-    if (user) {
+    const passwordCorrect = await passwordSec.checkHashPassword(username, password); 
+    
+    if (passwordCorrect) {
         //Auth success - give that user an authToken, save the token in a cookie, and redirect to the homepage.
+        
+        const user = await userDao.retrieveUserByUsername(username); 
+        // console.log("Before updating with authToken");
+        //console.log(user);
+        
         const authToken = uuid();
         user.authToken = authToken;
+
+        // console.log("Give authToken to this user.");
+        // console.log(user);
+
         await userDao.updateUser(user);
+        // console.log("After updating with authToken, call the same user const");
+        // console.log(user);
+
+        const checkuser = await userDao.retrieveUserByUsername(username);
+        
+        // console.log("After updating with authToken, call the same user with ANOTHER const");
+        // console.log(checkuser);
+
         res.cookie("authToken", authToken);
+
         res.locals.user = user;
-        res.redirect("/");
+        res.redirect("/?message=Welcome Back!");
     } else {
         res.locals.user = null;
         res.redirect("./login?message=Authentication failed!");

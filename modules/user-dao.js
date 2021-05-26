@@ -4,34 +4,35 @@ const dbPromise = require("./database.js");
 async function createUser(user) {
     
     const db = await dbPromise;
-
-
     
     const result = await db.run(SQL`
-    INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth) VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday})`);
-
-    console.log("created user");
-}
-
-async function retrieveUserWithCredentials(username, password) {
-    const db = await dbPromise;
-
-    const user = await db.get(SQL`
-        select * from users
-        where username = ${username} and passwordFieldToUpdate = ${password}`);
-    return user;
+        INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth, avatarImage) 
+        VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday}, ${user.avatarImage})`);
 }
 
 //does not include user profile image for now. 
 //user must be json object
 async function updateUser(user) {
+
+    // console.log("updateUser function received user");
+     //console.log(user);
+
     const db = await dbPromise;
 
+    //issue datbase not updating. not data type issue. 
     await db.run(SQL`
         update users
-        set username = ${user.username}, password = ${user.password},
-            name = ${user.name}, authToken = ${user.authToken}
-        where id = ${user.id}`);
+        set username = ${user.username}, 
+        passwordFieldToUpdate = ${user.passwordFieldToUpdate},
+        firstName = ${user.firstName}, 
+        lastName = ${user.lastName}, 
+        dateOfBirth = ${user.dateOfBirth}, 
+        authToken = ${user.authToken},
+        avatarImage = ${user.avatarImage}
+        where userID = ${user.userID}`
+        );
+
+    // console.log("completed updating database");
 }
 
 
@@ -44,14 +45,13 @@ async function retrieveAllUsers() {
 
 async function retrieveUserByUsername(username) {
     const db = await dbPromise;
-
     const user = await db.get(SQL`
         select * from users
         where username = ${username}`);
-
     return user;
 }
 
+<<<<<<< HEAD
 async function retrieveUserByUserID(userID) {
     const db = await dbPromise;
 
@@ -63,29 +63,47 @@ async function retrieveUserByUserID(userID) {
 }
 
 
+=======
+//need to update
+//delete user will also delete user's articles and comments
+>>>>>>> master
 async function deleteUser(username) {
     const db = await dbPromise;
-    
     await db.run(SQL`
         delete from users
         where username = ${username}`);
-
 }
 
 async function getUserPassword(username) {
     //console.log(`Getting the password of ${username}`);
     const db = await dbPromise;
     const hashPassword = await db.get(SQL`SELECT passwordFieldToUpdate FROM users WHERE username = ${username}`);
+    
     return hashPassword.passwordFieldToUpdate;
 }
+
+async function retrieveUserWithAuthToken(authToken) {
+    const db = await dbPromise;
+
+    const user = await db.get(SQL`
+        select * from users
+        where authToken = ${authToken}`);
+
+    return user;
+}
+
 // Export functions.
 module.exports = {
     createUser,
     retrieveAllUsers,
     updateUser,
     deleteUser,
-    retrieveUserWithCredentials,
     retrieveUserByUsername,
+<<<<<<< HEAD
     retrieveUserByUserID,
     getUserPassword
+=======
+    getUserPassword,
+    retrieveUserWithAuthToken
+>>>>>>> master
 };

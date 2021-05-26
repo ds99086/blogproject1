@@ -36,8 +36,13 @@ app.use(cookieParser());
 const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
 
+// Setup our middleware
+const { addUserToLocals } = require("./middleware/auth-middleware.js");
+app.use(addUserToLocals);
+
 //SETUP OUR ROUTERS
 // Setup general application routes
+// Setup routes
 const appRouter = require("./routes/application-routes.js");
 app.use(appRouter);
 // Setup authentication routes
@@ -53,4 +58,7 @@ app.use(articleRouter);
 // Start the server running.
 app.listen(port, function () {
     console.log(`App listening on port ${port}!`);
+
+
+
 });

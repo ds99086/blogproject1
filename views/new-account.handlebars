@@ -1,4 +1,4 @@
-{{> default-navi-bar }}
+0{{> default-navi-bar }}
 
 <div class="container">
 
@@ -10,7 +10,7 @@
     <form action="./newAccount" method="POST">
         <div class="flex-col mb" id="new_acount_username_div">
             <label for="new_acount_username">Username:</label>
-            <input type="text" name="new-account-username" id="new_acount_username" required>
+            <input type="text" name="new_account_username" id="new_acount_username" required>
             <p id="username_alert_message"></p>
         </div>
         
@@ -47,6 +47,8 @@
             <label for="txtDescription">Brief introduction about you!:</label>
             <input type="text" name="description" id="txtDescription" required>
         </div>
+
+        {{> avatar }}
 
         <br>
 
