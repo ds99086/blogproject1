@@ -1,5 +1,5 @@
 const userDao = require("../modules/user-dao.js");
-const alert = require('alert');  
+//const alert = require('alert');  
 
 //it will automatically use authToken from cookies everytime a page opens
 async function addUserToLocals(req, res, next) {
@@ -13,7 +13,7 @@ function verifyAuthenticated(req, res, next) {
         next();
     }
     else {
-        alert("You are not logged in!");
+        //alert("You are not logged in!");
         res.redirect("/")
     }
 }

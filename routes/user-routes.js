@@ -96,4 +96,49 @@ router.post("/deleteAccount", verifyAuthenticated, async function (req, res) {
 
 });
 
+router.get("/single-article", async function(req,res) {
+
+    const articleId = 1;
+
+    const initialList = await userDao.retrieveCommentsbyArticleID(articleId);
+
+
+    let output = [];
+    
+    for (let i = 0; i < initialList.length; i++) {
+        let comment = initialList[i];
+        if (comment.commentLevel == 0) {
+            output.push(comment);
+            comment.children = [];
+            addChildren(comment, initialList);
+    }
+    }
+
+    function addChildren(parentComment, arrayList) {
+        
+        for (let i = 0; i < arrayList.length; i++) {
+            let comment = arrayList[i];
+            if (comment.parentComment ===parentComment.commentID) {
+                parentComment.children.push(comment);
+            }
+        }  
+    };
+    
+    //console.log(output);
+    
+    res.locals.commentlist = output;
+
+    // console.log(initialList);
+
+    res.render("single-article");
+})
+
+
+
+
+
+
+
+
+
 module.exports = router;

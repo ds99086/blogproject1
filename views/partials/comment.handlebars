@@ -1,3 +1,74 @@
-<div class="comment">
-    <p>this is the area for comments</p>
+
+ <p>this is the area for comments</p>
+
+
+<div class="comment-container">
+
+    {{#if commentlist}}
+
+    <div class="comments-list" id="comments-list">
+
+    <h3>Comments</h3>
+
+  {{#each commentlist}}
+    <div class="comments-level-one">
+        <div class="comment-body">
+            <h5 class="comment-title">Name: {{commentID}}</h5>
+            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+            {{commentText}} 
+        </div>
+    </div>
+
+    {{#each children}}
+
+        <div class="comments-level-two">
+        <div class="comment-body">
+            <h5 class="comment-title">Name: {{commentID}}</h5>
+            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+            {{commentText}} 
+        </div>
+    </div>
+
+{{/each}}
+    {{/each}}
+
+    <br>
+
+    <div class="new-comment-box">
+        <div id="make-comment">
+            <form action="./newComment" method="POST">
+                <div class="flex-col mb">
+                    <label for="txtLName">Leave your comment:</label>
+                    <input type="text" name="lname" id="txtLName" required>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+
+        {{!-- <div class="user-icon">
+            <img src="public\images\Avatars\1.png" alt="Here will be image">
+        </div>
+        <div class="comment-info">
+            <div class="row">
+                  <div class="name">Username: </div>
+                  <div class="datetime"> Comment written at: </div>
+             </div>
+             <div class="row">
+                   <div class="text">Comment content</div>
+             </div>
+         </div> --}}
+    </div>
+
+    {{/if}}
+
+
+    {{!-- view existing comment --}}
+
+
+
+
+    {{!-- add comments --}}
+
 </div>
