@@ -36,14 +36,16 @@ window.addEventListener("load", async function () {
         }
     }
 
-    function displayPartialArticleOnPage(articleObj) {
+    async function displayPartialArticleOnPage(articleObj) {
         let articleDivElement = document.createElement("div");
         articleDivElement.classList.add("article");
+        let authorID = articleObj.authorID;
+        let userJSON = await getArticleAuthorName(authorID);
 
         articleDivElement.innerHTML = `
             <h3 class="article-title">${articleObj.title}</h3>
-            <h4 class="article-author" data-author-id="${articleObj.authorID}">${articleObj.authorID} </h4>
-            <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">${articleObj.publishDate} </h6>
+            <h4 class="article-author" author-username="${userJSON.username}">Published by:${userJSON.username}</h4>
+            <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">Published on: ${articleObj.publishDate} </h6>
             <p class="article-body"></p>
             <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
         `;
@@ -74,6 +76,12 @@ window.addEventListener("load", async function () {
         let articlesJsonArray = await articlesResponseObj.json();
         // console.log(articlesJsonArray)
         return articlesJsonArray;
+    }
+
+    async function getArticleAuthorName(userID){
+        let authorNameResponseObj = await fetch(`./loadArticleAutherName?articleID=${userID}`);
+        let authorNameJson = await authorNameResponseObj.json();
+        return authorNameJson;
     }
 
 

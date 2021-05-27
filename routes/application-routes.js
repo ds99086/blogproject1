@@ -28,10 +28,9 @@ router.get("/loadHomepageArticles", async function (req, res) {
     //with the limit article number
     const articleList = await articleDao.readArticleListByOrder(nextArticleIndex, LastArticleIndex, "publishDate","DESC");
     // console.log(articleList)
-
-    res.json(articleList);
-    
+    res.json(articleList);    
 });
+
 
 
 router.get("/checkUsername", async function (req, res) {

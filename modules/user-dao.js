@@ -62,6 +62,14 @@ async function retrieveUserByUserID(userID) {
 }
 
 
+async function retrieveUserameByUserID(userID) {
+    const db = await dbPromise;
+    const user = await db.get(SQL`
+        select username from users
+        where userID = ${userID}`);
+    return user;
+}
+
 //need to update
 //delete user will also delete user's articles and comments
 async function deleteUser(username) {
@@ -99,5 +107,6 @@ module.exports = {
     retrieveUserByUsername,
     retrieveUserByUserID,
     getUserPassword,
-    retrieveUserWithAuthToken
+    retrieveUserWithAuthToken,
+    retrieveUserameByUserID
 };
