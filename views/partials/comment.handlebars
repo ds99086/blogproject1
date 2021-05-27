@@ -16,7 +16,15 @@
             <h5 class="comment-title">Name: {{commentID}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
             {{commentText}} 
+            <div class="vote-buttons">
+            <button class="vote-up">Upvote</button>
+                <p id="upvote"></p>
+            <p class="vote-sum">1</p>
+            <button class="vote-down">Downvote</button>
+                <p id="downvote"></p>
+            </div>
         </div>
+
     </div>
 
     {{#each children}}
@@ -26,6 +34,14 @@
             <h5 class="comment-title">Name: {{commentID}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
             {{commentText}} 
+
+            <div class="vote-buttons">
+            <button class="vote-up">Upvote</button>
+                <p id="upvote"></p>
+            <p class="vote-sum">1</p>
+            <button class="vote-down">Downvote</button>
+                <p id="downvote"></p>
+            </div>
         </div>
     </div>
     
@@ -36,11 +52,18 @@
             <h5 class="comment-title">Name: {{commentID}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
             {{commentText}} 
+
+            <div class="vote-buttons">
+            <button class="vote-up">Upvote</button>
+                <p id="upvote"></p>
+            <p class="vote-sum">1</p>
+            <button class="vote-down">Downvote</button>
+                <p id="downvote"></p>
+            </div>
         </div>
     </div>
 
     {{/each}}
-
     {{/each}}
     {{/each}}
 
@@ -50,34 +73,20 @@
         <div id="make-comment">
             <form action="./newComment" method="POST">
                 <div class="flex-col mb">
-                    <label for="txtLName">Leave your comment:</label>
-                    <input type="text" name="lname" id="txtLName" required>
+                    <label for="txtComment">Leave your comment:</label>
+                    <input type="text" name="commentText" id="txtComment" required>
+                </div>
+                
+                <div class="flex-row justify-sb align-center">
+                <button type="submit">Submit</button>
                 </div>
             </form>
         </div>
-
-
     </div>
 
-        {{!-- <div class="user-icon">
-            <img src="public\images\Avatars\1.png" alt="Here will be image">
-        </div>
-        <div class="comment-info">
-            <div class="row">
-                  <div class="name">Username: </div>
-                  <div class="datetime"> Comment written at: </div>
-             </div>
-             <div class="row">
-                   <div class="text">Comment content</div>
-             </div>
-         </div> --}}
     </div>
 
     {{/if}}
-
-
-    {{!-- view existing comment --}}
-
 
 
 
