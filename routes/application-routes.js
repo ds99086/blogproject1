@@ -27,7 +27,7 @@ router.get("/loadHomepageArticles", async function (req, res) {
 
     //read aritles from article table in DESC order by publishDate
     //with the limit article number
-    const articleList = await articleDao.readArticleListByOrder(nextArticleIndex, LastArticleIndex, "publishDate","DESC");
+    const articleList = await articleDao.readArticleListBycolumnAndOrder(nextArticleIndex, LastArticleIndex, "publishDate","DESC");
     // console.log(articleList)
     res.json(articleList);    
 });

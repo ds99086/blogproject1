@@ -27,14 +27,18 @@ window.addEventListener("load", async function () {
             document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
         
             let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount);
+            //at this step articles are in order
+            // console.log(articlesJsonArray)
         
             for (let i = 0; i < articlesJsonArray.length; i++) {
-                displayPartialArticleOnPage(articlesJsonArray[i]);
+                //need to add await here, otherwise the article might not display in desired order!
+                await displayPartialArticleOnPage(articlesJsonArray[i]);
             }
         
             if (articlesJsonArray.length < loadArticleCount) {
                 document.querySelector('#article-load-button').style.background = "red";
                 document.querySelector('#article-load-button').innerText = "No more articles";
+                document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
             } else {
                 document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
                 loadArticleNext += loadArticleCount;
@@ -54,6 +58,7 @@ window.addEventListener("load", async function () {
                 <p class="article-body"></p>
                 <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
             `;
+
         
             let articlesDiv = document.querySelector("#articles-inner");
             articlesDiv.appendChild(articleDivElement);
@@ -63,12 +68,14 @@ window.addEventListener("load", async function () {
                     let articleContentDiv = e.target.previousElementSibling;
                     articleContentDiv.innerHTML = `${articleObj.bodyContentOrLinkToContent}`;
                     let readMoreButtonDiv = e.target;
+                    readMoreButtonDiv.style.style.background = "red";
                     readMoreButtonDiv.innerText = 'Close full content';
                 } else if (e.target.innerText == "Close full content") {
                     let articleContentDiv = e.target.previousElementSibling;
                     articleContentDiv.innerHTML = ``;
                     let readMoreButtonDiv = e.target;
                     readMoreButtonDiv.innerText = 'Show full content';
+                    readMoreButtonDiv.style.background = "teal";
                 }
             });
         }
@@ -79,8 +86,8 @@ window.addEventListener("load", async function () {
         async function getArticleArray(from, count) {
             let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}`);
             let articlesJsonArray = await articlesResponseObj.json();
-            // console.log(articlesJsonArray)
             return articlesJsonArray;
+            
         }
         
         async function getArticleAuthorName(userID) {
