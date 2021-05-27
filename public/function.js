@@ -6,6 +6,8 @@ window.addEventListener("load", async function () {
     const username_alert_message = document.getElementById("username_alert_message");
     const password_alert_message = document.getElementById("password_alert_message");
     const create_account_button = document.getElementById("create_account_btn");
+    //const vote_up = document.getElementsByClassName("vote-up");
+    //const vote_down = document.getElementsByClassName("vote-down");
     
     const writeNewArticlePageElements = document.querySelector(".editor")
 
@@ -130,8 +132,29 @@ window.addEventListener("load", async function () {
 
     // in the window.addEventListener call the avatar live update function
 
+//WORK IN PROGRESS
+    //Trialing comment upvote downvote system
+    //if comment box exists, then add event listner to monitor button clicked.
+    // if (vote_up) {
+    //     const vote_sum = document.querySelector("vote-sum");
+    //     console.log(vote_sum);
+    //     vote_up.forEach(item => {
+    //         item.addEventListener('click', event => {
+    //             vote_sum ++;
+    //         })
+    //     })
+    // };
 
-});
+
+        //     item.addEventListener('click', function(event){
+        //     console.log("I am detecting vote up");
+        //     vote_sum ++;
+        // })}
+        // // vote_down.addEventListener('click', function(event) {
+        // //     vote_sum --;
+        // // });
+    
+})
 
 // async function retrieveUserByAuthToken(authToken){
 //     let response = await fetch(`./checkAuthToken?authToken=${authToken}`);

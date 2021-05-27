@@ -227,6 +227,30 @@ form .form-group {
 }
 /*****************************************************************/
 
+
+
+/* comments */
+/*****************************************************************/
+/* .comment-container * {
+    border: 1px solid black;
+} */
+
+.comments-list {
+    background-color: lightblue;
+    margin: 1em;
+    padding: 1em 1em 2em 2em;
+}
+
+.comments-level-two {
+    padding: 1em 1em 3em 2em;
+}
+
+.comments-level-three {
+    padding: 1em 1em 3em 4em;
+}
+
+
+
 /* Articles */
 /*****************************************************************/
 

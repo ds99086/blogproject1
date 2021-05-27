@@ -1,3 +1,95 @@
-<div class="comment">
-    <p>this is the area for comments</p>
+
+ <p>this is the area for comments</p>
+
+
+<div class="comment-container">
+
+{{#if commentlist}}
+
+    <div class="comments-list" id="comments-list">
+
+    <h3>Comments</h3>
+
+  {{#each commentlist}}
+    <div class="comments-level-one">
+        <div class="comment-body">
+            <h5 class="comment-title">Name: {{commentID}}</h5>
+            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+            {{commentText}} 
+            <div class="vote-buttons">
+            <button class="vote-up">Upvote</button>
+                <p id="upvote"></p>
+            <p class="vote-sum">1</p>
+            <button class="vote-down">Downvote</button>
+                <p id="downvote"></p>
+            </div>
+        </div>
+
+    </div>
+
+    {{#each children}}
+
+        <div class="comments-level-two">
+        <div class="comment-body">
+            <h5 class="comment-title">Name: {{commentID}}</h5>
+            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+            {{commentText}} 
+
+            <div class="vote-buttons">
+            <button class="vote-up">Upvote</button>
+                <p id="upvote"></p>
+            <p class="vote-sum">1</p>
+            <button class="vote-down">Downvote</button>
+                <p id="downvote"></p>
+            </div>
+        </div>
+    </div>
+    
+    {{#each children}}
+
+        <div class="comments-level-three">
+        <div class="comment-body">
+            <h5 class="comment-title">Name: {{commentID}}</h5>
+            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+            {{commentText}} 
+
+            <div class="vote-buttons">
+            <button class="vote-up">Upvote</button>
+                <p id="upvote"></p>
+            <p class="vote-sum">1</p>
+            <button class="vote-down">Downvote</button>
+                <p id="downvote"></p>
+            </div>
+        </div>
+    </div>
+
+    {{/each}}
+    {{/each}}
+    {{/each}}
+
+    <br>
+
+    <div class="new-comment-box">
+        <div id="make-comment">
+            <form action="./newComment" method="POST">
+                <div class="flex-col mb">
+                    <label for="txtComment">Leave your comment:</label>
+                    <input type="text" name="commentText" id="txtComment" required>
+                </div>
+                
+                <div class="flex-row justify-sb align-center">
+                <button type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </div>
+
+    {{/if}}
+
+
+
+    {{!-- add comments --}}
+
 </div>

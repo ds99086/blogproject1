@@ -98,6 +98,8 @@ async function retrieveUserWithAuthToken(authToken) {
     return user;
 }
 
+
+
 // Export functions.
 module.exports = {
     createUser,
