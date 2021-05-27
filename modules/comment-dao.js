@@ -22,10 +22,20 @@ async function deleteComment(commentID) {
     );
 }
 
+async function retrieveCommentsbyArticleID(articleId) {
+    const db = await dbPromise;
+
+    const commentList = await db.all(SQL`
+    select * from comments
+    where parentArticleID = ${articleId}`);
+
+    return commentList;
+}
 
 
 //Export funcitons
 module.exports = {
     createComment,
-    deleteComment
+    deleteComment,
+    retrieveCommentsbyArticleID
 }

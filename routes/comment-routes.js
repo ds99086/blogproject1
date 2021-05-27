@@ -27,9 +27,9 @@ router.get("/single-article", async function(req,res) {
     // const articleID = req.query.articleID;
     const articleID = 1;
 
-    const commentList = await userDao.retrieveCommentsbyArticleID(articleID);
+    const commentList = await commentDao.retrieveCommentsbyArticleID(articleID);
 
-    let output = [];
+    let output = []; 
     function addChildren(parentC, commentList) {
         for (let j = 0; j < commentList.length; j++) {
             let anotherC = commentList[j];
