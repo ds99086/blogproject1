@@ -49,23 +49,33 @@ router.get("/loadArticleAutherName", async function (req, res) {
 
 })
 
-router.get("/checkUsername", async function (req, res) {
-    const input_username = req.query.input_username;
-    const username_availability = await userDao.retrieveUserByUsername(input_username);
+router.get("/article-details", function (req, res) {
     
-    if (username_availability) {
-        const response = {
-            username_availability: false
-        }
-        res.json(response);
+    const articleID = req.query.articleID;
+    res.cookie("articleID",`${articleID}`)
+    res.render("single-article")
+    
+})
 
-    } else {
-        //console.log("This username is good to go!");
-        const response = {
-            username_availability: true
-        }
-        res.json(response);
+//get the required article from database
+router.get("/articleJSON", async function (req, res) {
+    const articleID = req.query.articleID;
+    const article = await articleDao.readArticlebyID(articleID);
+    // console.log(article)
+    const user = await userDao.retrieveUserameByUserID(article.articleAuthorID);
+
+    const updatedArticleObj = {
+        articleID: article.articleID,
+        articleTitle: article.articleTitle,
+        articlePubDate: article.articlePubDate,
+        articleAuthorID: article.articleAuthorID,
+        articleContent: article.articleContent,
+        articleAuthorUsername: user.username
     }
-});
+    // console.log(updatedArticleObj)
+     res.json(updatedArticleObj);
+    
+})
+
 
 module.exports = router;

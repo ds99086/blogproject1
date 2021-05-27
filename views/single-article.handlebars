@@ -4,7 +4,14 @@
 {{> default-navi-bar }}
 {{/if}}
 
-<div class="container">
-
+<div class="grid-container">
+        <div id="articles" class="panel">
+            <h2>Articles</h2>
+    
+            <!-- Loaded articles should appear here -->
+            <div id="signle-article"></div>
+    
+        </div>    
+        {{> sorting-column }}
 </div>
 {{> comment }}
