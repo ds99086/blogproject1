@@ -54,6 +54,9 @@ app.use(userRouter);
 // Setup article routes
 const articleRouter = require("./routes/article-routes.js");
 app.use(articleRouter);
+// Setup comment routes
+const commentRouter = require("./routes/comment-routes.js");
+app.use(commentRouter);
 
 // Start the server running.
 app.listen(port, function () {
