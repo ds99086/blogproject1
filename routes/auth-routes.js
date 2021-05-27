@@ -32,6 +32,7 @@ router.post("/newAccount", async function(req, res) {
         res.redirect("/login?message=Account creation successful. Please login using your new credentials.");
     }
     catch (err) {
+        //console.log(err)
         res.redirect("/newAccount?message=That username was already taken!");
     }
 });
@@ -97,6 +98,18 @@ router.get("/checkUsername", async function (req, res) {
         }
         res.json(response);
     }
+});
+
+router.get("/checkAuthToken", async function (req, res) {
+    const authToken = req.query.authToken;
+    const user = await userDao.retrieveUserWithAuthToken(authToken);
+
+    const usernameAndID = {
+        username: user.username,
+        userID: user.userID
+    }
+    res.json(usernameAndID)    
+    
 });
 
 //route to login page

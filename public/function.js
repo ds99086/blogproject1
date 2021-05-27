@@ -1,4 +1,4 @@
-window.addEventListener("load", function () {
+window.addEventListener("load", async function () {
 
     const username_input = document.getElementById("new_acount_username");
     const password1_input = document.getElementById("new_account_password1");
@@ -6,6 +6,85 @@ window.addEventListener("load", function () {
     const username_alert_message = document.getElementById("username_alert_message");
     const password_alert_message = document.getElementById("password_alert_message");
     const create_account_button = document.getElementById("create_account_btn");
+    
+    const writeNewArticlePageElements = document.querySelector(".editor")
+
+    //Variables to control where the application is with loading articles and how many it should load at a time
+    const loadArticleCount = 5;
+    let loadArticleNext = 0;    
+
+    //load articles title on oage
+    displayNextArticlesOnPage();
+    document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
+
+
+    async function displayNextArticlesOnPage() {
+        document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
+
+        let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount);
+
+        for (let i = 0; i < articlesJsonArray.length; i++) {
+            displayPartialArticleOnPage(articlesJsonArray[i]);
+        }
+
+        if (articlesJsonArray.length < loadArticleCount){
+            document.querySelector('#article-load-button').style.background = "red";
+            document.querySelector('#article-load-button').innerText = "No more articles";
+        } else {
+            document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
+            loadArticleNext += loadArticleCount;
+        }
+    }
+
+    async function displayPartialArticleOnPage(articleObj) {
+        let articleDivElement = document.createElement("div");
+        articleDivElement.classList.add("article");
+        let authorID = articleObj.authorID;
+        let userJSON = await getArticleAuthorName(authorID);
+
+        articleDivElement.innerHTML = `
+            <h3 class="article-title">${articleObj.title}</h3>
+            <h4 class="article-author" author-username="${userJSON.username}">Published by:${userJSON.username}</h4>
+            <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">Published on: ${articleObj.publishDate} </h6>
+            <p class="article-body"></p>
+            <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
+        `;
+
+        let articlesDiv = document.querySelector("#articles-inner");
+        articlesDiv.appendChild(articleDivElement);
+
+        articleDivElement.querySelector('.article-read-more').addEventListener('click', e=>{
+            if(e.target.innerText=="Show full content"){
+                let articleContentDiv = e.target.previousElementSibling;
+                articleContentDiv.innerHTML = `${articleObj.bodyContentOrLinkToContent}`;
+                let readMoreButtonDiv = e.target;
+                readMoreButtonDiv.innerText = 'Close full content';
+            } else if(e.target.innerText=="Close full content"){
+                let articleContentDiv = e.target.previousElementSibling;
+                articleContentDiv.innerHTML = ``;
+                let readMoreButtonDiv = e.target;
+                readMoreButtonDiv.innerText = 'Show full content';
+            }            
+        });
+    }
+
+
+
+    //get artiles array base on the ariticle numbers on page now
+    async function getArticleArray(from, count) {
+        let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}`);
+        let articlesJsonArray = await articlesResponseObj.json();
+        // console.log(articlesJsonArray)
+        return articlesJsonArray;
+    }
+
+    async function getArticleAuthorName(userID){
+        let authorNameResponseObj = await fetch(`./loadArticleAutherName?articleID=${userID}`);
+        let authorNameJson = await authorNameResponseObj.json();
+        return authorNameJson;
+    }
+
+
 
     //this this checking whether we are on the new account page
     //then add event listener to monitor the input
@@ -33,11 +112,45 @@ window.addEventListener("load", function () {
         userAvatarChangeLiveUpdate();
     };
 
+    //check whether we are on article writing page.
+    //if so, get the username and userID by cookie
+    // if(writeNewArticlePageElements!=undefined){
+    //     const usernameArea = document.querySelector(".articleAuthorusername")
+    //     console.log(usernameArea)
+
+    //     const authToken = getCookie("authToken");
+    //     console.log(authToken)
+    //     const usernameAndID = await retrieveUserByAuthToken(authToken);
+    //     console.log(usernameAndID)
+        
+    //     usernameArea.setAttribute("value", `${usernameAndID.username}`)
+
+    // }
+
 
     // in the window.addEventListener call the avatar live update function
 
 
 });
+
+// async function retrieveUserByAuthToken(authToken){
+//     let response = await fetch(`./checkAuthToken?authToken=${authToken}`);
+//     let usernameAndIDObj = await response.json();
+//     return usernameAndIDObj;
+// }
+
+// //get cookie by attribute from client side
+// function getCookie(cname) {
+//     const name = `${cname}=`;
+//     const decodedCookie = decodeURIComponent(document.cookie); 
+//     const cookieArray = decodedCookie.split(";");
+//     for(let i = 0; i <cookieArray.length; i++) {
+//         let cookie = cookieArray[i].trim(); 
+//         if (cookie.indexOf(name) === 0) {
+//             return cookie.substring(name.length); }
+//     }
+//     return undefined; 
+// }
 
 async function retrieveUserByUsername(id) {
     let response = await fetch(`./checkUsername?input_username=${id}`);
