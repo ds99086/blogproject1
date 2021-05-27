@@ -3,6 +3,8 @@ const router = express.Router();
 const articleDao = require("../modules/article-dao");
 const userDao = require("../modules/user-dao");
 const { retrieveUserWithAuthToken } = require("../modules/user-dao");
+const commentDao = require("../modules/comment-dao.js");
+
 
 
 
@@ -49,10 +51,49 @@ router.get("/loadArticleAutherName", async function (req, res) {
 
 })
 
-router.get("/article-details", function (req, res) {
+router.get("/article-details", async function (req, res) {
     
     const articleID = req.query.articleID;
     res.cookie("articleID",`${articleID}`)
+    function removeItemOnce(arr, value) {
+        var index = arr.indexOf(value);
+        if (index > -1) {
+          arr.splice(index, 1);
+        }
+        return arr;
+    }
+
+    
+
+    const commentList = await commentDao.retrieveCommentsbyArticleID(articleID);
+
+    let output = []; 
+    function addChildren(parentC, commentList) {
+        for (let j = 0; j < commentList.length; j++) {
+            let anotherC = commentList[j];
+            if (anotherC.parentComment === parentC.commentID) {
+                if (!Array.isArray(parentC.children)) {
+                    parentC.children = [];  
+                } 
+                parentC.children.push(anotherC);
+                removeItemOnce(commentList, anotherC);
+                j--;
+                addChildren(anotherC, commentList);
+            }
+        }
+    }
+
+    for (let i = 0; i < commentList.length; i++) {
+        let comment = commentList[i];
+        if (comment.commentLevel == 0 ) {
+        output.push(comment);
+        removeItemOnce(commentList, comment);
+        i--;
+        addChildren(comment, commentList, output);
+    }}
+    
+    res.locals.commentlist = output;
+    
     res.render("single-article")
     
 })

@@ -20,8 +20,76 @@ window.addEventListener("load", async function () {
         let loadArticleNext = 0;
 
         //load articles title on oage
-        displayNextArticlesOnPage(loadArticleNext, loadArticleCount);
+        displayNextArticlesOnPage();
         document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
+
+        async function displayNextArticlesOnPage() {
+            document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
+        
+            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount);
+        
+            for (let i = 0; i < articlesJsonArray.length; i++) {
+                displayPartialArticleOnPage(articlesJsonArray[i]);
+            }
+        
+            if (articlesJsonArray.length < loadArticleCount) {
+                document.querySelector('#article-load-button').style.background = "red";
+                document.querySelector('#article-load-button').innerText = "No more articles";
+            } else {
+                document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
+                loadArticleNext += loadArticleCount;
+            }
+        }
+        
+        async function displayPartialArticleOnPage(articleObj) {
+            let articleDivElement = document.createElement("div");
+            articleDivElement.classList.add("article");
+            let authorID = articleObj.authorID;
+            let userJSON = await getArticleAuthorName(authorID);
+        
+            articleDivElement.innerHTML = `
+                <h3 class="article-title"><a href="./article-details?articleID=${articleObj.articleID}">${articleObj.title}</a></h3>
+                <h4 class="article-author" author-username="${userJSON.username}">Published by:${userJSON.username}</h4>
+                <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">Published on: ${articleObj.publishDate} </h6>
+                <p class="article-body"></p>
+                <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
+            `;
+        
+            let articlesDiv = document.querySelector("#articles-inner");
+            articlesDiv.appendChild(articleDivElement);
+        
+            articleDivElement.querySelector('.article-read-more').addEventListener('click', e => {
+                if (e.target.innerText == "Show full content") {
+                    let articleContentDiv = e.target.previousElementSibling;
+                    articleContentDiv.innerHTML = `${articleObj.bodyContentOrLinkToContent}`;
+                    let readMoreButtonDiv = e.target;
+                    readMoreButtonDiv.innerText = 'Close full content';
+                } else if (e.target.innerText == "Close full content") {
+                    let articleContentDiv = e.target.previousElementSibling;
+                    articleContentDiv.innerHTML = ``;
+                    let readMoreButtonDiv = e.target;
+                    readMoreButtonDiv.innerText = 'Show full content';
+                }
+            });
+        }
+        
+        
+        
+        //get artiles array base on the ariticle numbers on page now
+        async function getArticleArray(from, count) {
+            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}`);
+            let articlesJsonArray = await articlesResponseObj.json();
+            // console.log(articlesJsonArray)
+            return articlesJsonArray;
+        }
+        
+        async function getArticleAuthorName(userID) {
+            let authorNameResponseObj = await fetch(`./loadArticleAutherName?articleID=${userID}`);
+            let authorNameJson = await authorNameResponseObj.json();
+            return authorNameJson;
+        }
+
+
     }    
 
 
@@ -127,71 +195,7 @@ window.addEventListener("load", async function () {
 //     return undefined; 
 // }
 
-async function displayNextArticlesOnPage(loadArticleNext, loadArticleCount) {
-    document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
 
-    let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount);
-
-    for (let i = 0; i < articlesJsonArray.length; i++) {
-        displayPartialArticleOnPage(articlesJsonArray[i]);
-    }
-
-    if (articlesJsonArray.length < loadArticleCount) {
-        document.querySelector('#article-load-button').style.background = "red";
-        document.querySelector('#article-load-button').innerText = "No more articles";
-    } else {
-        document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
-        loadArticleNext += loadArticleCount;
-    }
-}
-
-async function displayPartialArticleOnPage(articleObj) {
-    let articleDivElement = document.createElement("div");
-    articleDivElement.classList.add("article");
-    let authorID = articleObj.authorID;
-    let userJSON = await getArticleAuthorName(authorID);
-
-    articleDivElement.innerHTML = `
-        <h3 class="article-title"><a href="./article-details?articleID=${articleObj.articleID}">${articleObj.title}</a></h3>
-        <h4 class="article-author" author-username="${userJSON.username}">Published by:${userJSON.username}</h4>
-        <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">Published on: ${articleObj.publishDate} </h6>
-        <p class="article-body"></p>
-        <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
-    `;
-
-    let articlesDiv = document.querySelector("#articles-inner");
-    articlesDiv.appendChild(articleDivElement);
-
-    articleDivElement.querySelector('.article-read-more').addEventListener('click', e => {
-        if (e.target.innerText == "Show full content") {
-            let articleContentDiv = e.target.previousElementSibling;
-            articleContentDiv.innerHTML = `${articleObj.bodyContentOrLinkToContent}`;
-            let readMoreButtonDiv = e.target;
-            readMoreButtonDiv.innerText = 'Close full content';
-        } else if (e.target.innerText == "Close full content") {
-            let articleContentDiv = e.target.previousElementSibling;
-            articleContentDiv.innerHTML = ``;
-            let readMoreButtonDiv = e.target;
-            readMoreButtonDiv.innerText = 'Show full content';
-        }
-    });
-}
-
-
-
-//get artiles array base on the ariticle numbers on page now
-async function getArticleArray(from, count) {
-    let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}`);
-    let articlesJsonArray = await articlesResponseObj.json();
-    // console.log(articlesJsonArray)
-    return articlesJsonArray;
-}
-
-async function getArticleAuthorName(userID) {
-    let authorNameResponseObj = await fetch(`./loadArticleAutherName?articleID=${userID}`);
-    let authorNameJson = await authorNameResponseObj.json();
-    return authorNameJson;
-}
 
 
 async function retrieveUserByUsername(id) {

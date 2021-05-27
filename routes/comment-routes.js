@@ -12,51 +12,6 @@ const { createComment } = require("../modules/comment-dao.js");
 // io.listen(3000);
 
 
-router.get("/single-article", async function(req,res) {
-
-    //removes a known item from an array
-    function removeItemOnce(arr, value) {
-        var index = arr.indexOf(value);
-        if (index > -1) {
-          arr.splice(index, 1);
-        }
-        return arr;
-    }
-
-    //Article number is hard coded to 1. 
-    // const articleID = req.query.articleID;
-    const articleID = 1;
-
-    const commentList = await commentDao.retrieveCommentsbyArticleID(articleID);
-
-    let output = []; 
-    function addChildren(parentC, commentList) {
-        for (let j = 0; j < commentList.length; j++) {
-            let anotherC = commentList[j];
-            if (anotherC.parentComment === parentC.commentID) {
-                if (!Array.isArray(parentC.children)) {
-                    parentC.children = [];  
-                } 
-                parentC.children.push(anotherC);
-                removeItemOnce(commentList, anotherC);
-                j--;
-                addChildren(anotherC, commentList);
-            }
-        }
-    }
-
-    for (let i = 0; i < commentList.length; i++) {
-        let comment = commentList[i];
-        if (comment.commentLevel == 0 ) {
-        output.push(comment);
-        removeItemOnce(commentList, comment);
-        i--;
-        addChildren(comment, commentList, output);
-    }}
-    
-    res.locals.commentlist = output;
-    res.render("single-article");
-})
 
 //Hardcode user details
 router.post("/newComment", async function(req,res) {
