@@ -51,6 +51,25 @@ async function retrieveUserByUsername(username) {
     return user;
 }
 
+async function retrieveUserByUserID(userID) {
+    const db = await dbPromise;
+
+    const user = await db.get(SQL`
+        select * from users
+        where userID = ${userID}`);
+
+    return user;
+}
+
+
+async function retrieveUserameByUserID(userID) {
+    const db = await dbPromise;
+    const user = await db.get(SQL`
+        select username from users
+        where userID = ${userID}`);
+    return user;
+}
+
 //need to update
 //delete user will also delete user's articles and comments
 async function deleteUser(username) {
@@ -64,8 +83,9 @@ async function getUserPassword(username) {
     //console.log(`Getting the password of ${username}`);
     const db = await dbPromise;
     const hashPassword = await db.get(SQL`SELECT passwordFieldToUpdate FROM users WHERE username = ${username}`);
-    
-    return hashPassword.passwordFieldToUpdate;
+    if(hashPassword != undefined){
+        return hashPassword.passwordFieldToUpdate;
+    } else {return undefined};
 }
 
 async function retrieveUserWithAuthToken(authToken) {
@@ -95,7 +115,8 @@ module.exports = {
     updateUser,
     deleteUser,
     retrieveUserByUsername,
+    retrieveUserByUserID,
     getUserPassword,
     retrieveUserWithAuthToken,
-    retrieveCommentsbyArticleID
+    retrieveUserameByUserID
 };

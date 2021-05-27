@@ -57,6 +57,16 @@ function checkIsArticle(article) {
     return value;
 }
 
+async function readArticleListByOrder(startingIndex, LastArticleIndex, attribute ,order){
+    const db = await dbPromise;
+    const articleList = await db.all(`
+    SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES
+    ORDER BY ${attribute} ${order}
+    LIMIT ${startingIndex},${LastArticleIndex};`)    
+
+    return articleList;
+}
+
 //Export funcitons
 module.exports = {
     readArticlebyID,
@@ -64,4 +74,5 @@ module.exports = {
     writeNewArticle,
     writeUpdateArticle,
     readAuthor,
+    readArticleListByOrder
 }
