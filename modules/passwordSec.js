@@ -14,10 +14,14 @@ async function checkHashPassword(userName, password) {
     let dataBasePass = await userDao.getUserPassword(userName);
     //console.log("the password returned from the database is "+dataBasePass);
 
-    let checkResult = await bcrypt.compareSync(password, dataBasePass);
-    //console.log(checkResult);
-
-    return checkResult;
+    if(dataBasePass == undefined){
+        return false
+    } else {
+        let checkResult = await bcrypt.compareSync(password, dataBasePass);
+        //console.log(checkResult);
+    
+        return checkResult;
+    }    
 }
 
 module.exports = {

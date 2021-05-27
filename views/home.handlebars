@@ -8,14 +8,18 @@
 <p>{{message}} {{user.username}}</p>
 {{/if}}
 
-<div class="container">
-    <div id="articles" class="panel">
-        <h2>Articles</h2>
 
-        <!-- Loaded articles should appear here -->
-        <div id="articles-inner"></div>
-
-        <div id="article-load-button" class="article-load button">Load more articles</div>
+    <div class="grid-container">
+        <div id="articles" class="panel">
+            <h2>Articles</h2>
+    
+            <!-- Loaded articles should appear here -->
+            <div id="articles-inner"></div>
+    
+            <div id="article-load-button" class="article-load button">Load more articles</div>
+        </div>    
+        {{> sorting-column }}
     </div>
 
-</div>
+    
+

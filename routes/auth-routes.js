@@ -32,6 +32,7 @@ router.post("/newAccount", async function(req, res) {
         res.redirect("/login?message=Account creation successful. Please login using your new credentials.");
     }
     catch (err) {
+        //console.log(err)
         res.redirect("/newAccount?message=That username was already taken!");
     }
 });

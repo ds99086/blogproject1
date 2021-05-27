@@ -64,6 +64,31 @@ body {
 .container {
     margin: 20px 20px;
 }
+
+.grid-container {
+    margin: auto 7%;
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+            "header header"
+            "articles catalogue"
+}
+
+.header {
+    grid-area: header;
+    display: flex;
+    justify-content: center;
+}
+
+.nav {
+    grid-area: navi;
+}
+
+#articles { grid-area: articles; }
+#catalogue { grid-area: catalogue; }
+
+
 /*****************************************************************/
 
 
@@ -204,9 +229,6 @@ form .form-group {
 
 /* Articles */
 /*****************************************************************/
-#articles { 
-    grid-area: articles; 
-}
 
 .article {
     margin: 0.25em;

@@ -75,8 +75,9 @@ async function getUserPassword(username) {
     //console.log(`Getting the password of ${username}`);
     const db = await dbPromise;
     const hashPassword = await db.get(SQL`SELECT passwordFieldToUpdate FROM users WHERE username = ${username}`);
-    
-    return hashPassword.passwordFieldToUpdate;
+    if(hashPassword != undefined){
+        return hashPassword.passwordFieldToUpdate;
+    } else {return undefined};
 }
 
 async function retrieveUserWithAuthToken(authToken) {
