@@ -60,7 +60,7 @@ router.post("/articleUploadFile", multerUploader.single("blogImage"), async func
     let imageUrl = `userUploads/user_${user.userID}/${fileInfo.originalname}`;
 
     //Stuff to pass back to the client
-    let text = `<h1>Image succesfully uploaded!</h1><br>
+    let text = `<h1>Image successfully uploaded!</h1><br>
     <img src=${imageUrl} width="300">
     <p>The link to the image is <a href=${imageUrl}>${imageUrl}</a></p><br>
     <p>you can delete this message and continue working on your article below</p><br>
