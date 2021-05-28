@@ -233,6 +233,10 @@ form .form-group {
 .userAvatarDiv{
     height: 100px;
 }
+
+.vote-icon {
+    width: 10px;
+}
 /*****************************************************************/
 
 
