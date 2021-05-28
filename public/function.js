@@ -8,6 +8,9 @@ window.addEventListener("load", async function () {
     const create_account_button = document.getElementById("create_account_btn");
     const single_article_div = document.querySelector("#signle-article");
     const homepage_articles_div = document.querySelector("#articles-inner")
+    const list_of_replybtn = document.getElementsByClassName("comment-reply");
+    
+
     //const vote_up = document.getElementsByClassName("vote-up");
     //const vote_down = document.getElementsByClassName("vote-down");
     
@@ -79,8 +82,6 @@ window.addEventListener("load", async function () {
             });
         }
         
-        
-        
         //get artiles array base on the ariticle numbers on page now
         async function getArticleArray(from, count) {
             let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}`);
@@ -94,13 +95,7 @@ window.addEventListener("load", async function () {
             let authorNameJson = await authorNameResponseObj.json();
             return authorNameJson;
         }
-
-
     }    
-
-
-    
-
 
     //this this checking whether we are on the new account page
     //then add event listener to monitor the input
@@ -139,6 +134,92 @@ window.addEventListener("load", async function () {
         <h6 class="article-publishDate" data-publishDate="${article.articlePubDate}">Published on: ${article.articlePubDate} </h6>
         <p class="article-body">${article.articleContent}</p>`
     }
+
+
+    //if we have a list of reply butons - the single article page has comments
+    //add eventlistener for each buttons to create new-comment form. 
+    //add eventlistener for each submit button to send the form. 
+    //console.log(list_of_replybtn);
+    if(list_of_replybtn) {
+        for (let i = 0; i < list_of_replybtn.length; i++) {
+            replybtn = list_of_replybtn[i];
+            //console.log(replybtn);
+            replybtn.addEventListener('click', e => {
+                if (e.target.innerText == "Reply") {
+                    let buttonDiv = e.target;
+                    buttonDiv.innerHTML = "Cancel";
+                    const replyDiv = document.createElement("div");
+                    buttonDiv.parentElement.parentElement.appendChild(replyDiv);
+                    replyDiv.innerHTML=`
+                    <div class="new-comment-box">
+                        <div class="flex-col mb">
+                            <input type="hidden" name="parentcomment" id="parentcomment" value="">
+                            <label for="txtReply">Leave your comment:</label>
+                            <input type="text" name="commentText" id="txtReply" required>
+                        </div>
+                        <div class="flex-row justify-sb align-center">
+                        <button class="reply-submit">Submit</button>
+                        </div>
+                    </div>
+                    `;
+                } else if (e.target.innerText == "Cancel") {
+                    let buttonDiv = e.target;
+                    buttonDiv.innerHTML = "Reply";
+                    let replyDiv = e.target.parentElement.parentElement.lastChild;
+                    replyDiv.remove();
+                }
+                
+
+                // const list_of_submitform = document.querySelectorAll("form.commentReplyForm");
+                //console.log(list_of_submitform);
+                const list_of_submitbtn = document.getElementsByClassName("reply-submit");
+                
+                for (let j = 0; j < list_of_submitbtn.length; j++) {
+                    const submitbtn = list_of_submitbtn[j];
+                    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.id;   
+                    const replyContentDiv = submitbtn.parentElement.previousElementSibling.lastElementChild;
+                    //console.log(replyContentDiv);
+
+                    submitbtn.addEventListener('click', async e => {
+                        const replyContent = replyContentDiv.value;
+                        const parentComment = parentCommentId;
+                        const articleID = getCookie("articleID");
+                        console.log(articleID);
+                        // console.log(parentCommentId);
+                        //console.log(replyContent);
+
+                        const response = await createReplyToComment(parentComment, replyContent, articleID);
+
+
+                    })
+                  
+                    
+                    
+
+                    // const parentcommentIDcontainer = targetbtn.parentElement.parentElement.firstElementChild.firstElementChild;
+                    // console.log(parentcommentIDcontainer);
+                
+                // 
+
+                //     form.addEventListener('submit', e => {
+                        
+                //         e.preventDefault();
+                //         console.log("paused form submit");
+                        
+                //         parentcommentIDcontainer.value = parentCommentId;
+                //         form.submit();
+                        
+                        
+                    // })
+                    
+                }
+
+                //console.log(list_of_submitreplybtn);
+            }
+        )
+    }};
+
+
 
     //check whether we are on article writing page.
     //if so, get the username and userID by cookie
@@ -263,6 +344,12 @@ function getCookie(cname) {
             return cookie.substring(name.length); }
     }
     return undefined; 
+}
+
+async function createReplyToComment(parentComment, replyContent, articleID) {
+    const response = await fetch(`./replyComment?parentCommentID=${parentComment}&replyContent=${replyContent}&articleID=${articleID}`);
+
+    return response;
 }
 
 
