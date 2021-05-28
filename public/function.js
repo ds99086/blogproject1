@@ -138,6 +138,25 @@ window.addEventListener("load", async function () {
         <h4 class="article-author" author-username="${article.articleAuthorUsername}">Published by:${article.articleAuthorUsername}</h4>
         <h6 class="article-publishDate" data-publishDate="${article.articlePubDate}">Published on: ${article.articlePubDate} </h6>
         <p class="article-body">${article.articleContent}</p>`
+
+
+        //display all the vote count once the page load
+        //select all the vote-container
+        const vote_containers = document.querySelectorAll(".vote-container");
+        for(vote_container of vote_containers){
+            const comment_ID = vote_container.parentElement.getAttribute(id);
+            const voteCountsObj = getVoteCountByCommentID(comment_ID)
+            const upVoteCount = voteCountsObj.upVotesCount;
+            const downVoteCount = voteCountsObj.downVotesCount;
+            const upVoteDisplayDiv = vote_container.querySelector(".upvote-count")
+            const downVoteDisplayDiv = vote_container.querySelector(".downvote-count")
+            upVoteDisplayDiv.innerText = upVoteCount;
+            downVoteDisplayDiv.innerText = downVoteCount;
+
+
+        }
+
+
     }
 
     //check whether we are on article writing page.
@@ -201,6 +220,10 @@ window.addEventListener("load", async function () {
 //     return undefined; 
 // }
 
+async function getVoteCountByCommentID(commentID){
+    const voteCountObj = await fetch(`./getvotecounts?commentID=${commentID}`)
+    return voteCountObj
+}
 
 
 
