@@ -27,7 +27,7 @@ router.post("/articleChanges", async function(req, res) {
     res.locals.title = "WYSIWYG Editor"
     res.locals.WYSIWYG = true;
     res.locals.returnText = text;
-    res.render("new-article");
+    res.redirect(`/./article-details?articleID=${newArticle.lastID}`);
 });
 
 
