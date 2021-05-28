@@ -11,7 +11,13 @@ async function createComment(comment) {
     
     const result = await db.run(SQL`
         INSERT INTO comments (commentDate, commentText, commentLevel, parentComment, authorID, parentArticleID) 
-        VALUES(${comment.commentDate}, ${comment.commentText}, ${comment.commentLevel}, ${comment.commentParent}, ${comment.commentAuthorID}, ${comment.commentArticleID})`);
+        VALUES(
+            ${comment.commentDate}, 
+            ${comment.commentText}, 
+            ${comment.commentLevel}, 
+            ${comment.commentParent}, 
+            ${comment.commentAuthorID}, 
+            ${comment.commentArticleID})`);
 }
 
 async function deleteComment(commentID) {

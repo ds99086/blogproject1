@@ -249,6 +249,12 @@ form .form-group {
     padding: 1em 1em 3em 4em;
 }
 
+.commentreply-delete, .vote-buttons{
+    display:flex;
+    align-items: baseline;
+
+}
+
 
 
 /* Articles */
