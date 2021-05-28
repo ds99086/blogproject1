@@ -13,6 +13,7 @@
 --Drop existing tables to reinitialise the data base.
 --Commented out for safety.
 
+DROP TABLE IF EXISTS articleVotes;
 DROP TABLE IF EXISTS votes;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS articles;
@@ -27,7 +28,8 @@ CREATE TABLE users (
 	lastName VARCHAR(100),
 	dateOfBirth DATE,
     avatarImage VARCHAR(500),
-    authToken VARCHAR(128)
+    authToken VARCHAR(128),
+    adminstratorLevel INTEGER DEFAULT 0
 	);
 
 CREATE TABLE articles (
@@ -59,6 +61,16 @@ CREATE TABLE votes (
 	PRIMARY KEY (userID,commentID),
     FOREIGN KEY (userID) REFERENCES users (userID),
 	FOREIGN KEY (commentID) REFERENCES comments (commentID)
+	);
+	
+	
+CREATE TABLE articleVotes (
+	userID INTEGER NOT NULL,
+	articleID INTEGER NOT NULL,
+	voteValue INTEGER,
+	PRIMARY KEY (userID, articleID),
+    FOREIGN KEY (userID) REFERENCES users (userID),
+	FOREIGN KEY (articleID) REFERENCES articles (articleID)
 	);
 	
 --users(userID, username, passwordFieldsToUpdate, firstName, lastName, dateOfBirth)
@@ -115,9 +127,6 @@ INSERT INTO articles VALUES
                 ',4);
 				
 	
-	
-
-
 INSERT INTO comments VALUES
    (1, '2010-04-20', 'This is the first comment, no parent, article 1', 0, 0, 2, 1),
    (2, '2011-04-20', 'This is the second comment, no parent, article 1', 0, 0, 2, 1),
@@ -131,3 +140,15 @@ INSERT INTO comments VALUES
    (10, '2010-04-20', 'This is the tenth comment, no parent, article 1', 0, 0, 2, 1),
    (11, '2011-04-20', 'This is the elevnth comment, no parent, article 1', 0, 0, 2, 1),
    (12, '2012-04-20', 'This is the twelth comment, replies to the 10th comment, artcile 1', 1, 10, 2, 1);
+   
+   
+ INSERT INTO votes VALUES
+	(1, 1, 1),
+	(2, 1, 1),
+	(3, 1, 1),
+	(1, 2, -1),
+	(2, 2, 1),
+	(3, 2, -1),
+	(2, 3, 1);
+   
+
