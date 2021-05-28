@@ -54,10 +54,10 @@ router.post("/articleUploadFile", multerUploader.single("blogImage"), async func
     if (!fs.existsSync(`./public/userUploads/user_${user.userID}`)){
         fs.mkdirSync(`./public/userUploads/user_${user.userID}`);
     }
-    const newFileName = `./public/userUploads/user_${user.userID}/${fileInfo.originalname}`;
+    const newFileName = `./public/userUploads/user_${user.userID}/${fileInfo.originalname.replace(/\s/g, '')}`;
     fs.renameSync(oldFileName, newFileName);
 
-    let imageUrl = `userUploads/user_${user.userID}/${fileInfo.originalname}`;
+    let imageUrl = `userUploads/user_${user.userID}/${fileInfo.originalname.replace(/\s/g, '')}`;
 
     //Stuff to pass back to the client
     let text = `<h1>Image successfully uploaded!</h1><br>

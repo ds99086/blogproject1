@@ -3,6 +3,7 @@
 <div>
     <h1>WYSIWYG Editor</h1>
 </div>
+    <form method="post" action="./articleChanges">
     <div style="border: solid 1px black; padding: 10px; margin: auto; width: 400px">
         <h2>Basic Aritcle Information</h2>
         <label for="articleTitle">Article Title:</label>
@@ -72,6 +73,12 @@
                         </span>
                         </div>
                         
+                        <div style="margin: auto 50px auto;">
+                            
+                            <input type="hidden" id="articleContent" name="articleContent">
+                            <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Create New Article</button>
+                            </form>
+                        </div>
                         
                         <div class="box" style="border: 1px solid; margin: auto">
                             <div style="margin: 5px">
@@ -85,6 +92,8 @@
                                     <button type="submit" id="loadArticle" onclick="alert('Loading an existing article')">Loading an Article by Number</button></form>
                             </div>
                         </div>
+
+                        
                         
                         
                     </div>
@@ -137,12 +146,7 @@
 
 
 
-                        <div style="margin: auto 50px auto;">
-                            <form method="post" action="./articleChanges">
-                            <input type="hidden" id="articleContent" name="articleContent">
-                            <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Create New Article</button>
-                            </form>
-                        </div>
+                        
                         </div>
 
                     </div>
