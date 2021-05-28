@@ -57,11 +57,13 @@ app.use(articleRouter);
 // Setup comment routes
 const commentRouter = require("./routes/comment-routes.js");
 app.use(commentRouter);
+//setip vote routes
+const voteRouter = require("./routes/vote-routes.js");
+app.use(voteRouter);
 
 // Start the server running.
 app.listen(port, function () {
     console.log(`App listening on port ${port}!`);
-
 
 
 });

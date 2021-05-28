@@ -21,9 +21,23 @@ async function getVotesCount(commentID){
     return votesCount;
 }
 
+async function getSingleVote(commentID, userID){
+    const db = await dbPromise;
+    const vote = await db.get(SQL`
+    SELECT * FROM votes
+    WHERE userID=${userID}, commentID=${commentID}`
+    );
+    return vote;
+}
+
+
 async function updateVote(voteObject){
     const db = await dbPromise;
-    const
+    const result = await db.run(SQL`
+    DELETE FROM votes
+    WHERE userID = ${userID}, commentID=${commentID}
+    `);
+    await addVote(voteObject);
 }
 
 
@@ -35,7 +49,7 @@ async function addVote(voteObject){
     `);
 }
 
-async function deleteVote(userID){
+async function deleteUserAllVotes(userID){
     const db = await dbPromise;
     const result = await db.run(SQL`
     DELETE FROM votes
@@ -47,5 +61,7 @@ async function deleteVote(userID){
 module.exports = {
     getVotesCount,
     addVote,
-    deleteVote
+    deleteUserAllVotes,
+    updateVote,
+    getSingleVote
 }

@@ -51,7 +51,7 @@ window.addEventListener("load", async function () {
             let userJSON = await getArticleAuthorName(authorID);
         
             articleDivElement.innerHTML = `
-                <h3 class="article-title"><a href="./article-details?articleID=${articleObj.articleID}">${articleObj.title}</a></h3>
+                <h3 class="article-title""><a href="./article-details?articleID=${articleObj.articleID}">${articleObj.title}</a></h3>
                 <h4 class="article-author" author-username="${userJSON.username}">Published by:${userJSON.username}</h4>
                 <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">Published on: ${articleObj.publishDate} </h6>
                 <p class="article-body"></p>
@@ -129,6 +129,8 @@ window.addEventListener("load", async function () {
     };
 
 
+    //need to work on here to combine comment and vote
+
     //if we are on the signle account page
     //get the articleID from cookies and use js to display the article
     if(single_article_div!=undefined){
@@ -143,20 +145,53 @@ window.addEventListener("load", async function () {
         //display all the vote count once the page load
         //select all the vote-container
         const vote_containers = document.querySelectorAll(".vote-container");
-        for(vote_container of vote_containers){
+        for (vote_container of vote_containers) {
             const comment_ID = vote_container.parentElement.getAttribute(id);
-            const voteCountsObj = getVoteCountByCommentID(comment_ID)
+            const voteCountsObj = await getVoteCountByCommentID(comment_ID)
             const upVoteCount = voteCountsObj.upVotesCount;
             const downVoteCount = voteCountsObj.downVotesCount;
             const upVoteDisplayDiv = vote_container.querySelector(".upvote-count")
             const downVoteDisplayDiv = vote_container.querySelector(".downvote-count")
             upVoteDisplayDiv.innerText = upVoteCount;
             downVoteDisplayDiv.innerText = downVoteCount;
-
-
         }
 
 
+        //for all up and down vote action, update the database and number displayed
+        const vote_icon = document.querySelectorAll(".vote-icon");
+        for (each_vote_icon of vote_icon) {
+            each_vote_icon.addEventListener('click', async e => {
+                let voteValue = 0;
+                if (e.target.innerText == "Upvote") {
+                    voteValue = 1
+                } else if (e.target.innerText == "Downvote") {
+                    voteValue = -1
+                }
+                const currentCountElement = e.target.nextSibling;
+                const comment_ID = e.target.parentElement.parentElement.getAttribute(id);
+                const user_ID = e.target.parentElement.parentElement.getAttribute(userID);
+                const updateResult = await updateVote(comment_ID, user_ID, voteValue);
+
+                if (e.target.innerText == "Upvote") {
+                    if (updateResult == "new vote added") {
+                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                    } else if (updateResult == "vote changed") {
+                        currentCountElement.innerText = parseInt(currentCountElement.innerText) - 1;
+                        const oppositeCountElement = currentCountElement.nextSibling.nextSibling;
+                        oppositeCountElement.innerText = parseInt(oppositeCountElement.innerText) + 1;
+                    }
+                }
+                else if (e.target.innerText == "Downvote") {
+                    if (updateResult == "new vote added") {
+                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                    } else if (updateResult == "vote changed") {
+                        currentCountElement.innerText = parseInt(currentCountElement.innerText) - 1;
+                        const oppositeCountElement = currentCountElement.previousElementSibling.previousElementSibling;
+                        oppositeCountElement.innerText = parseInt(oppositeCountElement.innerText) + 1;
+                    }
+                }
+            })
+        }
     }
 
     //check whether we are on article writing page.
@@ -223,6 +258,11 @@ window.addEventListener("load", async function () {
 async function getVoteCountByCommentID(commentID){
     const voteCountObj = await fetch(`./getvotecounts?commentID=${commentID}`)
     return voteCountObj
+}
+
+async function updateVote(commentID, userID, voteValue){
+    const result = await fetch(`./updateVote?commentID=${commentID}&userID=${userID}&voteValue=${voteValue}`)
+    return result;
 }
 
 
