@@ -57,14 +57,17 @@ function checkIsArticle(article) {
     return value;
 }
 
-async function readArticleListByOrder(startingIndex, LastArticleIndex, attribute ,order){
+//using append to force SQL in use
+async function readArticleListBycolumnAndOrder(startIndex, lastIndex, columeName, order){
     const db = await dbPromise;
-    const articleList = await db.all(`
+    const query = SQL`
     SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES
-    ORDER BY ${attribute} ${order}
-    LIMIT ${startingIndex},${LastArticleIndex};`)    
-
-    return articleList;
+    ORDER BY `
+    query.append(`${columeName} ${order}
+    LIMIT ${startIndex}, ${lastIndex};`);
+    const articleList = await db.all(query)
+    // console.log(articleList)
+    return articleList;    
 }
 
 //Export funcitons
@@ -74,5 +77,5 @@ module.exports = {
     writeNewArticle,
     writeUpdateArticle,
     readAuthor,
-    readArticleListByOrder
+    readArticleListBycolumnAndOrder
 }
