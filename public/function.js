@@ -38,7 +38,6 @@ window.addEventListener("load", async function () {
             if (articlesJsonArray.length < loadArticleCount) {
                 document.querySelector('#article-load-button').style.background = "red";
                 document.querySelector('#article-load-button').innerText = "No more articles";
-                document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
             } else {
                 document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
                 loadArticleNext += loadArticleCount;
@@ -64,11 +63,11 @@ window.addEventListener("load", async function () {
             articlesDiv.appendChild(articleDivElement);
         
             articleDivElement.querySelector('.article-read-more').addEventListener('click', e => {
-                if (e.target.innerText == "Show full content") {
+                  if (e.target.innerText == "Show full content") {
                     let articleContentDiv = e.target.previousElementSibling;
                     articleContentDiv.innerHTML = `${articleObj.bodyContentOrLinkToContent}`;
                     let readMoreButtonDiv = e.target;
-                    readMoreButtonDiv.style.style.background = "red";
+                    readMoreButtonDiv.style.background = "red";
                     readMoreButtonDiv.innerText = 'Close full content';
                 } else if (e.target.innerText == "Close full content") {
                     let articleContentDiv = e.target.previousElementSibling;
