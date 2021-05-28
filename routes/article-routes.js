@@ -4,7 +4,8 @@ const articleDao = require("../modules/article-dao");
 const userDao = require("../modules/user-dao");
 const { retrieveUserWithAuthToken } = require("../modules/user-dao");
 const commentDao = require("../modules/comment-dao.js");
-
+const multerUploader = require("../modules/multer-uploader.js")
+const fs = require("fs");
 
 
 
@@ -37,6 +38,33 @@ router.post("/editArticle", async function(req, res) {
     const targetArticle = articleDao.readArticlebyID(articleID);
     let text = (await targetArticle).articleContent;
     
+    res.locals.title = "WYSIWYG Editor"
+    res.locals.WYSIWYG = true;
+    res.locals.returnText = text;
+    res.render("new-article");
+});
+
+router.post("/articleUploadFile", multerUploader.single("blogImage"), async function(req, res) {
+    const articleContent = req.body.imageUploadContent;
+    const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+    console.log("attempting file upload");
+    console.log("user ID = "+user.userID);
+    const fileInfo = req.file;
+    const oldFileName = fileInfo.path;
+    if (!fs.existsSync(`./public/userUploads/user_${user.userID}`)){
+        fs.mkdirSync(`./public/userUploads/user_${user.userID}`);
+    }
+    const newFileName = `./public/userUploads/user_${user.userID}/${fileInfo.originalname}`;
+    fs.renameSync(oldFileName, newFileName);
+
+    let imageUrl = `userUploads/user_${user.userID}/${fileInfo.originalname}`;
+
+    //Stuff to pass back to the client
+    let text = `<h1>Image succesfully uploaded!</h1><br>
+    <img src=${imageUrl} width="300">
+    <p>The link to the image is <a href=${imageUrl}>${imageUrl}</a></p><br>
+    <p>you can delete this message and continue working on your article below</p><br>
+    ${articleContent}`;
     res.locals.title = "WYSIWYG Editor"
     res.locals.WYSIWYG = true;
     res.locals.returnText = text;

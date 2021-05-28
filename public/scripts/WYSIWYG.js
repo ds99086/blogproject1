@@ -10,14 +10,19 @@ window.addEventListener("load", function () {
     const visuellView = contentArea.getElementsByClassName('visuell-view')[0];
     const htmlView = contentArea.getElementsByClassName('html-view')[0];
     const modal = document.getElementsByClassName('modal')[0];
+    
 
     const newArticleButton = document.getElementById("makeNewArticle");
     const loadArticleButton = document.getElementById("loadArticle");
+    const uploadButton = document.getElementById("uploadButton");
 
     // add active tag event
     document.addEventListener('selectionchange', selectionChange);
     newArticleButton.addEventListener('click', function() {
         saveArticle()}
+        );
+    uploadButton.addEventListener('click', function() {
+        processEditor()}
         );
     loadArticleButton.addEventListener('click', loadArticle);
 
@@ -178,18 +183,22 @@ window.addEventListener("load", function () {
     }
 
     function processEditor() {
-        console.log("process function called");
-        document.getElementById("articleContent").value = document.getElementById("editorContent").innerHTML;
+        console.log("image upload function called");
+        document.getElementById("imageUploadContent").value = document.getElementById("editorContent").innerHTML;
         return true;
       }
 
     function saveArticle() {
         console.log("trying to save editor contents")
-        processEditor();
+        console.log("process function called");
+        document.getElementById("articleContent").value = document.getElementById("editorContent").innerHTML;
+        return true;
     }
 
     function loadArticle() {
         return null;
     }
+
+    
 
 });

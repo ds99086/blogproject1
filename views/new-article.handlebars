@@ -3,8 +3,6 @@
 <div>
     <h1>WYSIWYG Editor</h1>
 </div>
-    <form method="post" action="./articleChanges">
-    <input type="hidden" id="articleContent" name="articleContent">
     <div style="border: solid 1px black; padding: 10px; margin: auto; width: 400px">
         <h2>Basic Aritcle Information</h2>
         <label for="articleTitle">Article Title:</label>
@@ -74,6 +72,21 @@
                         </span>
                         </div>
                         
+                        
+                        <div class="box" style="border: 1px solid; margin: auto">
+                            <div style="margin: 5px">
+                                <form method="POST" action="./editArticle">
+                                <p style="margin: 1px">Load Article by ID</p>
+                            </div>
+                            <div style="margin: 5px">
+                                    <input type="number" name="articleID" id="articleIDBox" text="number of article here">
+                            </div>
+                            <div style="margin: 5px">
+                                    <button type="submit" id="loadArticle" onclick="alert('Loading an existing article')">Loading an Article by Number</button></form>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
 
                     <!--Second row of buttons in the editor-->
@@ -110,9 +123,30 @@
                             <span class="btn icon" data-action="save" title="Set text as Heading Level 2" >
                                 <img loading="lazy" src="./icons/editor_icon_save.svg" alt="save button">
                             </span>
+                        
+                        <div class="box" style="border: 1px solid; margin: auto 50px">
+                            <form action="./articleUploadFile" method="POST" enctype="multipart/form-data">
+                            <div>
+                                <label for="inpFile">Upload an image here:</label>
+                                <input id="inpFile" type="file" name="blogImage" accept=".jpg,.jpeg,.png">
+                                <input type="hidden" id="imageUploadContent" name="imageUploadContent">
+                                <button id="uploadButton" type="submit">Upload!</button>
+                            </div>
+                            </form>
+                        </div>
+
+
+
+                        <div style="margin: auto 50px auto;">
+                            <form method="post" action="./articleChanges">
+                            <input type="hidden" id="articleContent" name="articleContent">
+                            <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Create New Article</button>
+                            </form>
+                        </div>
                         </div>
 
                     </div>
+                        </form>
 
                 </div>
                 <div class="content-area">
@@ -143,15 +177,5 @@
                 </div>
             </div>
 
-            <div>
-                <h2>Create New Article Button</h2>
-                <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Create New Article</button>
-            </div>
-            </form>
-            <form method="POST" action="./editArticle">
-            <div>
-                <h2>Load Article by ID</h2>
-                <input type="number" name="articleID" id="articleIDBox" text="number of article here"><br>
-                <button type="submit" id="loadArticle" onclick="alert('Loading an existing article')">Loading an Article by Number</button>
-            </div>
-            </form>
+            
+            
