@@ -57,6 +57,17 @@ app.use(articleRouter);
 // Setup comment routes
 const commentRouter = require("./routes/comment-routes.js");
 app.use(commentRouter);
+// Setup API routes
+const apiRouter = require("./routes/api-routes.js");
+app.use(apiRouter);
+
+// app.use((req, res, next) => {
+//     res.status(404).json({
+//         message: 'Ohh you are lost, read the API documentation to find your way back home :)'
+//     })
+// })
+
+
 
 // Start the server running.
 app.listen(port, function () {
