@@ -139,11 +139,9 @@ window.addEventListener("load", async function () {
     //if we have a list of reply butons - the single article page has comments
     //add eventlistener for each buttons to create new-comment form. 
     //add eventlistener for each submit button to send the form. 
-    //console.log(list_of_replybtn);
     if(list_of_replybtn) {
         for (let i = 0; i < list_of_replybtn.length; i++) {
             replybtn = list_of_replybtn[i];
-            //console.log(replybtn);
             replybtn.addEventListener('click', e => {
                 if (e.target.innerText == "Reply") {
                     let buttonDiv = e.target;
@@ -169,14 +167,13 @@ window.addEventListener("load", async function () {
                     replyDiv.remove();
                 }
                 
-
-                // const list_of_submitform = document.querySelectorAll("form.commentReplyForm");
-                //console.log(list_of_submitform);
                 const list_of_submitbtn = document.getElementsByClassName("reply-submit");
-                
                 for (let j = 0; j < list_of_submitbtn.length; j++) {
                     const submitbtn = list_of_submitbtn[j];
                     const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.id;   
+                    console.log("parent comment ID is");
+                    console.log(parentCommentId);
+                    
                     const replyContentDiv = submitbtn.parentElement.previousElementSibling.lastElementChild;
                     //console.log(replyContentDiv);
 
@@ -184,37 +181,42 @@ window.addEventListener("load", async function () {
                         const replyContent = replyContentDiv.value;
                         const parentComment = parentCommentId;
                         const articleID = getCookie("articleID");
-                        console.log(articleID);
-                        // console.log(parentCommentId);
+                        //console.log(articleID);
+                        //console.log(parentCommentId);
                         //console.log(replyContent);
 
                         const response = await createReplyToComment(parentComment, replyContent, articleID);
+                        const reply = await response.json();
+                        //console.log("I got my reply json");
+                        //console.log(reply);
 
+                        let replyDiv = e.target.parentElement.parentElement.parentElement;
 
+                        //console.log(replyDiv);
+
+                        replyDiv.innerHTML = `
+                        <div class="comments-level-${reply.commentLevel}">
+                        <div class="comment-body">
+                            <h5 class="comment-title">Name: ${reply.commentAuthorID}</h5>
+                            <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
+                            ${reply.commentText} 
+                            <div class="vote-buttons">
+                            <button class="vote-up">Upvote</button>
+                                <p id="upvote"></p>
+                            <p class="vote-sum">1</p>
+                            <button class="vote-down">Downvote</button>
+                                <p id="downvote"></p>
+                            </div>
+                            <div class="commentreply-delete">
+                            <button class="comment-reply">Reply</button>
+                                <p id="commentreply"></p>
+                            <button class="comment-delete">Delete</button>
+                                <p id="commentdelete"></p>
+                            </div>
+                        </div>
+                        `;
                     })
-                  
-                    
-                    
-
-                    // const parentcommentIDcontainer = targetbtn.parentElement.parentElement.firstElementChild.firstElementChild;
-                    // console.log(parentcommentIDcontainer);
-                
-                // 
-
-                //     form.addEventListener('submit', e => {
-                        
-                //         e.preventDefault();
-                //         console.log("paused form submit");
-                        
-                //         parentcommentIDcontainer.value = parentCommentId;
-                //         form.submit();
-                        
-                        
-                    // })
-                    
                 }
-
-                //console.log(list_of_submitreplybtn);
             }
         )
     }};

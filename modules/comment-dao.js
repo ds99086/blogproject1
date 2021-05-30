@@ -38,10 +38,21 @@ async function retrieveCommentsbyArticleID(articleId) {
     return commentList;
 }
 
+async function retrieveCommentbyParentCommentID(commentParentID) {
+    const db = await dbPromise;
+
+    const parentComment = await db.all(SQL`
+    select * from comments
+    where commentID = ${commentParentID}`);
+
+    return parentComment;
+}
+
 
 //Export funcitons
 module.exports = {
     createComment,
     deleteComment,
-    retrieveCommentsbyArticleID
+    retrieveCommentsbyArticleID,
+    retrieveCommentbyParentCommentID
 }
