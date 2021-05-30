@@ -24,13 +24,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-// // Setup express-session
-// const session = require("express-session");
-// app.use(session({
-//    resave: false,
-//    saveUninitialized: false,
-//    secret: "CS719"
-// }));
 
 // Make the "public" folder available statically
 const path = require("path");
@@ -39,6 +32,8 @@ app.use(express.static(path.join(__dirname, "public")));
 // Setup our middleware
 const { addUserToLocals } = require("./middleware/auth-middleware.js");
 app.use(addUserToLocals);
+
+
 
 //SETUP OUR ROUTERS
 // Setup general application routes
@@ -57,9 +52,23 @@ app.use(articleRouter);
 // Setup comment routes
 const commentRouter = require("./routes/comment-routes.js");
 app.use(commentRouter);
+<<<<<<< HEAD
 //setip vote routes
 const voteRouter = require("./routes/vote-routes.js");
 app.use(voteRouter);
+=======
+// Setup API routes
+const apiRouter = require("./routes/api-routes.js");
+app.use(apiRouter);
+
+// app.use((req, res, next) => {
+//     res.status(404).json({
+//         message: 'Ohh you are lost, read the API documentation to find your way back home :)'
+//     })
+// })
+
+
+>>>>>>> master
 
 // Start the server running.
 app.listen(port, function () {
