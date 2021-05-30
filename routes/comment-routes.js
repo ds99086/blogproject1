@@ -36,13 +36,13 @@ router.post("/newComment", async function(req,res) {
 
 //Hardcode comment details
 //must check if user authToken matches to be able to delete. 
-router.post("/deleteComment", async function(req,res) {
+router.get("/deleteComment", async function(req,res) {
 
-    const commentID = 1;
+    const commentID = req.query.commentID;
     console.log("deleting comment");
-    await commentDao.deleteComment(commentID);
-
-    res.redirect("/single-article");
+    await commentDao.deleteCommentByUser(commentID);
+    res.json()
+    //res.redirect("/single-article");
 })
 
 router.get("/replyComment", async function(req,res) {
@@ -50,11 +50,11 @@ router.get("/replyComment", async function(req,res) {
     const replyContent = req.query.replyContent;
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken;    
-    console.log("parent commentID is: " + commentParentID);
+    //console.log("parent commentID is: " + commentParentID);
     const parentComment = await commentDao.retrieveCommentbyParentCommentID(commentParentID);
-    console.log("parent comment is:");
+    //console.log("parent comment is:");
 
-    console.log(parentComment);
+    //console.log(parentComment);
     const parentCommentLevel = parentComment[0].commentLevel;
     //console.log(parentCommentLevel);
     const commentLevel = (parentCommentLevel +1) ;
@@ -71,11 +71,7 @@ router.get("/replyComment", async function(req,res) {
     
     //console.log(reply);
     await commentDao.createComment(reply);
-
-
     res.json(reply);
-
-    //res.redirect("/article-details");
 });
 
 

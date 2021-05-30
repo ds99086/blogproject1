@@ -20,6 +20,15 @@ async function createComment(comment) {
             ${comment.commentArticleID})`);
 }
 
+async function deleteCommentByUser(commentID) {
+    const db = await dbPromise;
+    const result = await db.run(SQL`
+    UPDATE comments
+    SET commentText = '[User Have Deleted This Comment]'
+    WHERE commentID = ${commentID}`
+    );
+}
+
 async function deleteComment(commentID) {
     const db = await dbPromise;
     const result = await db.run(SQL`
@@ -54,5 +63,6 @@ module.exports = {
     createComment,
     deleteComment,
     retrieveCommentsbyArticleID,
-    retrieveCommentbyParentCommentID
+    retrieveCommentbyParentCommentID,
+    deleteCommentByUser
 }

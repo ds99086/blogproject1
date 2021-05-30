@@ -9,6 +9,7 @@ window.addEventListener("load", async function () {
     const single_article_div = document.querySelector("#signle-article");
     const homepage_articles_div = document.querySelector("#articles-inner")
     const list_of_replybtn = document.getElementsByClassName("comment-reply");
+    const list_of_deletebtn = document.getElementsByClassName("comment-delete");
     
 
     //const vote_up = document.getElementsByClassName("vote-up");
@@ -171,8 +172,8 @@ window.addEventListener("load", async function () {
                 for (let j = 0; j < list_of_submitbtn.length; j++) {
                     const submitbtn = list_of_submitbtn[j];
                     const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.id;   
-                    console.log("parent comment ID is");
-                    console.log(parentCommentId);
+                    //console.log("parent comment ID is");
+                    //console.log(parentCommentId);
                     
                     const replyContentDiv = submitbtn.parentElement.previousElementSibling.lastElementChild;
                     //console.log(replyContentDiv);
@@ -181,23 +182,18 @@ window.addEventListener("load", async function () {
                         const replyContent = replyContentDiv.value;
                         const parentComment = parentCommentId;
                         const articleID = getCookie("articleID");
-                        //console.log(articleID);
-                        //console.log(parentCommentId);
-                        //console.log(replyContent);
 
                         const response = await createReplyToComment(parentComment, replyContent, articleID);
                         const reply = await response.json();
-                        //console.log("I got my reply json");
                         //console.log(reply);
 
                         let replyDiv = e.target.parentElement.parentElement.parentElement;
-
                         //console.log(replyDiv);
 
                         replyDiv.innerHTML = `
                         <div class="comments-level-${reply.commentLevel}">
-                        <div class="comment-body">
-                            <h5 class="comment-title">Name: ${reply.commentAuthorID}</h5>
+                        <div class="comment-body" id="${reply.commentID}">
+                            <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
                             <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
                             ${reply.commentText} 
                             <div class="vote-buttons">
@@ -221,6 +217,23 @@ window.addEventListener("load", async function () {
         )
     }};
 
+    //Allow user to delete comment and also modify SQL to show that user have deleted this comment.
+    if(list_of_deletebtn) {
+        for (let i = 0; i < list_of_deletebtn.length; i++) {
+            let deletebtn = list_of_deletebtn[i];
+            let commentID = deletebtn.parentElement.parentElement.id;
+            deletebtn.addEventListener('click', async e => {
+                let commentDiv = e.target.parentElement.parentElement;
+                let textDiv = commentDiv.getElementsByTagName("p")[0];
+                //console.log(commentDiv);
+                //console.log(textDiv);
+                textDiv.innerHTML = `
+                [User Have Deleted This Comment]
+                `;
+                let response = await fetch(`./deleteComment?commentID=${commentID}`);
+            })
+        }
+    }
 
 
     //check whether we are on article writing page.
@@ -283,7 +296,6 @@ window.addEventListener("load", async function () {
 //     }
 //     return undefined; 
 // }
-
 
 
 
