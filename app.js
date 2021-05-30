@@ -52,11 +52,9 @@ app.use(articleRouter);
 // Setup comment routes
 const commentRouter = require("./routes/comment-routes.js");
 app.use(commentRouter);
-<<<<<<< HEAD
 //setip vote routes
 const voteRouter = require("./routes/vote-routes.js");
 app.use(voteRouter);
-=======
 // Setup API routes
 const apiRouter = require("./routes/api-routes.js");
 app.use(apiRouter);
@@ -68,7 +66,6 @@ app.use(apiRouter);
 // })
 
 
->>>>>>> master
 
 // Start the server running.
 app.listen(port, function () {

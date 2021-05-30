@@ -12,9 +12,12 @@ const articleDao = require("../modules/article-dao.js");
 router.get('/getvotecounts', async function(req,res) {
 
     const commentID = req.query.commentID;
+    //console.log(commentID)
     const voteCountObj = await voteDao.getVotesCount(commentID);
+    //console.log(voteCountObj)
 
-    return voteCountObj;
+    res.json(voteCountObj)   
+    
 });
 
 router.get('/updateVote', async function(req,res) {
@@ -28,16 +31,25 @@ router.get('/updateVote', async function(req,res) {
         voteValue: voteValue
     }
 
-    const vote = await voteDao.getSingleVote(commentID, userID);
+    const currentVote = await voteDao.getSingleVote(commentID, userID);
     
-    if(vote == undefined){
+    if(currentVote == undefined){
         await voteDao.addVote(newVote);
-        return "new vote added";
-    } else if (vote.voteValue == voteValue){
-        return "already voted";
-    } else if (vote.voteValue != voteValue){
+        result = {
+            response: "new vote added"
+        }
+        res.json(result);
+    } else if (currentVote.voteValue == voteValue){
+        result = {
+            response: "already voted"
+        }
+        res.json(result);
+    } else if (currentVote.voteValue != voteValue){
         await voteDao.updateVote(newVote)
-        return "vote changed"
+        result = {
+            response: "vote changed"
+        }
+        res.json(result);
     }
 });
 

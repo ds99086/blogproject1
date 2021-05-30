@@ -235,7 +235,8 @@ form .form-group {
 }
 
 .vote-icon {
-    width: 10px;
+    width: 30px;
+    cursor: pointer;
 }
 /*****************************************************************/
 

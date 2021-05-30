@@ -9,11 +9,11 @@ window.addEventListener("load", async function () {
     const single_article_div = document.querySelector("#signle-article");
     const homepage_articles_div = document.querySelector("#articles-inner")
     const list_of_replybtn = document.getElementsByClassName("comment-reply");
-    
+
 
     //const vote_up = document.getElementsByClassName("vote-up");
     //const vote_down = document.getElementsByClassName("vote-down");
-    
+
     const writeNewArticlePageElements = document.querySelector(".editor")
 
     //if we are on the homepage
@@ -28,16 +28,16 @@ window.addEventListener("load", async function () {
 
         async function displayNextArticlesOnPage() {
             document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
-        
+
             let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount);
             //at this step articles are in order
             // console.log(articlesJsonArray)
-        
+
             for (let i = 0; i < articlesJsonArray.length; i++) {
                 //need to add await here, otherwise the article might not display in desired order!
                 await displayPartialArticleOnPage(articlesJsonArray[i]);
             }
-        
+
             if (articlesJsonArray.length < loadArticleCount) {
                 document.querySelector('#article-load-button').style.background = "red";
                 document.querySelector('#article-load-button').innerText = "No more articles";
@@ -46,13 +46,13 @@ window.addEventListener("load", async function () {
                 loadArticleNext += loadArticleCount;
             }
         }
-        
+
         async function displayPartialArticleOnPage(articleObj) {
             let articleDivElement = document.createElement("div");
             articleDivElement.classList.add("article");
             let authorID = articleObj.authorID;
             let userJSON = await getArticleAuthorName(authorID);
-        
+
             articleDivElement.innerHTML = `
                 <h3 class="article-title""><a href="./article-details?articleID=${articleObj.articleID}">${articleObj.title}</a></h3>
                 <h4 class="article-author" author-username="${userJSON.username}">Published by:${userJSON.username}</h4>
@@ -61,12 +61,12 @@ window.addEventListener("load", async function () {
                 <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
             `;
 
-        
+
             let articlesDiv = document.querySelector("#articles-inner");
             articlesDiv.appendChild(articleDivElement);
-        
+
             articleDivElement.querySelector('.article-read-more').addEventListener('click', e => {
-                  if (e.target.innerText == "Show full content") {
+                if (e.target.innerText == "Show full content") {
                     let articleContentDiv = e.target.previousElementSibling;
                     articleContentDiv.innerHTML = `${articleObj.bodyContentOrLinkToContent}`;
                     let readMoreButtonDiv = e.target;
@@ -81,21 +81,21 @@ window.addEventListener("load", async function () {
                 }
             });
         }
-        
+
         //get artiles array base on the ariticle numbers on page now
         async function getArticleArray(from, count) {
             let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}`);
             let articlesJsonArray = await articlesResponseObj.json();
             return articlesJsonArray;
-            
+
         }
-        
+
         async function getArticleAuthorName(userID) {
             let authorNameResponseObj = await fetch(`./loadArticleAutherName?articleID=${userID}`);
             let authorNameJson = await authorNameResponseObj.json();
             return authorNameJson;
         }
-    }    
+    }
 
     //this this checking whether we are on the new account page
     //then add event listener to monitor the input
@@ -128,7 +128,7 @@ window.addEventListener("load", async function () {
 
     //if we are on the signle account page
     //get the articleID from cookies and use js to display the article
-    if(single_article_div!=undefined){
+    if (single_article_div != undefined) {
         const article_ID = getCookie("articleID");
         const article = await retrieveArticleByArticleID(article_ID);
         single_article_div.innerHTML = `<h3 class="article-title"><${article.articleTitle}</a></h3>
@@ -137,64 +137,15 @@ window.addEventListener("load", async function () {
         <p class="article-body">${article.articleContent}</p>`
 
 
-        //display all the vote count once the page load
-        //select all the vote-container
-        const vote_containers = document.querySelectorAll(".vote-container");
-        for (vote_container of vote_containers) {
-            const comment_ID = vote_container.parentElement.getAttribute(id);
-            const voteCountsObj = await getVoteCountByCommentID(comment_ID)
-            const upVoteCount = voteCountsObj.upVotesCount;
-            const downVoteCount = voteCountsObj.downVotesCount;
-            const upVoteDisplayDiv = vote_container.querySelector(".upvote-count")
-            const downVoteDisplayDiv = vote_container.querySelector(".downvote-count")
-            upVoteDisplayDiv.innerText = upVoteCount;
-            downVoteDisplayDiv.innerText = downVoteCount;
-        }
-
-
-        //for all up and down vote action, update the database and number displayed
-        const vote_icon = document.querySelectorAll(".vote-icon");
-        for (each_vote_icon of vote_icon) {
-            each_vote_icon.addEventListener('click', async e => {
-                let voteValue = 0;
-                if (e.target.innerText == "Upvote") {
-                    voteValue = 1
-                } else if (e.target.innerText == "Downvote") {
-                    voteValue = -1
-                }
-                const currentCountElement = e.target.nextSibling;
-                const comment_ID = e.target.parentElement.parentElement.getAttribute(id);
-                const user_ID = e.target.parentElement.parentElement.getAttribute(userID);
-                const updateResult = await updateVote(comment_ID, user_ID, voteValue);
-
-                if (e.target.innerText == "Upvote") {
-                    if (updateResult == "new vote added") {
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                    } else if (updateResult == "vote changed") {
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) - 1;
-                        const oppositeCountElement = currentCountElement.nextSibling.nextSibling;
-                        oppositeCountElement.innerText = parseInt(oppositeCountElement.innerText) + 1;
-                    }
-                }
-                else if (e.target.innerText == "Downvote") {
-                    if (updateResult == "new vote added") {
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                    } else if (updateResult == "vote changed") {
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) - 1;
-                        const oppositeCountElement = currentCountElement.previousElementSibling.previousElementSibling;
-                        oppositeCountElement.innerText = parseInt(oppositeCountElement.innerText) + 1;
-                    }
-                }
-            })
-        }
-    }
+        
+    };
 
 
     //if we have a list of reply butons - the single article page has comments
     //add eventlistener for each buttons to create new-comment form. 
     //add eventlistener for each submit button to send the form. 
     //console.log(list_of_replybtn);
-    if(list_of_replybtn) {
+    if (list_of_replybtn) {
         for (let i = 0; i < list_of_replybtn.length; i++) {
             replybtn = list_of_replybtn[i];
             //console.log(replybtn);
@@ -204,7 +155,7 @@ window.addEventListener("load", async function () {
                     buttonDiv.innerHTML = "Cancel";
                     const replyDiv = document.createElement("div");
                     buttonDiv.parentElement.parentElement.appendChild(replyDiv);
-                    replyDiv.innerHTML=`
+                    replyDiv.innerHTML = `
                     <div class="new-comment-box">
                         <div class="flex-col mb">
                             <input type="hidden" name="parentcomment" id="parentcomment" value="">
@@ -222,15 +173,15 @@ window.addEventListener("load", async function () {
                     let replyDiv = e.target.parentElement.parentElement.lastChild;
                     replyDiv.remove();
                 }
-                
+
 
                 // const list_of_submitform = document.querySelectorAll("form.commentReplyForm");
                 //console.log(list_of_submitform);
                 const list_of_submitbtn = document.getElementsByClassName("reply-submit");
-                
+
                 for (let j = 0; j < list_of_submitbtn.length; j++) {
                     const submitbtn = list_of_submitbtn[j];
-                    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.id;   
+                    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.id;
                     const replyContentDiv = submitbtn.parentElement.previousElementSibling.lastElementChild;
                     //console.log(replyContentDiv);
 
@@ -246,65 +197,65 @@ window.addEventListener("load", async function () {
 
 
                     })
-                  
-                    
-                    
+
+
+
 
                     // const parentcommentIDcontainer = targetbtn.parentElement.parentElement.firstElementChild.firstElementChild;
                     // console.log(parentcommentIDcontainer);
-                
-                // 
 
-                //     form.addEventListener('submit', e => {
-                        
-                //         e.preventDefault();
-                //         console.log("paused form submit");
-                        
-                //         parentcommentIDcontainer.value = parentCommentId;
-                //         form.submit();
-                        
-                        
+                    // 
+
+                    //     form.addEventListener('submit', e => {
+
+                    //         e.preventDefault();
+                    //         console.log("paused form submit");
+
+                    //         parentcommentIDcontainer.value = parentCommentId;
+                    //         form.submit();
+
+
                     // })
-                    
+
                 }
 
                 //console.log(list_of_submitreplybtn);
             }
-        )
-    }};
+            )
+        };
 
 
 
-    //check whether we are on article writing page.
-    //if so, get the username and userID by cookie
-    // if(writeNewArticlePageElements!=undefined){
-    //     const usernameArea = document.querySelector(".articleAuthorusername")
-    //     console.log(usernameArea)
+        //check whether we are on article writing page.
+        //if so, get the username and userID by cookie
+        // if(writeNewArticlePageElements!=undefined){
+        //     const usernameArea = document.querySelector(".articleAuthorusername")
+        //     console.log(usernameArea)
 
-    //     const authToken = getCookie("authToken");
-    //     console.log(authToken)
-    //     const usernameAndID = await retrieveUserByAuthToken(authToken);
-    //     console.log(usernameAndID)
-        
-    //     usernameArea.setAttribute("value", `${usernameAndID.username}`)
+        //     const authToken = getCookie("authToken");
+        //     console.log(authToken)
+        //     const usernameAndID = await retrieveUserByAuthToken(authToken);
+        //     console.log(usernameAndID)
 
-    // }
+        //     usernameArea.setAttribute("value", `${usernameAndID.username}`)
+
+        // }
 
 
-    // in the window.addEventListener call the avatar live update function
+        // in the window.addEventListener call the avatar live update function
 
-//WORK IN PROGRESS
-    //Trialing comment upvote downvote system
-    //if comment box exists, then add event listner to monitor button clicked.
-    // if (vote_up) {
-    //     const vote_sum = document.querySelector("vote-sum");
-    //     console.log(vote_sum);
-    //     vote_up.forEach(item => {
-    //         item.addEventListener('click', event => {
-    //             vote_sum ++;
-    //         })
-    //     })
-    // };
+        //WORK IN PROGRESS
+        //Trialing comment upvote downvote system
+        //if comment box exists, then add event listner to monitor button clicked.
+        // if (vote_up) {
+        //     const vote_sum = document.querySelector("vote-sum");
+        //     console.log(vote_sum);
+        //     vote_up.forEach(item => {
+        //         item.addEventListener('click', event => {
+        //             vote_sum ++;
+        //         })
+        //     })
+        // };
 
 
         //     item.addEventListener('click', function(event){
@@ -314,8 +265,69 @@ window.addEventListener("load", async function () {
         // // vote_down.addEventListener('click', function(event) {
         // //     vote_sum --;
         // // });
+
+        //display all the vote count once the page load
+        //select all the vote-container
+        const vote_containers = document.querySelectorAll(".vote-container");
+        for (vote_container of vote_containers) {
+            const comment_ID = vote_container.parentElement.getAttribute("commentID");
+            //console.log(comment_ID)
+            const voteCountsObj = await getVoteCountByCommentID(comment_ID)
+            //console.log(voteCountsObj)
+            const upVoteCount = voteCountsObj.upVotesCount;
+            const downVoteCount = voteCountsObj.downVotesCount;
+            const upVoteDisplayDiv = vote_container.querySelector(".upvote-count")
+            const downVoteDisplayDiv = vote_container.querySelector(".downvote-count")
+            upVoteDisplayDiv.innerText = upVoteCount;
+            downVoteDisplayDiv.innerText = downVoteCount;
+        }
+
+
+        //for all up and down vote action, update the database and number displayed
+        const vote_icon = document.querySelectorAll(".vote-icon");
+        for (each_vote_icon of vote_icon) {
+            each_vote_icon.addEventListener('click', async e => {
+                let voteValue = 0;
+                if (e.target.getAttribute("voteType") == "Upvote") {
+                    voteValue = 1
+                } else if (e.target.getAttribute("voteType") == "Downvote") {
+                    voteValue = -1
+                }
+                const currentCountElement = e.target.nextElementSibling;
+                const comment_ID = e.target.parentElement.parentElement.getAttribute("commentID");
+                const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
+                // console.log(comment_ID);
+                // console.log(user_ID);
+                const updateResult = await updateVote(comment_ID, user_ID, voteValue);
+                // console.log(updateResult)
+
+                if (e.target.getAttribute("voteType") == "Upvote") {
+                    if (updateResult.response == "new vote added") {
     
-})
+                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+
+                    } else if (updateResult.response == "vote changed") {
+
+                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                        const oppositeCountElement = currentCountElement.nextElementSibling.nextElementSibling;
+                        oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+                    }
+                }
+                else if (e.target.getAttribute("voteType") == "Downvote") {
+                    if (updateResult.response == "new vote added") {
+
+                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                    } else if (updateResult.response == "vote changed") {
+
+                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                        const oppositeCountElement = currentCountElement.previousElementSibling.previousElementSibling;
+                        oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+                    }
+                }
+            })
+        }
+    }
+});
 
 // async function retrieveUserByAuthToken(authToken){
 //     let response = await fetch(`./checkAuthToken?authToken=${authToken}`);
@@ -336,14 +348,17 @@ window.addEventListener("load", async function () {
 //     return undefined; 
 // }
 
-async function getVoteCountByCommentID(commentID){
-    const voteCountObj = await fetch(`./getvotecounts?commentID=${commentID}`)
+async function getVoteCountByCommentID(commentID) {
+    let response = await fetch(`./getvotecounts?commentID=${commentID}`);
+    let voteCountObj = await response.json();
+    //console.log(voteCountObj);
     return voteCountObj
 }
 
-async function updateVote(commentID, userID, voteValue){
-    const result = await fetch(`./updateVote?commentID=${commentID}&userID=${userID}&voteValue=${voteValue}`)
-    return result;
+async function updateVote(commentID, userID, voteValue) {
+    let response = await fetch(`./updateVote?commentID=${commentID}&userID=${userID}&voteValue=${voteValue}`);
+    let resultObj = await response.json()
+    return resultObj;
 }
 
 
@@ -354,7 +369,7 @@ async function retrieveUserByUsername(id) {
     return username_availability_obj;
 }
 
-async function retrieveArticleByArticleID(articleID){
+async function retrieveArticleByArticleID(articleID) {
     let response = await fetch(`./articleJSON?articleID=${articleID}`)
     let articleObj = await response.json();
     return articleObj;
@@ -399,14 +414,15 @@ function checkUserPasswordConsistency(password1_input, password2_input) {
 //client side get cookies function
 function getCookie(cname) {
     const name = `${cname}=`;
-    const decodedCookie = decodeURIComponent(document.cookie); 
+    const decodedCookie = decodeURIComponent(document.cookie);
     const cookieArray = decodedCookie.split(";");
-    for(let i = 0; i <cookieArray.length; i++) {
-        let cookie = cookieArray[i].trim(); 
+    for (let i = 0; i < cookieArray.length; i++) {
+        let cookie = cookieArray[i].trim();
         if (cookie.indexOf(name) === 0) {
-            return cookie.substring(name.length); }
+            return cookie.substring(name.length);
+        }
     }
-    return undefined; 
+    return undefined;
 }
 
 async function createReplyToComment(parentComment, replyContent, articleID) {
