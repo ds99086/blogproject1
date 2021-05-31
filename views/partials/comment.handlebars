@@ -11,17 +11,16 @@
     <h3>Comments</h3>
 
   {{#each commentlist}}
-    <div class="comments-level-one">
-        <div class="comment-body {{authorID}}" id="{{commentID}}">
+    <div class="comments-level-0">
+        <div class="comment-body" userID="{{authorID}}" commentID="{{commentID}}">
             <h5 class="comment-title">Name: {{authorID}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
             {{commentText}} 
-            <div class="vote-buttons" >
-            <button class="vote-up">Upvote</button>
-                <p id="upvote"></p>
-            <p class="vote-sum">1</p>
-            <button class="vote-down">Downvote</button>
-                <p id="downvote"></p>
+            <div class="vote-container">
+            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                <span class="upvote-count">0</span>
+            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                <span class="downvote-count">0</span>
             </div>
 
             <div class="commentreply-delete">
@@ -36,36 +35,48 @@
 
     {{#each children}}
 
-        <div class="comments-level-two">
-        <div class="comment-body">
+        <div class="comments-level-1">
+        <div class="comment-body" userID="{{authorID}}" commentID="{{commentID}}">
             <h5 class="comment-title">Name: {{commentID}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
-            {{commentText}} 
+            <p>{{commentText}} </p>
 
-            <div class="vote-buttons">
-            <button class="vote-up">Upvote</button>
-                <p id="upvote"></p>
-            <p class="vote-sum">1</p>
-            <button class="vote-down">Downvote</button>
-                <p id="downvote"></p>
+           <div class="vote-container">
+            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                <span class="upvote-count">0</span>
+            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                <span class="downvote-count">0</span>
+            </div>
+
+                        <div class="commentreply-delete">
+            <button class="comment-reply">Reply</button>
+                <p id="commentreply"></p>
+            <button class="comment-delete">Delete</button>
+                <p id="commentdelete"></p>
             </div>
         </div>
     
     
     {{#each children}}
 
-        <div class="comments-level-three">
-        <div class="comment-body">
+        <div class="comments-level-2">
+        <div class="comment-body" userID="{{authorID}}" commentID="{{commentID}}">
             <h5 class="comment-title">Name: {{commentID}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
-            {{commentText}} 
+            <p>{{commentText}} </p>
 
-            <div class="vote-buttons">
-            <button class="vote-up">Upvote</button>
-                <p id="upvote"></p>
-            <p class="vote-sum">1</p>
-            <button class="vote-down">Downvote</button>
-                <p id="downvote"></p>
+           <div class="vote-container">
+            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                <span class="upvote-count">0</span>
+            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                <span class="downvote-count">0</span>
+            </div>
+
+                        <div class="commentreply-delete">
+            <button class="comment-reply">Reply</button>
+                <p id="commentreply"></p>
+            <button class="comment-delete">Delete</button>
+                <p id="commentdelete"></p>
             </div>
         </div>
     </div>

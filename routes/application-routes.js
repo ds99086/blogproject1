@@ -12,8 +12,43 @@ router.get("/",function(req, res) {
     //res.locals.allTestData = await testDao.retrieveAllTestData();
     res.locals.message = req.query.message;
 
+    const LoginedUser = res.locals.user;
+    // console.log(LoginedUser)
+
+    //get the sorting requirement from the query
+    //if there is no sorting requirement
+    //the default will be desc in publishDate
+    let sortingAttribute = req.query.sortingAttribute;
+    let sortingOrder = req.query.sortingOrder;
+    let sortingFilterName = req.query.sortingFilterName;
+    let sortingFilter = req.query.sortingFilter;
+
+    if (sortingAttribute == undefined){
+        sortingAttribute = "publishDate";
+    }
+    if (sortingOrder == undefined){
+        sortingOrder = "DESC";
+    }
+    if (sortingFilterName == undefined){
+        sortingFilterName = "None";
+    }
+    if (sortingFilterName == "authorID"){
+        sortingFilter = LoginedUser.userID;
+    }
+
+
     //res.locals.message = req.query.message;
     // const user = res.locals.user;
+
+    res.locals.attribute = sortingAttribute;
+    res.locals.order = sortingOrder;
+    res.locals.filterName = sortingFilterName
+    res.locals.filter = sortingFilter
+
+    // console.log(sortingAttribute);
+    // console.log(sortingOrder);
+    // console.log(sortingFilterName);
+    // console.log(sortingFilter);
     res.render("home");
 
 });
@@ -23,11 +58,18 @@ router.get("/loadHomepageArticles", async function (req, res) {
     const nextArticleIndex = parseInt(req.query.from);
     const articleNumToLoad = parseInt(req.query.number);
     const LastArticleIndex = nextArticleIndex+articleNumToLoad;
-
+    const articleSortingAttribute = req.query.attribute;
+    const articleSortingOrder = req.query.order;
+    const articleSortingFilterName = req.query.filterName;
+    const articleSortingFitler = req.query.filter
+    // console.log(articleSortingAttribute);
+    // console.log(articleSortingOrder);
+    // console.log(articleSortingFilterName);
+    // console.log(articleSortingFitler);
 
     //read aritles from article table in DESC order by publishDate
     //with the limit article number
-    const articleList = await articleDao.readArticleListBycolumnAndOrder(nextArticleIndex, LastArticleIndex, "publishDate","DESC");
+    const articleList = await articleDao.readArticleListBycolumnAndOrder(nextArticleIndex, LastArticleIndex, articleSortingAttribute,articleSortingOrder, articleSortingFilterName, articleSortingFitler);
     // console.log(articleList)
     res.json(articleList);    
 });
