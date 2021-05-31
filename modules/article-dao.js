@@ -67,7 +67,7 @@ async function readArticleListBycolumnAndOrder(startIndex, lastIndex, Sortingcol
     }
     query.append(`ORDER BY ${SortingcolumeName} ${order}
     LIMIT ${startIndex}, ${lastIndex};`);
-    console.log(query)
+    // console.log(query)
     const articleList = await db.all(query)
     // console.log(articleList)
     return articleList;    
