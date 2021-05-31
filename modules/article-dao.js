@@ -41,7 +41,17 @@ async function writeNewArticle(articleObject) {
 
 async function writeUpdateArticle(articleObject) {
     const db = await dbPromise;
-    return null;
+    const result = await db.run(SQL`
+    UPDATE articles 
+        SET title = ${articleObject.articleTitle},
+            publishDate = ${articleObject.articlePubDate},
+            lastEditDate = CURRENT_TIMESTAMP,
+            bodyContentOrLinkToContent = ${articleObject.articleContent},
+            authorID = ${articleObject.articleAuthorID}
+        WHERE
+            articleID = ${articleObject.articleID};`);
+    console.log("updated article "+result.lastID);
+    return result;
 }
 
 async function readAuthor(articleID) {

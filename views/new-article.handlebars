@@ -1,21 +1,51 @@
 {{> user-navi-bar }}
 
-<div>
-    <h1>WYSIWYG Editor</h1>
-</div>
-    <form method="post" action="./articleChanges">
-    <div style="border: solid 1px black; padding: 10px; margin: auto; width: 400px">
-        <h2>Basic Aritcle Information</h2>
-        <label for="articleTitle">Article Title:</label>
-        <input type="text" name="articleTitle" id="articleTitleBox" value="TestArticleX"><br><br>
-        <label for="articlePubDate">Date of Publication:</label>
-        <input type="date"  name="articlePubDate" id="articlePubDateBox" value="2021-01-01"><br><br>
-        {{!-- <label for="articleAuthorusername">Article Author Username:</label>
-        <input type="text" name="articleAuthorUsername" id="articleAuthorusername"> --}}
-    </div>
-    
+    <p style="text-align: center;">
+        {{#if articleTitle}}
+            Edit Article mode
+        {{else}}
+            New Article mode
+        {{/if}}
+    </p>
+
     <div class="editor">
                 <div class="toolbar">
+                    <div class="line">
+                        {{#if articleTitle}}
+                            <form method="post" action="./updateExistingArticle">
+                        {{else}}
+                            <form method="post" action="./saveNewArticle">                                
+                        {{/if}}
+                        <span class="editorfield">
+                        <label for="articleTitle">
+                            {{#if articleTitle}}<span>Previous Title: {{articleTitle}}</span>&nbsp;&nbsp;New Title:</label>
+                                <input type="text" name="articleTitle" id="articleTitleBox" value="{{articleTitle}}">
+                            {{else}}New Article Title: </label>
+                                <input type="text" name="articleTitle" id="articleTitleBox" value="Untitled Article">
+                            {{/if}}
+                        </span>
+                        <span class="editorfield">
+                        <label for="articlePubDate">Date of Publication:</label>
+                        <input type="date"  name="articlePubDate" id="articlePubDateBox" value={{date}}>
+                        {{!-- <label for="articleAuthorusername">Article Author Username:</label>
+                        <input type="text" name="articleAuthorUsername" id="articleAuthorusername"> --}}
+                        </span>
+                        
+                        {{#if articleTitle}}
+                        <span class="editorfield">
+                            <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
+                            <input type="hidden" id="articleContent" name="articleContent">
+                            <button type="submit" id="updateExisitingArticle" onclick="alert('Updating existing article!')">Update Exisiting Article</button>
+                            </form>
+                        </span>
+                        {{else}}
+                        <span class="editorfield">
+                            <input type="hidden" id="articleContent" name="articleContent">
+                            <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Create New Article</button>
+                            </form>
+                        </span>
+                        {{/if}}
+                    </div>
                     <!--First row of buttons in the editor-->
                     <!--Currently button svg images come from https://www.flaticon.com/packs/font-awesome-->
                     <div class="line">
@@ -73,12 +103,7 @@
                         </span>
                         </div>
                         
-                        <div style="margin: auto 50px auto;">
-                            
-                            <input type="hidden" id="articleContent" name="articleContent">
-                            <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Create New Article</button>
-                            </form>
-                        </div>
+                        
                         
                         <div class="box" style="border: 1px solid; margin: auto">
                             <div style="margin: 5px">
@@ -139,6 +164,10 @@
                                 <label for="inpFile">Upload an image here:</label>
                                 <input id="inpFile" type="file" name="blogImage" accept=".jpg,.jpeg,.png">
                                 <input type="hidden" id="imageUploadContent" name="imageUploadContent">
+                                {{#if articleTitle}}
+                                <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
+                                <input type="hidden" id="articleTitleHidden" name="articleTitleHidden">
+                                {{/if}}
                                 <button id="uploadButton" type="submit">Upload!</button>
                             </div>
                             </form>
@@ -154,7 +183,7 @@
 
                 </div>
                 <div class="content-area">
-                <div class="visuell-view" id="editorContent" style="overflow: auto" contenteditable>
+                <div class="visuell-view" id="editorContent" contenteditable>
                     {{#if returnText}}
                     {{{returnText}}}
                     {{else}}
