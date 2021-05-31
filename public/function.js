@@ -106,6 +106,19 @@ window.addEventListener("load", async function () {
             let authorNameJson = await authorNameResponseObj.json();
             return authorNameJson;
         }
+
+        //the author's search function
+        //once the "seach" btn is clicked, pass in the username to the router
+        //use the username to get user's all article
+        const authorSearchInput = document.querySelector("#txtAuthorUsername")
+        const authorSearchBtn = document.querySelector(".author-name-search-submission")
+
+        authorSearchBtn.addEventListener('click', async e=>{
+            const autherUsernameQuery = authorSearchInput.value;
+            let href = `./?sortingFilterName=username&sortingFilter=${autherUsernameQuery}`
+            location.href = href;
+        });
+
     }
 
     //this this checking whether we are on the new account page
@@ -308,49 +321,54 @@ window.addEventListener("load", async function () {
             downVoteDisplayDiv.innerText = downVoteCount;
         }
 
+        //call this method after each comment is created
+        updateVoteContainerEnable();
+
 
         //for all up and down vote action, update the database and number displayed
-        const vote_icon = document.querySelectorAll(".vote-icon");
-        for (each_vote_icon of vote_icon) {
-            each_vote_icon.addEventListener('click', async e => {
-                let voteValue = 0;
-                if (e.target.getAttribute("voteType") == "Upvote") {
-                    voteValue = 1
-                } else if (e.target.getAttribute("voteType") == "Downvote") {
-                    voteValue = -1
-                }
-                const currentCountElement = e.target.nextElementSibling;
-                const comment_ID = e.target.parentElement.parentElement.getAttribute("commentID");
-                const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
-                // console.log(comment_ID);
-                // console.log(user_ID);
-                const updateResult = await updateVote(comment_ID, user_ID, voteValue);
-                // console.log(updateResult)
-
-                if (e.target.getAttribute("voteType") == "Upvote") {
-                    if (updateResult.response == "new vote added") {
-    
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-
-                    } else if (updateResult.response == "vote changed") {
-
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                        const oppositeCountElement = currentCountElement.nextElementSibling.nextElementSibling;
-                        oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+        function updateVoteContainerEnable(){
+            const vote_icon = document.querySelectorAll(".vote-icon");
+            for (each_vote_icon of vote_icon) {
+                each_vote_icon.addEventListener('click', async e => {
+                    let voteValue = 0;
+                    if (e.target.getAttribute("voteType") == "Upvote") {
+                        voteValue = 1
+                    } else if (e.target.getAttribute("voteType") == "Downvote") {
+                        voteValue = -1
                     }
-                }
-                else if (e.target.getAttribute("voteType") == "Downvote") {
-                    if (updateResult.response == "new vote added") {
+                    const currentCountElement = e.target.nextElementSibling;
+                    const comment_ID = e.target.parentElement.parentElement.getAttribute("commentID");
+                    const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
+                    // console.log(comment_ID);
+                    // console.log(user_ID);
+                    const updateResult = await updateVote(comment_ID, user_ID, voteValue);
+                    // console.log(updateResult)
 
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                    } else if (updateResult.response == "vote changed") {
+                    if (e.target.getAttribute("voteType") == "Upvote") {
+                        if (updateResult.response == "new vote added") {
+        
+                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
 
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                        const oppositeCountElement = currentCountElement.previousElementSibling.previousElementSibling;
-                        oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+                        } else if (updateResult.response == "vote changed") {
+
+                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                            const oppositeCountElement = currentCountElement.nextElementSibling.nextElementSibling;
+                            oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+                        }
                     }
-                }
-            })
+                    else if (e.target.getAttribute("voteType") == "Downvote") {
+                        if (updateResult.response == "new vote added") {
+
+                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                        } else if (updateResult.response == "vote changed") {
+
+                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                            const oppositeCountElement = currentCountElement.previousElementSibling.previousElementSibling;
+                            oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+                        }
+                    }
+                })
+            }
         }
     }
 });
@@ -374,6 +392,13 @@ window.addEventListener("load", async function () {
 //     return undefined; 
 // }
 
+//an async globle eventListener method
+//method allows to select any async element
+function addAsyncGlobalEventListener(type, selector, callback){
+    document.addEventListener(type, e =>{
+        if (e.target.matches(selector)) callback(e);
+    })
+}
 
 
 async function getVoteCountByCommentID(commentID) {

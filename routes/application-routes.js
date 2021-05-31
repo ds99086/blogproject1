@@ -6,7 +6,7 @@ const userDao = require("../modules/user-dao");
 //const testDao = require("../modules/test-dao.js");
 const articleDao = require("../modules/article-dao.js");
 
-router.get("/",function(req, res) {
+router.get("/", async function(req, res) {
 
     res.locals.title = "My route title!";
     //res.locals.allTestData = await testDao.retrieveAllTestData();
@@ -35,6 +35,17 @@ router.get("/",function(req, res) {
     if (sortingFilterName == "authorID"){
         sortingFilter = LoginedUser.userID;
     }
+    if (sortingFilterName == "username"){
+        sortingFilterName = "authorID"
+        const user = await userDao.retrieveUserByUsername(sortingFilter)
+        console.log(user)
+        if(user){
+            sortingFilter = user.userID;
+        } else{
+            sortingFilter == undefined;
+            res.locals.searchingWarning = "No article under this user!"
+        }       
+    }
 
 
     //res.locals.message = req.query.message;
@@ -45,10 +56,10 @@ router.get("/",function(req, res) {
     res.locals.filterName = sortingFilterName
     res.locals.filter = sortingFilter
 
-    // console.log(sortingAttribute);
-    // console.log(sortingOrder);
-    // console.log(sortingFilterName);
-    // console.log(sortingFilter);
+    console.log(sortingAttribute);
+    console.log(sortingOrder);
+    console.log(sortingFilterName);
+    console.log(sortingFilter);
     res.render("home");
 
 });

@@ -12,6 +12,9 @@
     <div class="grid-container">
         <div id="articles" class="panel">
             <h2>Articles</h2>
+            {{#if searchingWarning}}
+            <p>{{searchingWarning}}</p>
+            {{/if}}
     
             <!-- Loaded articles should appear here -->
             <div id="articles-inner"></div>
