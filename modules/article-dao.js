@@ -58,17 +58,22 @@ function checkIsArticle(article) {
 }
 
 //using append to force SQL in use
-async function readArticleListBycolumnAndOrder(startIndex, lastIndex, columeName, order){
+async function readArticleListBycolumnAndOrder(startIndex, lastIndex, SortingcolumeName, order, filterColumnName, filter){
     const db = await dbPromise;
     const query = SQL`
-    SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES
-    ORDER BY `
-    query.append(`${columeName} ${order}
+    SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES `
+    if(filterColumnName != "None"){
+        query.append(`WHERE ${filterColumnName} = ${filter} `)
+    }
+    query.append(`ORDER BY ${SortingcolumeName} ${order}
     LIMIT ${startIndex}, ${lastIndex};`);
+    console.log(query)
     const articleList = await db.all(query)
     // console.log(articleList)
     return articleList;    
 }
+
+
 
 //Export funcitons
 module.exports = {

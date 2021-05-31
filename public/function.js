@@ -11,6 +11,7 @@ window.addEventListener("load", async function () {
     const list_of_replybtn = document.getElementsByClassName("comment-reply");
 
 
+
     //const vote_up = document.getElementsByClassName("vote-up");
     //const vote_down = document.getElementsByClassName("vote-down");
 
@@ -22,6 +23,13 @@ window.addEventListener("load", async function () {
         const loadArticleCount = 5;
         let loadArticleNext = 0;
 
+        //get the sorting info from the hidden elements in home page
+        const article_sorting_attribute = document.querySelector(".sorting-attribute").innerText;
+        const article_sorting_order = document.querySelector(".sorting-order").innerText;
+        const article_sorting_filter = document.querySelector(".sorting-filter").innerText;
+        const article_sorting_filter_name = document.querySelector(".sorting-filter-Name").innerText;
+           
+
         //load articles title on oage
         displayNextArticlesOnPage();
         document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
@@ -29,7 +37,7 @@ window.addEventListener("load", async function () {
         async function displayNextArticlesOnPage() {
             document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
 
-            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount);
+            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order, article_sorting_filter_name, article_sorting_filter);
             //at this step articles are in order
             // console.log(articlesJsonArray)
 
@@ -83,10 +91,11 @@ window.addEventListener("load", async function () {
         }
 
         //get artiles array base on the ariticle numbers on page now
-        async function getArticleArray(from, count) {
-            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}`);
+        async function getArticleArray(from, count, arttibute, order, filterName, filter) {
+            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}&attribute=${arttibute}&order=${order}&filterName=${filterName}&filter=${filter}`);
             let articlesJsonArray = await articlesResponseObj.json();
-            return articlesJsonArray;
+            // console.log(articlesJsonArray)
+            return articlesJsonArray;         
 
         }
 
@@ -134,10 +143,7 @@ window.addEventListener("load", async function () {
         single_article_div.innerHTML = `<h3 class="article-title"><${article.articleTitle}</a></h3>
         <h4 class="article-author" author-username="${article.articleAuthorUsername}">Published by:${article.articleAuthorUsername}</h4>
         <h6 class="article-publishDate" data-publishDate="${article.articlePubDate}">Published on: ${article.articlePubDate} </h6>
-        <p class="article-body">${article.articleContent}</p>`
-
-
-        
+        <p class="article-body">${article.articleContent}</p>`        
     };
 
 
@@ -266,6 +272,7 @@ window.addEventListener("load", async function () {
         // //     vote_sum --;
         // // });
 
+
         //display all the vote count once the page load
         //select all the vote-container
         const vote_containers = document.querySelectorAll(".vote-container");
@@ -347,6 +354,8 @@ window.addEventListener("load", async function () {
 //     }
 //     return undefined; 
 // }
+
+
 
 async function getVoteCountByCommentID(commentID) {
     let response = await fetch(`./getvotecounts?commentID=${commentID}`);

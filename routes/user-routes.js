@@ -38,12 +38,15 @@ router.get("/new-article", verifyAuthenticated, async function (req, res) {
 });
 
 
-//route to user ariticles
-router.get("/user-articles", verifyAuthenticated, async function (req, res) {
+// //route to user ariticles
+// router.get("/user-articles", verifyAuthenticated, async function (req, res) {
+    
+//     const user = res.locals.user;
 
+    
 
-    res.render("user-articles");
-});
+//     res.render("home");
+// });
 
 router.post("/updateUseDetails", verifyAuthenticated, async function (req, res) {
 
