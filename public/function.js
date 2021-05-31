@@ -8,7 +8,9 @@ window.addEventListener("load", async function () {
     const create_account_button = document.getElementById("create_account_btn");
     const single_article_div = document.querySelector("#signle-article");
     const homepage_articles_div = document.querySelector("#articles-inner")
-    const list_of_replybtn = document.getElementsByClassName("comment-reply");
+    let list_of_replybtn = document.getElementsByClassName("comment-reply");
+    let list_of_deletebtn = document.getElementsByClassName("comment-delete");
+    
 
 
     //const vote_up = document.getElementsByClassName("vote-up");
@@ -144,11 +146,10 @@ window.addEventListener("load", async function () {
     //if we have a list of reply butons - the single article page has comments
     //add eventlistener for each buttons to create new-comment form. 
     //add eventlistener for each submit button to send the form. 
-    //console.log(list_of_replybtn);
+
     if (list_of_replybtn) {
         for (let i = 0; i < list_of_replybtn.length; i++) {
             replybtn = list_of_replybtn[i];
-            //console.log(replybtn);
             replybtn.addEventListener('click', e => {
                 if (e.target.innerText == "Reply") {
                     let buttonDiv = e.target;
@@ -167,21 +168,22 @@ window.addEventListener("load", async function () {
                         </div>
                     </div>
                     `;
+                    // list_of_replybtn = document.getElementsByClassName("comment-reply");
+                    // list_of_deletebtn = document.getElementsByClassName("comment-delete");
                 } else if (e.target.innerText == "Cancel") {
                     let buttonDiv = e.target;
                     buttonDiv.innerHTML = "Reply";
                     let replyDiv = e.target.parentElement.parentElement.lastChild;
                     replyDiv.remove();
                 }
-
-
-                // const list_of_submitform = document.querySelectorAll("form.commentReplyForm");
-                //console.log(list_of_submitform);
-                const list_of_submitbtn = document.getElementsByClassName("reply-submit");
-
+                
+                let list_of_submitbtn = document.getElementsByClassName("reply-submit");
                 for (let j = 0; j < list_of_submitbtn.length; j++) {
                     const submitbtn = list_of_submitbtn[j];
-                    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.id;
+                    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.getAttribute("commentID");   
+                    //console.log("parent comment ID is");
+                    //console.log(parentCommentId);
+                    
                     const replyContentDiv = submitbtn.parentElement.previousElementSibling.lastElementChild;
                     //console.log(replyContentDiv);
 
@@ -189,41 +191,58 @@ window.addEventListener("load", async function () {
                         const replyContent = replyContentDiv.value;
                         const parentComment = parentCommentId;
                         const articleID = getCookie("articleID");
-                        console.log(articleID);
-                        // console.log(parentCommentId);
-                        //console.log(replyContent);
 
                         const response = await createReplyToComment(parentComment, replyContent, articleID);
+                        const reply = await response.json();
+                        console.log(reply);
 
+                        let replyDiv = e.target.parentElement.parentElement.parentElement;
+                        //console.log(replyDiv);
 
+                        replyDiv.innerHTML = `
+                        <div class="comments-level-${reply.commentLevel}">
+                        <div class="comment-body" id="${reply.commentID}">
+                            <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
+                            <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
+                            ${reply.commentText} 
+                            <div class="vote-buttons">
+                            <button class="vote-up">Upvote</button>
+                                <p id="upvote"></p>
+                            <p class="vote-sum">1</p>
+                            <button class="vote-down">Downvote</button>
+                                <p id="downvote"></p>
+                            </div>
+                            <div class="commentreply-delete">
+                            <button class="comment-reply">Reply</button>
+                                <p id="commentreply"></p>
+                            <button class="comment-delete">Delete</button>
+                                <p id="commentdelete"></p>
+                            </div>
+                        </div>
+                        `;
                     })
-
-
-
-
-                    // const parentcommentIDcontainer = targetbtn.parentElement.parentElement.firstElementChild.firstElementChild;
-                    // console.log(parentcommentIDcontainer);
-
-                    // 
-
-                    //     form.addEventListener('submit', e => {
-
-                    //         e.preventDefault();
-                    //         console.log("paused form submit");
-
-                    //         parentcommentIDcontainer.value = parentCommentId;
-                    //         form.submit();
-
-
-                    // })
-
                 }
-
-                //console.log(list_of_submitreplybtn);
             }
             )
         };
 
+    //Allow user to delete comment and also modify SQL to show that user have deleted this comment.
+    if(list_of_deletebtn) {
+        for (let i = 0; i < list_of_deletebtn.length; i++) {
+            let deletebtn = list_of_deletebtn[i];
+            let commentID = deletebtn.parentElement.parentElement.getAttribute("commentID");
+            deletebtn.addEventListener('click', async e => {
+                let commentDiv = e.target.parentElement.parentElement;
+                let textDiv = commentDiv.getElementsByTagName("p")[0];
+                //console.log(commentDiv);
+                //console.log(textDiv);
+                textDiv.innerHTML = `
+                [User Have Deleted This Comment]
+                `;
+                let response = await fetch(`./deleteComment?commentID=${commentID}`);
+            })
+        }
+    }
 
 
         //check whether we are on article writing page.
@@ -360,7 +379,6 @@ async function updateVote(commentID, userID, voteValue) {
     let resultObj = await response.json()
     return resultObj;
 }
-
 
 
 async function retrieveUserByUsername(id) {

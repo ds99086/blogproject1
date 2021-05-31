@@ -36,38 +36,49 @@ router.post("/newComment", async function(req,res) {
 
 //Hardcode comment details
 //must check if user authToken matches to be able to delete. 
-router.post("/deleteComment", async function(req,res) {
+router.get("/deleteComment", async function(req,res) {
 
-    const commentID = 1;
+    const commentID = req.query.commentID;
     console.log("deleting comment");
-    await commentDao.deleteComment(commentID);
-
-    res.redirect("/single-article");
+    await commentDao.deleteCommentByUser(commentID);
+    res.json()
+    //res.redirect("/single-article");
 })
 
-router.get("/replyComment", function(req,res) {
+router.get("/replyComment", async function(req,res) {
     const commentParentID = req.query.parentCommentID;
     const replyContent = req.query.replyContent;
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken;    
 
-    console.log(authToken);
+    const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
+    console.log(commentAuthor);
+    const authorID = commentAuthor.userID;
+
+    //console.log("parent commentID is: " + commentParentID);
+    const parentComment = await commentDao.retrieveCommentbyParentCommentID(commentParentID);
+    //console.log("parent comment is:");
+
+    //console.log(parentComment);
+    const parentCommentLevel = parentComment[0].commentLevel;
+    //console.log(parentCommentLevel);
+    const commentLevel = (parentCommentLevel + 1) ;
+    //console.log(commentLevel);
 
     const reply = {
         commentDate: '2020-02-02', 
         commentText: replyContent, 
-        commentLevel: null, 
+        commentLevel: commentLevel, 
         commentParent: commentParentID, 
         commentAuthorID: authToken, 
         commentArticleID: articleID
     };
-
-
-    commentDao.createComment(reply);
-
-    console.log(reply);
-
-    //res.redirect("/article-details");
+    
+    //console.log(reply);
+    await commentDao.createComment(reply);
+    console.log(authorID);
+    reply.commentAuthorID = authorID;
+    res.json(reply);
 });
 
 

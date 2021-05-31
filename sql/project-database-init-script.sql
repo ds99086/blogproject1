@@ -128,7 +128,7 @@ INSERT INTO articles VALUES
 				
 	
 INSERT INTO comments VALUES
-   (1, '2010-04-20', 'This is the first comment, no parent, article 1', 0, 0, 2, 1),
+   (1, '2010-04-20', 'This is the first comment, no parent, article 1', 0, 0, 4, 1),
    (2, '2011-04-20', 'This is the second comment, no parent, article 1', 0, 0, 2, 1),
    (3, '2012-04-20', 'This is the third comment, replies to the first comment, article 1', 1, 1, 2, 1),
    (4, '2010-04-20', 'This is the fourth comment, replies to the second comment, article 1', 1, 2, 2, 1),
