@@ -1,40 +1,54 @@
 
 
 window.addEventListener("load", function () {
+    setGlobalConstants();
+    listenUp();    
+});
 
+
+//Set some global variables.
+function setGlobalConstants() {
     // define vars
-    const editor = document.getElementsByClassName('editor')[0];
-    const toolbar = editor.getElementsByClassName('toolbar')[0];
-    const buttons = toolbar.querySelectorAll('.btn:not(.has-submenu)');
-    const contentArea = editor.getElementsByClassName('content-area')[0];
-    const visuellView = contentArea.getElementsByClassName('visuell-view')[0];
-    const htmlView = contentArea.getElementsByClassName('html-view')[0];
-    const modal = document.getElementsByClassName('modal')[0];
-    
+    editor = document.getElementsByClassName('editor')[0];
+    toolbar = editor.getElementsByClassName('toolbar')[0];
+    buttons = toolbar.querySelectorAll('.btn:not(.has-submenu)');
+    contentArea = editor.getElementsByClassName('content-area')[0];
+    visuellView = contentArea.getElementsByClassName('visuell-view')[0];
+    htmlView = contentArea.getElementsByClassName('html-view')[0];
+    modal = document.getElementsByClassName('modal')[0];
+    newArticleButton = document.getElementById("makeNewArticle");
+    editArticleButton = document.getElementById("updateExisitingArticle");
+    loadArticleButton = document.getElementById("loadArticle");
+    uploadButton = document.getElementById("uploadButton");
+}
 
-    const newArticleButton = document.getElementById("makeNewArticle");
-    const loadArticleButton = document.getElementById("loadArticle");
-    const uploadButton = document.getElementById("uploadButton");
-
+function listenUp() {
     // add active tag event
     document.addEventListener('selectionchange', selectionChange);
-    newArticleButton.addEventListener('click', function() {
-        saveArticle()}
-        );
+    
+    if (newArticleButton != null) {
+        newArticleButton.addEventListener('click', function() {
+            saveNewArticle()}
+            );
+    }
+
+    if (editArticleButton != null) {
+        editArticleButton.addEventListener('click', function() {
+            editExisitingArticle()}
+            );
+    }
+    
     uploadButton.addEventListener('click', function() {
         processEditor()}
         );
     loadArticleButton.addEventListener('click', loadArticle);
 
-
-
     // add toolbar button actions
-    for(let i = 0; i < buttons.length; i++) {
-    let button = buttons[i];
-    
+    let button;
+    for(button of buttons) {
+
     button.addEventListener('click', function(e) {
         let action = this.dataset.action;
-        
         switch(action) {
         case 'code':
             execCodeAction(this, editor);
@@ -45,26 +59,8 @@ window.addEventListener("load", function () {
         default:
             execDefaultAction(action);
         }
-        
+
     });
-    }
-
-    // this function toggles between visual and html view
-    function execCodeAction(button, editor) {
-
-    if(button.classList.contains('active')) { // show visuell view
-        visuellView.innerHTML = htmlView.value;
-        htmlView.style.display = 'none';
-        visuellView.style.display = 'block';
-
-        button.classList.remove('active');     
-    } else {  // show html view
-        htmlView.innerText = visuellView.innerHTML;
-        visuellView.style.display = 'none';
-        htmlView.style.display = 'block';
-
-        button.classList.add('active'); 
-    }
     }
 
     // add link action
@@ -148,10 +144,11 @@ window.addEventListener("load", function () {
             }
         }
     }
+}
 
-    // sets the current format buttons active/inactive
-    function selectionChange() {
-    
+// sets the current format buttons active/inactive
+function selectionChange() {
+
     for(let i = 0; i < buttons.length; i++) {
         let button = buttons[i];
         button.classList.remove('active');
@@ -160,45 +157,72 @@ window.addEventListener("load", function () {
     parentTagActive(window.getSelection().anchorNode.parentNode);
     }
 
-    function parentTagActive(elem) {
+// this function toggles between visual and html view
+function execCodeAction(button, editor) {
+
+    if(button.classList.contains('active')) { // show visuell view
+        visuellView.innerHTML = htmlView.value;
+        htmlView.style.display = 'none';
+        visuellView.style.display = 'block';
+
+        button.classList.remove('active');     
+    } else {  // show html view
+        htmlView.innerText = visuellView.innerHTML;
+        visuellView.style.display = 'none';
+        htmlView.style.display = 'block';
+
+        button.classList.add('active'); 
+    }
+}
+
+function parentTagActive(elem) {
     if(elem.classList.contains('visuell-view')) return false;
-    
     let toolbarButton;
-    
+
     // active by tag names
     let tagName = elem.tagName.toLowerCase();
     toolbarButton = document.querySelectorAll(`.toolbar .btn[data-tag-name="${tagName}"]`)[0];
     if(toolbarButton) {
         toolbarButton.classList.add('active');
     }
-    
+
     // active by text-align
     let textAlign = elem.style.textAlign;
     toolbarButton = document.querySelectorAll(`.toolbar .btn[data-style="textAlign:${textAlign}"]`)[0];
     if(toolbarButton) {
         toolbarButton.classList.add('active');
     }
-    
+
     return parentTagActive(elem.parentNode);
-    }
+}
 
-    function processEditor() {
-        console.log("image upload function called");
-        document.getElementById("imageUploadContent").value = document.getElementById("editorContent").innerHTML;
-        return true;
-      }
+function toggleHeading() {
+    console.log("attemptingToToggleHeading");
+}
 
-    function saveArticle() {
-        console.log("trying to save editor contents")
-        console.log("process function called");
-        document.getElementById("articleContent").value = document.getElementById("editorContent").innerHTML;
-        return true;
-    }
+function processEditor() {
+    console.log("image upload function called");
+    document.getElementById("articleTitleHidden").value = document.getElementById("articleTitleBox").value;
+    document.getElementById("imageUploadContent").value = document.getElementById("editorContent").innerHTML;
+    return true;
+  }
 
-    function loadArticle() {
-        return null;
-    }
+//This function creates a new article.
+function saveNewArticle() {
+    console.log("trying to save editor contents")
+    console.log("process function called");
+    document.getElementById("articleContent").value = document.getElementById("editorContent").innerHTML;
+    return true;
+}
 
-    
+function editExisitingArticle() {
+    console.log("trying to update existing article with editor contents")
+    console.log("process function called");
+    document.getElementById("articleContent").value = document.getElementById("editorContent").innerHTML;
+    return true;
+}
 
-});
+//Doesn't do anything yet, but we will make it do things later with editing articles.
+function loadArticle() {
+    return null;
+}
