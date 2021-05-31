@@ -50,6 +50,11 @@ router.get("/replyComment", async function(req,res) {
     const replyContent = req.query.replyContent;
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken;    
+
+    const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
+    console.log(commentAuthor);
+    const authorID = commentAuthor.userID;
+
     //console.log("parent commentID is: " + commentParentID);
     const parentComment = await commentDao.retrieveCommentbyParentCommentID(commentParentID);
     //console.log("parent comment is:");
@@ -57,7 +62,7 @@ router.get("/replyComment", async function(req,res) {
     //console.log(parentComment);
     const parentCommentLevel = parentComment[0].commentLevel;
     //console.log(parentCommentLevel);
-    const commentLevel = (parentCommentLevel +1) ;
+    const commentLevel = (parentCommentLevel + 1) ;
     //console.log(commentLevel);
 
     const reply = {
@@ -71,6 +76,8 @@ router.get("/replyComment", async function(req,res) {
     
     //console.log(reply);
     await commentDao.createComment(reply);
+    console.log(authorID);
+    reply.commentAuthorID = authorID;
     res.json(reply);
 });
 

@@ -8,8 +8,8 @@ window.addEventListener("load", async function () {
     const create_account_button = document.getElementById("create_account_btn");
     const single_article_div = document.querySelector("#signle-article");
     const homepage_articles_div = document.querySelector("#articles-inner")
-    const list_of_replybtn = document.getElementsByClassName("comment-reply");
-    const list_of_deletebtn = document.getElementsByClassName("comment-delete");
+    let list_of_replybtn = document.getElementsByClassName("comment-reply");
+    let list_of_deletebtn = document.getElementsByClassName("comment-delete");
     
 
 
@@ -168,6 +168,8 @@ window.addEventListener("load", async function () {
                         </div>
                     </div>
                     `;
+                    // list_of_replybtn = document.getElementsByClassName("comment-reply");
+                    // list_of_deletebtn = document.getElementsByClassName("comment-delete");
                 } else if (e.target.innerText == "Cancel") {
                     let buttonDiv = e.target;
                     buttonDiv.innerHTML = "Reply";
@@ -175,10 +177,10 @@ window.addEventListener("load", async function () {
                     replyDiv.remove();
                 }
                 
-                const list_of_submitbtn = document.getElementsByClassName("reply-submit");
+                let list_of_submitbtn = document.getElementsByClassName("reply-submit");
                 for (let j = 0; j < list_of_submitbtn.length; j++) {
                     const submitbtn = list_of_submitbtn[j];
-                    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.id;   
+                    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.getAttribute("commentID");   
                     //console.log("parent comment ID is");
                     //console.log(parentCommentId);
                     
@@ -192,7 +194,7 @@ window.addEventListener("load", async function () {
 
                         const response = await createReplyToComment(parentComment, replyContent, articleID);
                         const reply = await response.json();
-                        //console.log(reply);
+                        console.log(reply);
 
                         let replyDiv = e.target.parentElement.parentElement.parentElement;
                         //console.log(replyDiv);
@@ -228,7 +230,7 @@ window.addEventListener("load", async function () {
     if(list_of_deletebtn) {
         for (let i = 0; i < list_of_deletebtn.length; i++) {
             let deletebtn = list_of_deletebtn[i];
-            let commentID = deletebtn.parentElement.parentElement.id;
+            let commentID = deletebtn.parentElement.parentElement.getAttribute("commentID");
             deletebtn.addEventListener('click', async e => {
                 let commentDiv = e.target.parentElement.parentElement;
                 let textDiv = commentDiv.getElementsByTagName("p")[0];
