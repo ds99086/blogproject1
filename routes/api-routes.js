@@ -83,7 +83,9 @@ router.delete("/api/users/:userID", verifyAuthenticated, async function(req, res
 
 
 router.get('*', function(req, res){
-    res.status(404).send('Error! Page not found');
+    res.status(404);
+    res.locals.badurl = req.url;
+    res.render("./404-page-not-found")
   });
 
 

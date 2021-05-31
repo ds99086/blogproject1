@@ -41,7 +41,17 @@ async function writeNewArticle(articleObject) {
 
 async function writeUpdateArticle(articleObject) {
     const db = await dbPromise;
-    return null;
+    const result = await db.run(SQL`
+    UPDATE articles 
+        SET title = ${articleObject.articleTitle},
+            publishDate = ${articleObject.articlePubDate},
+            lastEditDate = CURRENT_TIMESTAMP,
+            bodyContentOrLinkToContent = ${articleObject.articleContent},
+            authorID = ${articleObject.articleAuthorID}
+        WHERE
+            articleID = ${articleObject.articleID};`);
+    console.log("updated article "+result.lastID);
+    return result;
 }
 
 async function readAuthor(articleID) {
@@ -49,6 +59,12 @@ async function readAuthor(articleID) {
     const userID = await db.get(SQL`SELECT authorID FROM ARTICLES WHERE articleID = ${articleID}`)
     const user = await userDao.retrieveUserByUserID(userID);
     return user;
+}
+
+async function readAuthorID(articleID) {
+    const db = await dbPromise;
+    console.log("Reading Author ID of "+articleID);
+    return db.get(SQL`SELECT authorID FROM ARTICLES WHERE articleID = ${articleID}`);
 }
 
 function checkIsArticle(article) {
@@ -82,5 +98,6 @@ module.exports = {
     writeNewArticle,
     writeUpdateArticle,
     readAuthor,
+    readAuthorID,
     readArticleListBycolumnAndOrder
 }
