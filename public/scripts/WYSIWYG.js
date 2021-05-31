@@ -20,6 +20,7 @@ function setGlobalConstants() {
     editArticleButton = document.getElementById("updateExisitingArticle");
     loadArticleButton = document.getElementById("loadArticle");
     uploadButton = document.getElementById("uploadButton");
+    bodyHintText = document.getElementById("bodyHintText");
 }
 
 function listenUp() {
@@ -35,6 +36,13 @@ function listenUp() {
     if (editArticleButton != null) {
         editArticleButton.addEventListener('click', function() {
             editExisitingArticle()}
+            );
+    }
+
+    if (bodyHintText != null) {
+        visuellView.addEventListener('click', function() {
+            //console.log("click detected in editor");
+            deleteHintText(bodyHintText)}
             );
     }
     
@@ -155,6 +163,8 @@ function selectionChange() {
     }
     
     parentTagActive(window.getSelection().anchorNode.parentNode);
+
+    console.log(window.getSelection().toString());
     }
 
 // this function toggles between visual and html view
@@ -202,7 +212,10 @@ function toggleHeading() {
 
 function processEditor() {
     console.log("image upload function called");
-    document.getElementById("articleTitleHidden").value = document.getElementById("articleTitleBox").value;
+    const hiddenTitleField = document.getElementById("articleTitleHidden");
+    if (hiddenTitleField!=null) {
+        hiddenTitleField.value = document.getElementById("articleTitleBox").value;
+    }     
     document.getElementById("imageUploadContent").value = document.getElementById("editorContent").innerHTML;
     return true;
   }
@@ -225,4 +238,8 @@ function editExisitingArticle() {
 //Doesn't do anything yet, but we will make it do things later with editing articles.
 function loadArticle() {
     return null;
+}
+
+function deleteHintText(element) {
+    element.innerHTML = "";
 }

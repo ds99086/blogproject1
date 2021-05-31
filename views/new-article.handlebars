@@ -21,7 +21,7 @@
                             {{#if articleTitle}}<span>Previous Title: {{articleTitle}}</span>&nbsp;&nbsp;New Title:</label>
                                 <input type="text" name="articleTitle" id="articleTitleBox" value="{{articleTitle}}">
                             {{else}}New Article Title: </label>
-                                <input type="text" name="articleTitle" id="articleTitleBox" value="Untitled Article">
+                                <input type="text" name="articleTitle" id="articleTitleBox" placeholder="Untitled Article">
                             {{/if}}
                         </span>
                         <span class="editorfield">
@@ -187,7 +187,7 @@
                     {{#if returnText}}
                     {{{returnText}}}
                     {{else}}
-                    <h1>You can write your article here</h1>
+                    <div id="bodyHintText"><h1>You can write your article here</h1></div>
                     {{/if}}
                 </div>
                 <textarea class="html-view"></textarea>

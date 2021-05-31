@@ -10,9 +10,8 @@ const fs = require("fs");
 router.get("/newArticle", async function(req, res) {
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     res.locals.title = "Create a New Article";
-    let text = "<h1>This is the place to write a new article</h1>";
     res.locals.editorMode = "newArticleMode";
-    res.locals.returnText = text;
+    console.log("getting date");
     res.locals.date = getDate();
     res.locals.WYSIWYG = true;
     res.render("new-article")
@@ -215,7 +214,7 @@ function getDate() {
     let yyyy = now.getFullYear();
     // let date = `${yyyy}-${mm}-${dd}`
     let date = `${yyyy}-${mm}-${dd}`
-    console.log(date);
+    console.log("setting date to be "+date);
     return date;
 }
 
