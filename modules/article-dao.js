@@ -61,6 +61,12 @@ async function readAuthor(articleID) {
     return user;
 }
 
+async function readAuthorID(articleID) {
+    const db = await dbPromise;
+    console.log("Reading Author ID of "+articleID);
+    return db.get(SQL`SELECT authorID FROM ARTICLES WHERE articleID = ${articleID}`);
+}
+
 function checkIsArticle(article) {
     let value = true;
     //if article.articleID.
@@ -87,5 +93,6 @@ module.exports = {
     writeNewArticle,
     writeUpdateArticle,
     readAuthor,
+    readAuthorID,
     readArticleListBycolumnAndOrder
 }

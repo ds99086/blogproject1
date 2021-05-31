@@ -43,7 +43,11 @@ router.post("/updateExistingArticle", async function(req, res) {
     
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const oldArticleID = req.body.articleID;
-    console.log(oldArticleID);
+    const articleAuthorID = await articleDao.readAuthor(oldArticleID);
+    if (user.userID != articleAuthorID) {
+        res.redirect("./permission-denied")
+    }
+
     const article = {
         articleID: oldArticleID,
         articleTitle: req.body.articleTitle,
@@ -61,18 +65,29 @@ router.post("/updateExistingArticle", async function(req, res) {
 
 router.post("/editArticle", async function(req, res) {
     console.log("attempting to load article")
+    const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const articleID = req.body.articleID;
-    console.log(`attempting to load article ${articleID}`)
-    const targetArticle = articleDao.readArticlebyID(articleID);
-    let text = (await targetArticle).articleContent;
-    res.locals.articleTitle = (await targetArticle).articleTitle;
-    res.locals.articleID = articleID;
-    res.locals.date = (await targetArticle).articlePubDate;
-    res.locals.editorMode = "editAritcleMode";
-    res.locals.title = "WYSIWYG Editor"
-    res.locals.WYSIWYG = true;
-    res.locals.returnText = text;
-    res.render("new-article");
+    const oldArticleID = req.body.articleID;
+    const articleAuthorID = await articleDao.readAuthorID(oldArticleID);
+    if (user.userID != articleAuthorID.authorID) {
+        console.log(user.userID);
+        console.log(articleAuthorID.authorID);
+        res.render("permission-denied");
+    } else {
+        console.log(`attempting to load article ${articleID}`)
+        const targetArticle = articleDao.readArticlebyID(articleID);
+        let text = (await targetArticle).articleContent;
+        res.locals.articleTitle = (await targetArticle).articleTitle;
+        res.locals.articleID = articleID;
+        res.locals.date = (await targetArticle).articlePubDate;
+        res.locals.editorMode = "editAritcleMode";
+        res.locals.title = "WYSIWYG Editor"
+        res.locals.WYSIWYG = true;
+        res.locals.returnText = text;
+        res.render("new-article");
+    }
+    
+
 });
 
 router.post("/articleUploadFile", multerUploader.single("blogImage"), async function(req, res) {
