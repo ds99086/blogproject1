@@ -252,7 +252,7 @@ form .form-group {
     border: 1px solid black;
 } */
 
-.comments-list {
+.comment-container {
     background-color: lightblue;
     margin: 1em;
     padding: 1em 1em 2em 2em;
