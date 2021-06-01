@@ -219,6 +219,8 @@ router.get("/article-details", async function (req, res) {
 
     const commentList = await commentDao.retrieveCommentsbyArticleID(articleID);
 
+
+    //assumes comment #0 is the earliest comment. 
     let output = []; 
     function addChildren(parentC, commentList) {
         for (let j = 0; j < commentList.length; j++) {

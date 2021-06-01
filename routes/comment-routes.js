@@ -20,9 +20,6 @@ router.get("/newComment", async function(req,res) {
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken; 
 
-
-
-
     const comment = {
         commentDate: '2020-02-01',
         commentText: commentContent,
