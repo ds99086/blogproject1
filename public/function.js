@@ -259,13 +259,19 @@ window.addEventListener("load", async function () {
 
 function showHideComment(e){
     const commentList = document.getElementById("comments-list");
-    const showHideBtn = document.getElementById("hide-show-comment");
-    if (e.target.value == "Show Comment") {
-        console.log("hiding comment");
-        e.target.innerText == `Hide Comment`;
-    } else if (e.target.value = "Hide Comment") {
-        e.target.innerText == `Show Comment`;
-        console.log("showing comment");
+    //const showHideBtn = document.getElementById("hide-show-comment");
+
+    if (e.target.innerHTML == "Hide Comments") {
+        //console.log("changing to hiding comment");
+        e.target.innerHTML = "Show Comments";
+        commentList.style.display = "none";
+        //console.log("changed button label: " + e.target.innerHTML);
+
+    } else if (e.target.innerHTML == "Show Comments") {
+        e.target.innerHTML = "Hide Comments";
+        commentList.style.display = "initial";
+        // console.log("changing to showing comment");
+        // console.log("changed button label: " + e.target.innerHTML);
     }
     // if (e.target.innerHTML = "Show Comments") {
 
@@ -292,26 +298,15 @@ function updateVoteDispalys(updateResult, targetElement){
 
 }
 
-
 async function newCommentSubmitFunction(e) {
-        //console.log("clicked on newcomment submit");
-
-        const textbox = document.getElementsByName('commentText')[0];
-        let newCommentContent = textbox.value;
-        textbox.value="";
-        //console.log(newCommentContent);
-       
-        const articleID = getCookie("articleID");
-        const newComment = await newCommentFetch(newCommentContent, articleID);
-
+        const newComment = await getNewComment();
         //console.log(newComment);
-        const commentDivAppendTarget = e.target.parentElement.parentElement.parentElement;
 
+        const commentDivAppendTarget = e.target.parentElement.parentElement.parentElement;
         const commentDiv = document.createElement("div");
         commentDiv.classList.add("comments-level-0");
         commentDivAppendTarget.appendChild(commentDiv);
-        commentDiv.innerHTML += 
-            `
+        commentDiv.innerHTML += `
             <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
             <h5 class="comment-title">Name: ${newComment.commentAuthorID}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
@@ -327,8 +322,7 @@ async function newCommentSubmitFunction(e) {
                 <p id="commentreply"></p>
             <button class="comment-delete">Delete</button>
                 <p id="commentdelete"></p>
-            </div>
-            `;
+            </div>`;
 }    
 
 async function newCommentFetch(newCommentContent, articleID) {
@@ -337,6 +331,15 @@ async function newCommentFetch(newCommentContent, articleID) {
     return newComment;
 }
 
+async function getNewComment(){
+    const textbox = document.getElementsByName('commentText')[0];
+    let newCommentContent = textbox.value;
+    //console.log(newCommentContent);
+    textbox.value="";
+    const articleID = getCookie("articleID");
+    const newComment = await newCommentFetch(newCommentContent, articleID);
+    return newComment;
+}
 
 function deleteBtnFunction(e) {
     let deletebtn = e.target;
@@ -528,4 +531,3 @@ function replyButtonFunction(e) {
 }
 
 })
-
