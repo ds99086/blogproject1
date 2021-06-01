@@ -210,8 +210,22 @@ function parentTagActive(elem) {
     return parentTagActive(elem.parentNode);
 }
 
-function toggleHeading() {
+function setHeading() {
     console.log("attemptingToToggleHeading");
+    if(window.getSelection().toString()) {
+        let h = document.createElement('h1');
+        window.getSelection().getRangeAt(0).surroundContents(h);
+        }
+    
+}
+
+function setPara() {
+    console.log("attemptingToSetAsParagraph");
+    if(window.getSelection().toString()) {
+        let h = document.createElement('p');
+        window.getSelection().getRangeAt(0).surroundContents(h);
+        }
+    
 }
 
 function processEditor() {
