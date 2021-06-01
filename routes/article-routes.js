@@ -6,18 +6,20 @@ const { retrieveUserWithAuthToken } = require("../modules/user-dao");
 const commentDao = require("../modules/comment-dao.js");
 const multerUploader = require("../modules/multer-uploader.js")
 const fs = require("fs");
+const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 
-router.get("/newArticle", async function(req, res) {
-    const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+router.get("/newArticle", verifyAuthenticated, async function(req, res) {
+    const user = res.locals.user;
+
     res.locals.title = "Create a New Article";
     res.locals.editorMode = "newArticleMode";
-    console.log("getting date");
+    // console.log("getting date");
     res.locals.date = getDate();
     res.locals.WYSIWYG = true;
     res.render("new-article")
 });
 
-router.post("/saveNewArticle", async function(req, res) {
+router.post("/saveNewArticle", verifyAuthenticated, async function(req, res) {
 
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     let title = req.body.articleTitle;
@@ -39,10 +41,10 @@ router.post("/saveNewArticle", async function(req, res) {
     res.locals.title = "WYSIWYG Editor";
     res.locals.WYSIWYG = true;
     res.locals.returnText = text;
-    res.redirect(`/./article-details?articleID=${newArticle.lastID}`);
+    res.redirect(`/article-details?articleID=${newArticle.lastID}`);
 });
 
-router.post("/updateExistingArticle", async function(req, res) {
+router.post("/updateExistingArticle", verifyAuthenticated, async function(req, res) {
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const oldArticleID = req.body.articleID;
 
@@ -63,11 +65,11 @@ router.post("/updateExistingArticle", async function(req, res) {
     //Stuff to pass back to the client
     res.locals.title = `New Version of ${req.body.articleTitle}`;
     console.log("aiming for "+oldArticleID);
-    res.redirect(`././article-details?articleID=${oldArticleID}`);
+    res.redirect(`./article-details?articleID=${oldArticleID}`);
 })
 
 
-router.get("/editArticle", async function(req, res) {
+router.get("/editArticle", verifyAuthenticated,async function(req, res) {
     console.log("attempting to load article")
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const articleID = req.query.articleID;
@@ -75,8 +77,8 @@ router.get("/editArticle", async function(req, res) {
     const articleAuthorID = targetArticle.articleAuthorID;
 
     if (user.userID != articleAuthorID) {
-        console.log(user.userID);
-        console.log(articleAuthorID);
+        // console.log(user.userID);
+        // console.log(articleAuthorID);
         res.render("permission-denied");
     } else {
         console.log(`attempting to load article ${articleID}`)
@@ -93,7 +95,7 @@ router.get("/editArticle", async function(req, res) {
 });
 
 
-router.post("/editArticle", async function(req, res) {
+router.post("/editArticle", verifyAuthenticated, async function(req, res) {
     console.log("attempting to load article")
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const articleID = req.body.articleID;
@@ -101,8 +103,8 @@ router.post("/editArticle", async function(req, res) {
     const articleAuthorID = targetArticle.articleAuthorID;
 
     if (user.userID != articleAuthorID) {
-        console.log(user.userID);
-        console.log(articleAuthorID);
+        // console.log(user.userID);
+        // console.log(articleAuthorID);
         res.render("permission-denied");
     } else {
         console.log(`attempting to load article ${articleID}`)
@@ -118,7 +120,7 @@ router.post("/editArticle", async function(req, res) {
     }
 });
 
-router.post("/articleUploadFile", multerUploader.single("blogImage"), async function(req, res) {
+router.post("/articleUploadFile", verifyAuthenticated, multerUploader.single("blogImage"), async function(req, res) {
     const articleContent = req.body.imageUploadContent;
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     
@@ -168,7 +170,11 @@ router.post("/articleUploadFile", multerUploader.single("blogImage"), async func
 //get article author username by author id
 router.get("/loadArticleAutherName", async function (req, res) {
     const userID = req.query.articleID;
-    const user = await userDao.retrieveUserameByUserID(userID);
+    let user = await userDao.retrieveUserameByUserID(userID);
+    // console.log(user)
+    if(user == undefined){
+        user = { username: 'user deleted' }
+    }
     res.json(user);
 
 })
@@ -176,8 +182,31 @@ router.get("/loadArticleAutherName", async function (req, res) {
 router.get("/article-details", async function (req, res) {
     
     const articleID = req.query.articleID;
+
+    const articleObj = await articleDao.readArticlebyID(articleID);
+    const articleAuthor = articleObj.articleAuthorID;
+    // console.log("this is test to show and hide edit button in article page")
+    // console.log(articleObj)
+    // console.log(articleAuthor)
+
     res.cookie("articleID",`${articleID}`)
     res.locals.articleID = articleID;
+    res.locals.articleTitle = articleObj.articleTitle;
+    
+    
+    
+    //
+    let user =  res.locals.user;
+    // console.log(user)
+    if (user == undefined){
+        res.locals.userIsAuthor = false;
+    } else if (user.userID == articleAuthor){
+        
+        res.locals.userIsAuthor = true;
+    } else if(user.userID != articleAuthor){
+        res.locals.userIsAuthor = false;
+    }
+
     function removeItemOnce(arr, value) {
         var index = arr.indexOf(value);
         if (index > -1) {
@@ -222,14 +251,18 @@ router.get("/article-details", async function (req, res) {
 })
 
 
-router.get("/deleteArticle", async function (req, res) {
-    console.log("attempting to load article");
+router.get("/deleteArticle", verifyAuthenticated, async function (req, res) {
+    // console.log("attempting to load article");
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+    // console.log(user)
     const articleID = req.query.articleID;
     const targetArticle = await articleDao.readArticlebyID(articleID);
     const articleAuthorID = targetArticle.articleAuthorID;
 
-    if (user.userID != articleAuthorID) {
+    //if the user is not logged in
+    if (user == undefined){
+        res.render("permission-denied");
+    } else if (user.userID != articleAuthorID) {
         console.log(user.userID);
         console.log(articleAuthorID);
         res.render("permission-denied");
@@ -248,7 +281,7 @@ router.get("/deleteArticle", async function (req, res) {
     }
 })
 
-router.get("/confirmDeleteArticle", async function (req, res) {
+router.get("/confirmDeleteArticle", verifyAuthenticated, async function (req, res) {
     console.log("article deletion confirmed");
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const articleID = req.query.articleID;
@@ -264,7 +297,7 @@ router.get("/confirmDeleteArticle", async function (req, res) {
             articleID: articleID,
             articleTitle: "Deleted Article",
             articlePubDate: targetArticle.articlePubDate,
-            articleAuthorID: user.userID,
+            articleAuthorID: null,
             articleContent: "This article has been deleted"
         }
     const updatedArticle = articleDao.writeUpdateArticle(article);
@@ -272,7 +305,7 @@ router.get("/confirmDeleteArticle", async function (req, res) {
     //Stuff to pass back to the client
     res.locals.title = `Deleted ${targetArticle.articleTitle}`;
     console.log("aiming for "+articleID);
-    res.redirect(`././article-details?articleID=${articleID}`);  
+    res.redirect(`/article-details?articleID=${articleID}`);  
     }
 })
 
@@ -283,8 +316,10 @@ router.get("/articleJSON", async function (req, res) {
     const articleID = req.query.articleID;
     const article = await articleDao.readArticlebyID(articleID);
     // console.log(article)
-    const user = await userDao.retrieveUserameByUserID(article.articleAuthorID);
-
+    let user = await userDao.retrieveUserameByUserID(article.articleAuthorID);
+    if (user == undefined){
+        user = {username: "article deleted"}
+    }
     const updatedArticleObj = {
         articleID: article.articleID,
         articleTitle: article.articleTitle,

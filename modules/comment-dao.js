@@ -59,6 +59,16 @@ async function retrieveCommentbyParentCommentID(commentParentID) {
     return parentComment;
 }
 
+async function updateCommentsAfterUserAccountDelect(userID){
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+        UPDATE comments
+        SET commentText='This comment has been deleted!'
+        WHERE authorID=${userID}
+    `)
+}
+
 
 //Export funcitons
 module.exports = {
@@ -66,5 +76,6 @@ module.exports = {
     deleteComment,
     retrieveCommentsbyArticleID,
     retrieveCommentbyParentCommentID,
-    deleteCommentByUser
+    deleteCommentByUser,
+    updateCommentsAfterUserAccountDelect
 }
