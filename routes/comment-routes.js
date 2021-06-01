@@ -14,30 +14,45 @@ const { createComment } = require("../modules/comment-dao.js");
 
 
 //Hardcode user details
-router.post("/newComment", async function(req,res) {
+router.get("/newComment", async function(req,res) {
+    
+    const commentContent = req.query.commentContent;
+    const articleID = req.query.articleID;
+    const authToken = req.cookies.authToken; 
+
+
+
 
     const comment = {
         commentDate: '2020-02-01',
-        commentText: req.body.commentText,
+        commentText: commentContent,
         commentLevel: 0,
         commentParent: 0,
-        commentAuthorID: 1,
-        commentArticleID: 1
+        commentAuthorID: authToken,
+        commentArticleID: articleID
     }
 
     console.log("making comment");
     console.log(comment);
 
-    await commentDao.createComment(comment);
+    const commentID = await commentDao.createComment(comment);
+    //console.log(authorID);
+        const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
+    //console.log(commentAuthor);
+    const authorID = commentAuthor.userID;
+    console.log(commentAuthor);
+    console.log(authorID);comment.commentAuthorID = authorID;
+    comment.commentID = commentID;
 
-    res.redirect("/single-article");
+    console.log(comment);
+
+    res.json(comment);
 })
 
 
 //Hardcode comment details
 //must check if user authToken matches to be able to delete. 
 router.get("/deleteComment", async function(req,res) {
-
     const commentID = req.query.commentID;
     console.log("deleting comment");
     await commentDao.deleteCommentByUser(commentID);
@@ -52,7 +67,7 @@ router.get("/replyComment", async function(req,res) {
     const authToken = req.cookies.authToken;    
 
     const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
-    console.log(commentAuthor);
+    //console.log(commentAuthor);
     const authorID = commentAuthor.userID;
 
     //console.log("parent commentID is: " + commentParentID);
@@ -75,9 +90,11 @@ router.get("/replyComment", async function(req,res) {
     };
     
     //console.log(reply);
-    await commentDao.createComment(reply);
-    console.log(authorID);
+    const replyID = await commentDao.createComment(reply);
+    //console.log(replyID);
     reply.commentAuthorID = authorID;
+    reply.commentID = replyID;
+    //console.log(reply);
     res.json(reply);
 });
 
