@@ -93,6 +93,16 @@ async function readArticleListBycolumnAndOrder(startIndex, lastIndex, Sortingcol
     return articleList;    
 }
 
+async function updateArticlesAfterUserAccountDelect(userID){
+    const db = await dbPromise;
+
+    const result1 = await db.run(SQL`
+        UPDATE articles
+        SET title='This article has been deleted!', bodyContentOrLinkToContent='This article has been deleted!'
+        WHERE authorID=${userID}
+    `)
+}
+
 
 
 //Export funcitons
@@ -103,5 +113,6 @@ module.exports = {
     writeUpdateArticle,
     readAuthor,
     readAuthorID,
-    readArticleListBycolumnAndOrder
+    readArticleListBycolumnAndOrder,
+    updateArticlesAfterUserAccountDelect
 }

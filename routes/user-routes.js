@@ -4,6 +4,8 @@ const router = express.Router();
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
 const passwordSec = require("../modules/passwordSec.js");
+const commentDao = require("../modules/comment-dao.js");
+const articleDao = require("../modules/article-dao.js");
 const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 
 router.get("/profile-setting", verifyAuthenticated, async function (req, res) {
@@ -107,9 +109,18 @@ router.post("/deleteAccount", verifyAuthenticated, async function (req, res) {
     //missing the middleware for now
     const user = res.locals.user;
 
+    await commentDao.updateCommentsAfterUserAccountDelect(user.userID);
+    await articleDao.updateArticlesAfterUserAccountDelect(user.userID);
+
     await userDao.deleteUser(user.username);
 
-    res.redirect("/?message=account deleted");
+
+    //clear cookies
+    res.clearCookie("authToken");
+    //set locals.user to null
+    res.locals.user = null;
+
+    res.redirect("/?message=Account has been deleted");
 
 });
 

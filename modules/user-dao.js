@@ -7,7 +7,8 @@ async function createUser(user) {
     
     const result = await db.run(SQL`
         INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth, avatarImage, introduction) 
-        VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday}, ${user.avatarImage}), ${user.introduction}`);
+        VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday}, ${user.avatarImage}, ${user.introduction})
+        `);
 }
 
 //does not include user profile image for now. 
@@ -75,6 +76,7 @@ async function retrieveUserameByUserID(userID) {
 //delete user will also delete user's articles and comments
 async function deleteUser(username) {
     const db = await dbPromise;
+
     await db.run(SQL`
         delete from users
         where username = ${username}`);

@@ -26,6 +26,7 @@ router.post("/newAccount", async function(req, res) {
         introduction: req.body.introduction,
         avatarImage: req.body.avatars
     };
+    console.log(user)
 
     try {
         await userDao.createUser(user);

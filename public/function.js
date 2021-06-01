@@ -46,6 +46,7 @@ window.addEventListener("load", async function () {
 
             for (let i = 0; i < articlesJsonArray.length; i++) {
                 //need to add await here, otherwise the article might not display in desired order!
+                console.log(articlesJsonArray[i])
                 await displayPartialArticleOnPage(articlesJsonArray[i]);
             }
 
@@ -100,7 +101,7 @@ window.addEventListener("load", async function () {
         async function getArticleArray(from, count, arttibute, order, filterName, filter) {
             let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}&attribute=${arttibute}&order=${order}&filterName=${filterName}&filter=${filter}`);
             let articlesJsonArray = await articlesResponseObj.json();
-            // console.log(articlesJsonArray)
+        //console.log(articlesJsonArray)
             return articlesJsonArray;         
         }
 
@@ -245,12 +246,11 @@ window.addEventListener("load", async function () {
                             <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
                             <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
                             ${reply.commentText} 
-                            <div class="vote-buttons">
-                            <button class="vote-up">Upvote</button>
-                                <p id="upvote"></p>
-                            <p class="vote-sum">1</p>
-                            <button class="vote-down">Downvote</button>
-                                <p id="downvote"></p>
+                            <div class="vote-container">
+                            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                                <span class="upvote-count">0</span>
+                            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                                <span class="downvote-count">0</span>
                             </div>
                             <div class="commentreply-delete">
                             <button class="comment-reply">Reply</button>
@@ -326,6 +326,7 @@ window.addEventListener("load", async function () {
         // // });
 
 
+
         //display all the vote count once the page load
         //select all the vote-container
         const vote_containers = document.querySelectorAll(".vote-container");
@@ -341,6 +342,14 @@ window.addEventListener("load", async function () {
             upVoteDisplayDiv.innerText = upVoteCount;
             downVoteDisplayDiv.innerText = downVoteCount;
         }
+
+
+
+
+
+
+
+        
 
         //call this method after each comment is created
         updateVoteContainerEnable();

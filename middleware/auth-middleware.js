@@ -16,7 +16,7 @@ function verifyAuthenticated(req, res, next) {
         console.log("An action was NOT performred as user could not be verified");
         console.log("Redirecting to the homepage");
         //alert("You are not logged in!");
-        res.redirect("/")
+        res.render("permission-denied")
     }
 }
 
