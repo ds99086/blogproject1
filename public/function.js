@@ -109,7 +109,7 @@ window.addEventListener("load", async function () {
         }
 
   
-        //sorting function
+        //sorting function(three sorting options)
         let sortingByDateSelection = document.getElementById("dateSorting")
         sortingByDateSelection.addEventListener('change', e=>{
             window.location.href = sortingByDateSelection.value;
