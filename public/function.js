@@ -561,6 +561,8 @@ function addReplyCommentEventListener() {
     }
 }
 
+//const newCommentTemplate 
+
 // async function createNewComment(newCommentContent, articleID) {
 //     let response = await fetch (`./newComment?commentContent=${newCommentContent}&articleID=${articleID}`);
 //     return response;
