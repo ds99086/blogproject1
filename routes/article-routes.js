@@ -10,9 +10,8 @@ const fs = require("fs");
 router.get("/newArticle", async function(req, res) {
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     res.locals.title = "Create a New Article";
-    let text = "<h1>This is the place to write a new article</h1>";
     res.locals.editorMode = "newArticleMode";
-    res.locals.returnText = text;
+    console.log("getting date");
     res.locals.date = getDate();
     res.locals.WYSIWYG = true;
     res.render("new-article")
@@ -40,13 +39,8 @@ router.post("/saveNewArticle", async function(req, res) {
 });
 
 router.post("/updateExistingArticle", async function(req, res) {
-    
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const oldArticleID = req.body.articleID;
-    const articleAuthorID = await articleDao.readAuthor(oldArticleID);
-    if (user.userID != articleAuthorID) {
-        res.redirect("./permission-denied")
-    }
 
     const article = {
         articleID: oldArticleID,
@@ -55,39 +49,64 @@ router.post("/updateExistingArticle", async function(req, res) {
         articleAuthorID: user.userID,
         articleContent: req.body.articleContent
     }
-    const updatedArticle = await articleDao.writeUpdateArticle(article);
+    const updatedArticle = articleDao.writeUpdateArticle(article);
 
     //Stuff to pass back to the client
     res.locals.title = `New Version of ${req.body.articleTitle}`;
-    res.redirect(`/./article-details?articleID=${oldArticleID}`);
+    console.log("aiming for "+oldArticleID);
+    res.redirect(`././article-details?articleID=${oldArticleID}`);
 })
+
+
+router.get("/editArticle", async function(req, res) {
+    console.log("attempting to load article")
+    const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+    const articleID = req.query.articleID;
+    const targetArticle = await articleDao.readArticlebyID(articleID);
+    const articleAuthorID = targetArticle.articleAuthorID;
+
+    if (user.userID != articleAuthorID) {
+        console.log(user.userID);
+        console.log(articleAuthorID);
+        res.render("permission-denied");
+    } else {
+        console.log(`attempting to load article ${articleID}`)
+        let text = targetArticle.articleContent;
+        res.locals.articleTitle = targetArticle.articleTitle;
+        res.locals.articleID = articleID;
+        res.locals.date = targetArticle.articlePubDate;
+        res.locals.editorMode = "editAritcleMode";
+        res.locals.title = `Editing: ${targetArticle.articleTitle}`;
+        res.locals.WYSIWYG = true;
+        res.locals.returnText = text;
+        res.render("new-article");
+    }
+});
 
 
 router.post("/editArticle", async function(req, res) {
     console.log("attempting to load article")
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const articleID = req.body.articleID;
-    const oldArticleID = req.body.articleID;
-    const articleAuthorID = await articleDao.readAuthorID(oldArticleID);
-    if (user.userID != articleAuthorID.authorID) {
+    const targetArticle = await articleDao.readArticlebyID(articleID);
+    const articleAuthorID = targetArticle.articleAuthorID;
+
+    if (user.userID != articleAuthorID) {
         console.log(user.userID);
-        console.log(articleAuthorID.authorID);
+        console.log(articleAuthorID);
         res.render("permission-denied");
     } else {
         console.log(`attempting to load article ${articleID}`)
-        const targetArticle = articleDao.readArticlebyID(articleID);
-        let text = (await targetArticle).articleContent;
-        res.locals.articleTitle = (await targetArticle).articleTitle;
+        let text = targetArticle.articleContent;
+        res.locals.articleTitle = targetArticle.articleTitle;
         res.locals.articleID = articleID;
-        res.locals.date = (await targetArticle).articlePubDate;
+        res.locals.date = targetArticle.articlePubDate;
         res.locals.editorMode = "editAritcleMode";
-        res.locals.title = "WYSIWYG Editor"
+        res.locals.title = `Editing: ${targetArticle.articleTitle}`;
         res.locals.WYSIWYG = true;
         res.locals.returnText = text;
         res.render("new-article");
     }
-    
-
 });
 
 router.post("/articleUploadFile", multerUploader.single("blogImage"), async function(req, res) {
@@ -119,11 +138,18 @@ router.post("/articleUploadFile", multerUploader.single("blogImage"), async func
 
 
     //Stuff to pass back to the client
-    let text = `<h1>Image successfully uploaded!</h1><br>
-    <img src=${imageUrl} width="300">
-    <p>The link to the image is <a href=${imageUrl}>${imageUrl}</a></p><br>
-    <p>you can delete this message and continue working on your article below</p><br>
+    /* The old way of passing images into the text
+        let text = `<h1>Image successfully uploaded!</h1><br>
+        <img src=${imageUrl} width="300">
+        <p>The link to the image is <a href=${imageUrl}>${imageUrl}</a></p><br>
+        <p>you can delete this message and continue working on your article below</p><br>
+        ${articleContent}`;
+    */
+    let text = `<img src=${imageUrl} width="300"><br><br>
     ${articleContent}`;
+    
+    res.locals.popupcontent = `Image successfully uploaded! The link to the image is: www.blogurl.com/${imageUrl}`;
+
     res.locals.title = "WYSIWYG Editor"
     res.locals.WYSIWYG = true;
     res.locals.returnText = text;
@@ -142,6 +168,7 @@ router.get("/article-details", async function (req, res) {
     
     const articleID = req.query.articleID;
     res.cookie("articleID",`${articleID}`)
+    res.locals.articleID = articleID;
     function removeItemOnce(arr, value) {
         var index = arr.indexOf(value);
         if (index > -1) {
@@ -215,7 +242,7 @@ function getDate() {
     let yyyy = now.getFullYear();
     // let date = `${yyyy}-${mm}-${dd}`
     let date = `${yyyy}-${mm}-${dd}`
-    console.log(date);
+    console.log("setting date to be "+date);
     return date;
 }
 

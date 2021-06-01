@@ -69,6 +69,7 @@ window.addEventListener("load", async function () {
                 <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">Published on: ${articleObj.publishDate} </h6>
                 <p class="article-body"></p>
                 <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
+                <a href="./editArticle?articleID=${articleObj.articleID}"><div class="article-edit button" data-article-id="${articleObj.articleID}">Edit Article</div></a>
             `;
 
 
