@@ -2,7 +2,10 @@
 
 window.addEventListener("load", function () {
     setGlobalConstants();
-    listenUp();    
+    listenUp();
+    if (popupcontent.innerHTML!=""){
+        this.alert(popupcontent.innerText);
+    }
 });
 
 
@@ -21,6 +24,7 @@ function setGlobalConstants() {
     loadArticleButton = document.getElementById("loadArticle");
     uploadButton = document.getElementById("uploadButton");
     bodyHintText = document.getElementById("bodyHintText");
+    popupcontent = document.getElementById("popupcontent");
 }
 
 function listenUp() {

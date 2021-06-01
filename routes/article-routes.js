@@ -39,13 +39,8 @@ router.post("/saveNewArticle", async function(req, res) {
 });
 
 router.post("/updateExistingArticle", async function(req, res) {
-    
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const oldArticleID = req.body.articleID;
-    const articleAuthorID = await articleDao.readAuthor(oldArticleID);
-    if (user.userID != articleAuthorID) {
-        res.redirect("./permission-denied")
-    }
 
     const article = {
         articleID: oldArticleID,
@@ -54,11 +49,12 @@ router.post("/updateExistingArticle", async function(req, res) {
         articleAuthorID: user.userID,
         articleContent: req.body.articleContent
     }
-    const updatedArticle = await articleDao.writeUpdateArticle(article);
+    const updatedArticle = articleDao.writeUpdateArticle(article);
 
     //Stuff to pass back to the client
     res.locals.title = `New Version of ${req.body.articleTitle}`;
-    res.redirect(`/./article-details?articleID=${oldArticleID}`);
+    console.log("aiming for "+oldArticleID);
+    res.redirect(`././article-details?articleID=${oldArticleID}`);
 })
 
 
@@ -118,11 +114,18 @@ router.post("/articleUploadFile", multerUploader.single("blogImage"), async func
 
 
     //Stuff to pass back to the client
-    let text = `<h1>Image successfully uploaded!</h1><br>
-    <img src=${imageUrl} width="300">
-    <p>The link to the image is <a href=${imageUrl}>${imageUrl}</a></p><br>
-    <p>you can delete this message and continue working on your article below</p><br>
+    /* The old way of passing images into the text
+        let text = `<h1>Image successfully uploaded!</h1><br>
+        <img src=${imageUrl} width="300">
+        <p>The link to the image is <a href=${imageUrl}>${imageUrl}</a></p><br>
+        <p>you can delete this message and continue working on your article below</p><br>
+        ${articleContent}`;
+    */
+    let text = `<img src=${imageUrl} width="300"><br><br>
     ${articleContent}`;
+    
+    res.locals.popupcontent = `Image successfully uploaded! The link to the image is: www.blogurl.com/${imageUrl}`;
+
     res.locals.title = "WYSIWYG Editor"
     res.locals.WYSIWYG = true;
     res.locals.returnText = text;
