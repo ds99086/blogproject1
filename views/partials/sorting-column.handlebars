@@ -1,10 +1,29 @@
 <div id="catalogue" class="panel">
-    <h2>Catalogue</h2>
+    <h2>Sort by</h2>
 
-    <div id="date-sorting">
-        <p><strong>Lastest Articles</strong></p>
-             <ul id=""></ul>
-        <p><strong>Oldest Articles</strong></p>
-       
-    </div>
+<div class="flex-col mb" id="date-sorting">
+    <label for="dateSorting">Published date:</label>
+    <select id="dateSorting" name="dateSorting">
+        <option value="/?sortingAttribute=publishDate&sortingOrder=DESC" {{#if sortingDateAsc}}selected{{/if}}>Lastest Articles</option>
+        <option value="/?sortingAttribute=publishDate&sortingOrder=ASC" {{#if sortingDateDesc}}selected{{/if}}>Oldest Articles</option>
+    </select>
+</div>
+
+<div class="flex-col mb" id="article-title-sorting">
+    <label for="titleSorting">Title:</label>
+    <select id="titleSorting" name="titleSorting">
+        <option value="/?sortingAttribute=title&sortingOrder=ASC" {{#if sortingTitleDesc}}selected{{/if}}>A-Z</option>
+        <option value="/?sortingAttribute=title&sortingOrder=DESC" {{#if sortingTitleAsc}}selected{{/if}}>Z-A</option>
+    </select>
+</div>
+    
+
+<div class="flex-col mb" id="article-Author-username-sorting">
+    <label for="usernameSorting">Username:</label>
+    <select id="usernameSorting" name="usernameSorting">
+        <option value="/?sortingAttribute=username&sortingOrder=ASC" {{#if sortingUsernameDesc}}selected{{/if}}>A-Z</option>
+        <option value="/?sortingAttribute=username&sortingOrder=DESC" {{#if sortingUsernameAsc}}selected{{/if}}>Z-A</option>
+    </select>
+</div>
+
 </div>

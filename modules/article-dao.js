@@ -41,7 +41,17 @@ async function writeNewArticle(articleObject) {
 
 async function writeUpdateArticle(articleObject) {
     const db = await dbPromise;
-    return null;
+    const result = await db.run(SQL`
+    UPDATE articles 
+        SET title = ${articleObject.articleTitle},
+            publishDate = ${articleObject.articlePubDate},
+            lastEditDate = CURRENT_TIMESTAMP,
+            bodyContentOrLinkToContent = ${articleObject.articleContent},
+            authorID = ${articleObject.articleAuthorID}
+        WHERE
+            articleID = ${articleObject.articleID};`);
+    console.log("updated article "+result.lastID);
+    return result;
 }
 
 async function readAuthor(articleID) {
@@ -51,6 +61,12 @@ async function readAuthor(articleID) {
     return user;
 }
 
+async function readAuthorID(articleID) {
+    const db = await dbPromise;
+    console.log("Reading Author ID of "+articleID);
+    return db.get(SQL`SELECT authorID FROM ARTICLES WHERE articleID = ${articleID}`);
+}
+
 function checkIsArticle(article) {
     let value = true;
     //if article.articleID.
@@ -58,14 +74,15 @@ function checkIsArticle(article) {
 }
 
 //using append to force SQL in use
-async function readArticleListBycolumnAndOrder(startIndex, lastIndex, SortingcolumeName, order, filterColumnName, filter){
+async function readArticleListBycolumnAndOrder(startIndex, lastIndex, SortingcolumeName, order){
     const db = await dbPromise;
     const query = SQL`
     SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES `
-    if(filterColumnName != "None"){
-        query.append(`WHERE ${filterColumnName} = ${filter} `)
+    if(SortingcolumeName == "username"){
+        query.append(`LEFT JOIN users 
+        ON authorID = userID `)
     }
-    query.append(`ORDER BY ${SortingcolumeName} ${order}
+    query.append(`ORDER BY LOWER(${SortingcolumeName}) ${order}
     LIMIT ${startIndex}, ${lastIndex};`);
     // console.log(query)
     const articleList = await db.all(query)
@@ -82,5 +99,6 @@ module.exports = {
     writeNewArticle,
     writeUpdateArticle,
     readAuthor,
+    readAuthorID,
     readArticleListBycolumnAndOrder
 }

@@ -26,8 +26,7 @@ window.addEventListener("load", async function () {
         //get the sorting info from the hidden elements in home page
         const article_sorting_attribute = document.querySelector(".sorting-attribute").innerText;
         const article_sorting_order = document.querySelector(".sorting-order").innerText;
-        const article_sorting_filter = document.querySelector(".sorting-filter").innerText;
-        const article_sorting_filter_name = document.querySelector(".sorting-filter-Name").innerText;
+        
            
 
         //load articles title on oage
@@ -37,7 +36,7 @@ window.addEventListener("load", async function () {
         async function displayNextArticlesOnPage() {
             document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
 
-            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order, article_sorting_filter_name, article_sorting_filter);
+            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order);
             //at this step articles are in order
             // console.log(articlesJsonArray)
 
@@ -66,8 +65,10 @@ window.addEventListener("load", async function () {
                 <h4 class="article-author" author-username="${userJSON.username}">Published by:${userJSON.username}</h4>
                 <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">Published on: ${articleObj.publishDate} </h6>
                 <p class="article-body"></p>
-                <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
-            `;
+                <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>`;
+                
+                
+                // <a href="./editArticle?articleID=${articleObj.articleID}"><div class="article-edit button" data-article-id="${articleObj.articleID}">Edit Article</div></a>`;
 
 
             let articlesDiv = document.querySelector("#articles-inner");
@@ -85,18 +86,18 @@ window.addEventListener("load", async function () {
                     articleContentDiv.innerHTML = ``;
                     let readMoreButtonDiv = e.target;
                     readMoreButtonDiv.innerText = 'Show full content';
+    
                     readMoreButtonDiv.style.background = "teal";
                 }
             });
         }
 
         //get artiles array base on the ariticle numbers on page now
-        async function getArticleArray(from, count, arttibute, order, filterName, filter) {
-            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}&attribute=${arttibute}&order=${order}&filterName=${filterName}&filter=${filter}`);
+        async function getArticleArray(from, count, arttibute, order) {
+            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}&attribute=${arttibute}&order=${order}`);
             let articlesJsonArray = await articlesResponseObj.json();
             // console.log(articlesJsonArray)
             return articlesJsonArray;         
-
         }
 
         async function getArticleAuthorName(userID) {
@@ -104,6 +105,23 @@ window.addEventListener("load", async function () {
             let authorNameJson = await authorNameResponseObj.json();
             return authorNameJson;
         }
+
+  
+        //sorting function(three sorting options)
+        let sortingByDateSelection = document.getElementById("dateSorting")
+        sortingByDateSelection.addEventListener('change', e=>{
+            window.location.href = sortingByDateSelection.value;
+        })       
+        let sortingByTitleSelection = document.getElementById("titleSorting")
+        sortingByTitleSelection.addEventListener('change', e=>{
+            window.location.href = sortingByTitleSelection.value;
+        }) 
+        let sortingByUsernameSelection = document.getElementById("usernameSorting")
+        sortingByUsernameSelection.addEventListener('change', e=>{
+            window.location.href = sortingByUsernameSelection.value;
+        })  
+        
+
     }
 
     //this this checking whether we are on the new account page
@@ -262,49 +280,54 @@ window.addEventListener("load", async function () {
             downVoteDisplayDiv.innerText = downVoteCount;
         }
 
+        //call this method after each comment is created
+        updateVoteContainerEnable();
+
 
         //for all up and down vote action, update the database and number displayed
-        const vote_icon = document.querySelectorAll(".vote-icon");
-        for (each_vote_icon of vote_icon) {
-            each_vote_icon.addEventListener('click', async e => {
-                let voteValue = 0;
-                if (e.target.getAttribute("voteType") == "Upvote") {
-                    voteValue = 1
-                } else if (e.target.getAttribute("voteType") == "Downvote") {
-                    voteValue = -1
-                }
-                const currentCountElement = e.target.nextElementSibling;
-                const comment_ID = e.target.parentElement.parentElement.getAttribute("commentID");
-                const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
-                // console.log(comment_ID);
-                // console.log(user_ID);
-                const updateResult = await updateVote(comment_ID, user_ID, voteValue);
-                // console.log(updateResult)
-
-                if (e.target.getAttribute("voteType") == "Upvote") {
-                    if (updateResult.response == "new vote added") {
-    
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-
-                    } else if (updateResult.response == "vote changed") {
-
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                        const oppositeCountElement = currentCountElement.nextElementSibling.nextElementSibling;
-                        oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+        function updateVoteContainerEnable(){
+            const vote_icon = document.querySelectorAll(".vote-icon");
+            for (each_vote_icon of vote_icon) {
+                each_vote_icon.addEventListener('click', async e => {
+                    let voteValue = 0;
+                    if (e.target.getAttribute("voteType") == "Upvote") {
+                        voteValue = 1
+                    } else if (e.target.getAttribute("voteType") == "Downvote") {
+                        voteValue = -1
                     }
-                }
-                else if (e.target.getAttribute("voteType") == "Downvote") {
-                    if (updateResult.response == "new vote added") {
+                    const currentCountElement = e.target.nextElementSibling;
+                    const comment_ID = e.target.parentElement.parentElement.getAttribute("commentID");
+                    const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
+                    // console.log(comment_ID);
+                    // console.log(user_ID);
+                    const updateResult = await updateVote(comment_ID, user_ID, voteValue);
+                    // console.log(updateResult)
 
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                    } else if (updateResult.response == "vote changed") {
+                    if (e.target.getAttribute("voteType") == "Upvote") {
+                        if (updateResult.response == "new vote added") {
+        
+                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
 
-                        currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                        const oppositeCountElement = currentCountElement.previousElementSibling.previousElementSibling;
-                        oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+                        } else if (updateResult.response == "vote changed") {
+
+                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                            const oppositeCountElement = currentCountElement.nextElementSibling.nextElementSibling;
+                            oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+                        }
                     }
-                }
-            })
+                    else if (e.target.getAttribute("voteType") == "Downvote") {
+                        if (updateResult.response == "new vote added") {
+
+                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                        } else if (updateResult.response == "vote changed") {
+
+                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                            const oppositeCountElement = currentCountElement.previousElementSibling.previousElementSibling;
+                            oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+                        }
+                    }
+                })
+            }
         }
     };
 });
@@ -399,6 +422,13 @@ function addReplyCommentEventListener() {
         }
     })
 
+//an async globle eventListener method
+//method allows to select any async element
+function addAsyncGlobalEventListener(type, selector, callback){
+    document.addEventListener(type, e =>{
+        if (e.target.matches(selector)) callback(e);
+    })
+}
 
 
     };
