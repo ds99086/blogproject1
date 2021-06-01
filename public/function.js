@@ -343,63 +343,49 @@ window.addEventListener("load", async function () {
             downVoteDisplayDiv.innerText = downVoteCount;
         }
 
+        //add eventlisten to conment div, if the event taget match the vote container
+        //do the action
+        const comment_continer_div = document.querySelector(".comment-container");
+        comment_continer_div.addEventListener('click', async e=>{
+            if (e.target && e.target.matches(".vote-icon")){
+                let voteValue = 0;
+                if (e.target.getAttribute("voteType") == "Upvote") {
+                    voteValue = 1
+                } else if (e.target.getAttribute("voteType") == "Downvote") {
+                    voteValue = -1
+                }
+                // const currentCountElement = e.target.nextElementSibling;
+                const comment_ID = e.target.parentElement.parentElement.getAttribute("commentID");
+                const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
+                // console.log(comment_ID);
+                // console.log(user_ID);
+                const updateResult = await updateVote(comment_ID, user_ID, voteValue);
+                // console.log(updateResult)
 
-
-
-
-
-
-        
-
-        //call this method after each comment is created
-        updateVoteContainerEnable();
-
-
-        //for all up and down vote action, update the database and number displayed
-        function updateVoteContainerEnable(){
-            const vote_icon = document.querySelectorAll(".vote-icon");
-            for (each_vote_icon of vote_icon) {
-                each_vote_icon.addEventListener('click', async e => {
-                    let voteValue = 0;
-                    if (e.target.getAttribute("voteType") == "Upvote") {
-                        voteValue = 1
-                    } else if (e.target.getAttribute("voteType") == "Downvote") {
-                        voteValue = -1
-                    }
-                    const currentCountElement = e.target.nextElementSibling;
-                    const comment_ID = e.target.parentElement.parentElement.getAttribute("commentID");
-                    const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
-                    // console.log(comment_ID);
-                    // console.log(user_ID);
-                    const updateResult = await updateVote(comment_ID, user_ID, voteValue);
-                    // console.log(updateResult)
-
-                    if (e.target.getAttribute("voteType") == "Upvote") {
-                        if (updateResult.response == "new vote added") {
-        
-                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-
-                        } else if (updateResult.response == "vote changed") {
-
-                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                            const oppositeCountElement = currentCountElement.nextElementSibling.nextElementSibling;
-                            oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
-                        }
-                    }
-                    else if (e.target.getAttribute("voteType") == "Downvote") {
-                        if (updateResult.response == "new vote added") {
-
-                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                        } else if (updateResult.response == "vote changed") {
-
-                            currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
-                            const oppositeCountElement = currentCountElement.previousElementSibling.previousElementSibling;
-                            oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
-                        }
-                    }
-                })
+                updateVoteDispalys(updateResult, e.target);
             }
+
+        })
+        //function for update vote count display
+        function updateVoteDispalys(updateResult, targetElement){
+            let currentCountElement = targetElement.nextElementSibling;
+            let oppositeCountElement;
+            if (targetElement.getAttribute("voteType") == "Upvote"){
+                oppositeCountElement =currentCountElement.nextElementSibling.nextElementSibling;
+            } else if (targetElement.getAttribute("voteType") == "Downvote"){
+                oppositeCountElement =currentCountElement.previousElementSibling.previousElementSibling;
+            }
+            if (updateResult.response == "new vote added") {
+                    currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+            } else if (updateResult.response == "vote changed") {
+                currentCountElement.innerText = parseInt(currentCountElement.innerText) + 1;
+                oppositeCountElement.innerText = Math.max(0, parseInt(oppositeCountElement.innerText) - 1);
+            } else if (updateResult.response == "vote deleted"){
+                currentCountElement.innerText = Math.max(0, parseInt(currentCountElement.innerText) - 1);
+            }
+
         }
+        
     }
 });
 

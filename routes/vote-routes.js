@@ -40,8 +40,9 @@ router.get('/updateVote', async function(req,res) {
         }
         res.json(result);
     } else if (currentVote.voteValue == voteValue){
+        await voteDao.delectSingleVote(newVote)
         result = {
-            response: "already voted"
+            response: "vote deleted"
         }
         res.json(result);
     } else if (currentVote.voteValue != voteValue){

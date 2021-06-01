@@ -52,6 +52,14 @@ async function addVote(voteObject){
     `);
 }
 
+async function delectSingleVote(voteObject){
+    const db = await dbPromise;
+    const result = await db.run(SQL`
+        DELETE FROM votes
+        WHERE userID = ${voteObject.userID} AND commentID=${voteObject.commentID}
+    `)
+}
+
 async function deleteUserAllVotes(userID){
     const db = await dbPromise;
     const result = await db.run(SQL`
@@ -66,5 +74,6 @@ module.exports = {
     addVote,
     deleteUserAllVotes,
     updateVote,
-    getSingleVote
+    getSingleVote,
+    delectSingleVote
 }
