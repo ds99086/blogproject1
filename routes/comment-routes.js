@@ -21,9 +21,6 @@ router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,r
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken; 
 
-
-
-
     const comment = {
         commentDate: '2020-02-01',
         commentText: commentContent,
