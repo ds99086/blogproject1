@@ -58,6 +58,32 @@ router.post("/updateExistingArticle", async function(req, res) {
 })
 
 
+router.get("/editArticle", async function(req, res) {
+    console.log("attempting to load article")
+    const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+    const articleID = req.query.articleID;
+    const targetArticle = await articleDao.readArticlebyID(articleID);
+    const articleAuthorID = targetArticle.articleAuthorID;
+
+    if (user.userID != articleAuthorID) {
+        console.log(user.userID);
+        console.log(articleAuthorID);
+        res.render("permission-denied");
+    } else {
+        console.log(`attempting to load article ${articleID}`)
+        let text = targetArticle.articleContent;
+        res.locals.articleTitle = targetArticle.articleTitle;
+        res.locals.articleID = articleID;
+        res.locals.date = targetArticle.articlePubDate;
+        res.locals.editorMode = "editAritcleMode";
+        res.locals.title = `Editing: ${targetArticle.articleTitle}`;
+        res.locals.WYSIWYG = true;
+        res.locals.returnText = text;
+        res.render("new-article");
+    }
+});
+
+
 router.post("/editArticle", async function(req, res) {
     console.log("attempting to load article")
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
@@ -142,6 +168,7 @@ router.get("/article-details", async function (req, res) {
     
     const articleID = req.query.articleID;
     res.cookie("articleID",`${articleID}`)
+    res.locals.articleID = articleID;
     function removeItemOnce(arr, value) {
         var index = arr.indexOf(value);
         if (index > -1) {
