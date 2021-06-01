@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
+const { verifyAuthenticatedWithAlertOnly } = require("../middleware/auth-middleware.js");
 const userDao = require("../modules/user-dao");
 const voteDao = require("../modules/vote-dao")
+
 
 
 //const testDao = require("../modules/test-dao.js");
@@ -20,7 +22,7 @@ router.get('/getvotecounts', async function(req,res) {
     
 });
 
-router.get('/updateVote', async function(req,res) {
+router.get('/updateVote', verifyAuthenticatedWithAlertOnly, async function(req,res) {
 
     const commentID = req.query.commentID;
     const userID = req.query.userID;
