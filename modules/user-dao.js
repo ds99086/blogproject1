@@ -6,8 +6,8 @@ async function createUser(user) {
     const db = await dbPromise;
     
     const result = await db.run(SQL`
-        INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth, avatarImage) 
-        VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday}, ${user.avatarImage})`);
+        INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth, avatarImage, introduction) 
+        VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday}, ${user.avatarImage}), ${user.introduction}`);
 }
 
 //does not include user profile image for now. 

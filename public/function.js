@@ -28,7 +28,9 @@ window.addEventListener("load", async function () {
         //get the sorting info from the hidden elements in home page
         const article_sorting_attribute = document.querySelector(".sorting-attribute").innerText;
         const article_sorting_order = document.querySelector(".sorting-order").innerText;
-        
+        const article_sorting_filter = document.querySelector(".sorting-filter").innerText;
+        const article_sorting_filter_name = document.querySelector(".sorting-filter-Name").innerText;
+
            
 
         //load articles title on oage
@@ -38,7 +40,7 @@ window.addEventListener("load", async function () {
         async function displayNextArticlesOnPage() {
             document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
 
-            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order);
+            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order, article_sorting_filter_name, article_sorting_filter);
             //at this step articles are in order
             // console.log(articlesJsonArray)
 
@@ -95,8 +97,8 @@ window.addEventListener("load", async function () {
         }
 
         //get artiles array base on the ariticle numbers on page now
-        async function getArticleArray(from, count, arttibute, order) {
-            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}&attribute=${arttibute}&order=${order}`);
+        async function getArticleArray(from, count, arttibute, order, filterName, filter) {
+            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}&attribute=${arttibute}&order=${order}&filterName=${filterName}&filter=${filter}`);
             let articlesJsonArray = await articlesResponseObj.json();
             // console.log(articlesJsonArray)
             return articlesJsonArray;         
@@ -121,8 +123,22 @@ window.addEventListener("load", async function () {
         let sortingByUsernameSelection = document.getElementById("usernameSorting")
         sortingByUsernameSelection.addEventListener('change', e=>{
             window.location.href = sortingByUsernameSelection.value;
-        })  
-        
+        })         
+
+    }
+
+    //if it is on the user setting page
+    if(document.querySelector(".user-profile")){
+        const profileUpdateBtn = document.querySelector(".profile-update-div-btn")
+        const profileUpdateDiv = document.querySelector(".profile-update-div")
+        profileUpdateBtn.addEventListener('click', e=>{
+            profileUpdateDiv.classList.toggle("invisible-class");
+            if (e.target.innerText == "Thinking about changing your information?"){
+                e.target.innerText = "Never mind!"
+            } else if (e.target.innerText == "Never mind!"){
+                e.target.innerText = "Thinking about changing your information?"
+            }
+        })
 
     }
 
