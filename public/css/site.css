@@ -51,6 +51,10 @@ img {
 .code {
     font-family: Consolas, monospace;
 }
+
+.invisible-class {
+    display: none
+}
 /*****************************************************************/
 
 

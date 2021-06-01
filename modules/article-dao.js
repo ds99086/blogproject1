@@ -74,7 +74,7 @@ function checkIsArticle(article) {
 }
 
 //using append to force SQL in use
-async function readArticleListBycolumnAndOrder(startIndex, lastIndex, SortingcolumeName, order){
+async function readArticleListBycolumnAndOrder(startIndex, lastIndex, SortingcolumeName, order, filterColumnName, filter){
     const db = await dbPromise;
     const query = SQL`
     SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES `
@@ -82,12 +82,25 @@ async function readArticleListBycolumnAndOrder(startIndex, lastIndex, Sortingcol
         query.append(`LEFT JOIN users 
         ON authorID = userID `)
     }
+    if(filterColumnName != "None"){
+        query.append(`WHERE ${filterColumnName} = ${filter} `)
+    }
     query.append(`ORDER BY LOWER(${SortingcolumeName}) ${order}
     LIMIT ${startIndex}, ${lastIndex};`);
     // console.log(query)
     const articleList = await db.all(query)
     // console.log(articleList)
     return articleList;    
+}
+
+async function updateArticlesAfterUserAccountDelect(userID){
+    const db = await dbPromise;
+
+    const result1 = await db.run(SQL`
+        UPDATE articles
+        SET title='This article has been deleted!', bodyContentOrLinkToContent='This article has been deleted!'
+        WHERE authorID=${userID}
+    `)
 }
 
 
@@ -100,5 +113,6 @@ module.exports = {
     writeUpdateArticle,
     readAuthor,
     readAuthorID,
-    readArticleListBycolumnAndOrder
+    readArticleListBycolumnAndOrder,
+    updateArticlesAfterUserAccountDelect
 }

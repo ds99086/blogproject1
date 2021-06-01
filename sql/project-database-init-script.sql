@@ -29,7 +29,8 @@ CREATE TABLE users (
 	dateOfBirth DATE,
     avatarImage VARCHAR(500),
     authToken VARCHAR(128),
-    adminstratorLevel INTEGER DEFAULT 0
+    adminstratorLevel INTEGER DEFAULT 0,
+    introduction VARCHAR(500)
 	);
 
 CREATE TABLE articles (

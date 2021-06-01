@@ -1,65 +1,85 @@
 {{> user-navi-bar }}
 
-<div class="container">
+{{profileChangingMessage}}
+
+<div class="container user-profile">
     <div class="userAvatarDiv">
         <img src="/images/Avatars/{{user.avatarImage}}.png" class="avatarIcon">
     </div>
     <h1>Hello, {{user.username}}!</h1>
+    <p>Your introduction: {{user.introduction}}</p>
 
-    <h2>Update your information:</h2>
+     <div class="flex-row justify-center align-center">
+            <button class="profile-update-div-btn" type="submit">Thinking about changing your information?</button>
+    </div>
 
+    <div class="profile-update-div invisible-class">
+
+
+
+    <h3>Update your information:</h3>
+    <p>In order to update your information, you need to type in your current password</p>
     <form action="./updateUseDetails" method="POST">
         <div class="flex-col mb" id="new_acount_username_div">
             <label for="new_acount_username">Username:</label>
-            <input type="text" name="new_account_username" id="new_acount_username">
+            <input type="text" name="new_account_username" id="new_acount_username" value={{user.username}}>
             <p id="username_alert_message"></p>
         </div>
 
         <div class="flex-col mb">
-            <label for="new_account_password1">Password:</label>
+            <label for="passwordc">Enter your current password:</label>
+            <input type="password" name="passwordc" id="current_password" required> 
+        </div>
+        
+        
+        <div class="flex-col mb">
+            <label for="new_account_password1">Enter your new password:</label>
             <input type="password" name="password1" id="new_account_password1">
         </div>
 
         <div class="flex-col mb">
-            <label for="new_account_password2">Re-enter your password:</label>
+            <label for="new_account_password2">Re-enter your new password:</label>
             <input type="password" name="password2" id="new_account_password2">
             <p id="password_alert_message"></p>
         </div>
 
         <div class="flex-col mb">
             <label for="txtFName">First name:</label>
-            <input type="text" name="fname" id="txtFName">
+            <input type="text" name="fname" id="txtFName" value={{user.firstName}}>
         </div>
 
         <div class="flex-col mb">
             <label for="txtLName">Last name:</label>
-            <input type="text" name="lname" id="txtLName">
+            <input type="text" name="lname" id="txtLName" value={{user.lastName}}>
         </div>
 
         <div>
             <label for="txtdob">Birthday:</label>
-            <input type="date" name="birthday" id="txtdob">
+            <input type="date" name="birthday" id="txtdob" value={{user.dateOfBirth}}>
         </div>
 
         <div class="flex-col mb">
             <label for="txtDescription">Re-introduction about you!:</label>
-            <input type="text" name="description" id="txtDescription">
+            <input type="text" name="introduction" id="txtDescription" value={{user.introduction}}>
         </div>
+
+        {{> avatar }}
         
+
         <div class="flex-row justify-center align-center">
             <button type="submit">Update your profile!</button>
         </div>
 
     </form>
-    <br>
+    {{!-- <br>
      <form action="./updateUserAvatar" method="POST">
      
         {{> avatar }}
         <div class="flex-row justify-center align-center">
             <button type="submit">Update your Avatar!</button>
         </div>
-     </form>
-
+     </form> --}}
+</div>
     <br>
 
     <form action="./deleteAccount" method="POST">
