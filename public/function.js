@@ -67,9 +67,10 @@ window.addEventListener("load", async function () {
                 <h4 class="article-author" author-username="${userJSON.username}">Published by:${userJSON.username}</h4>
                 <h6 class="article-publishDate" data-publishDate="${articleObj.publishDate}">Published on: ${articleObj.publishDate} </h6>
                 <p class="article-body"></p>
-                <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>
-                <a href="./editArticle?articleID=${articleObj.articleID}"><div class="article-edit button" data-article-id="${articleObj.articleID}">Edit Article</div></a>
-            `;
+                <div class="article-read-more button" data-article-id="${articleObj.articleID}">Show full content</div>`;
+                
+                
+                // <a href="./editArticle?articleID=${articleObj.articleID}"><div class="article-edit button" data-article-id="${articleObj.articleID}">Edit Article</div></a>`;
 
 
             let articlesDiv = document.querySelector("#articles-inner");

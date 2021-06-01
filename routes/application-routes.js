@@ -63,14 +63,13 @@ router.get("/", async function(req, res) {
         }
     } 
 
-
     // console.log(sortingAttribute);
     // console.log(sortingOrder);
     // console.log(sortingFilterName);
     // console.log(sortingFilter);
     res.render("home");
-
 });
+
 
 //get articles array from 
 router.get("/loadHomepageArticles", async function (req, res) {
