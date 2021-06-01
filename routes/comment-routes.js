@@ -5,6 +5,7 @@ const router = express.Router();
 const userDao = require("../modules/user-dao.js");
 const commentDao = require("../modules/comment-dao.js");
 const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
+const { verifyAuthenticatedWithAlertOnly } = require("../middleware/auth-middleware.js");
 const { createComment } = require("../modules/comment-dao.js");
 
 // const io = require('socket.io')();
@@ -14,7 +15,7 @@ const { createComment } = require("../modules/comment-dao.js");
 
 
 //Hardcode user details
-router.get("/newComment", async function(req,res) {
+router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
     
     const commentContent = req.query.commentContent;
     const articleID = req.query.articleID;
@@ -60,7 +61,7 @@ router.get("/deleteComment", async function(req,res) {
     //res.redirect("/single-article");
 })
 
-router.get("/replyComment", async function(req,res) {
+router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
     const commentParentID = req.query.parentCommentID;
     const replyContent = req.query.replyContent;
     const articleID = req.query.articleID;
@@ -81,11 +82,10 @@ router.get("/replyComment", async function(req,res) {
     //console.log(commentLevel);
 
     const reply = {
-        commentDate: '2020-02-02', 
         commentText: replyContent, 
         commentLevel: commentLevel, 
         commentParent: commentParentID, 
-        commentAuthorID: authToken, 
+        commentAuthorID: authorID, 
         commentArticleID: articleID
     };
     

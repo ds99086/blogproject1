@@ -45,7 +45,7 @@ CREATE TABLE articles (
 
 CREATE TABLE comments (
 	commentID INTEGER NOT NULL PRIMARY KEY,
-	commentDate TIMESTAMT DEFAULT CURRENT_TIMESTAMP,
+	commentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     commentText TEXT,
     commentLevel INTEGER DEFAULT 0, 
     parentComment INTEGER DEFAULT null,
@@ -129,18 +129,18 @@ INSERT INTO articles VALUES
 				
 	
 INSERT INTO comments VALUES
-   (1, '2010-04-20', 'This is the first comment, no parent, article 1', 0, 0, 4, 1),
-   (2, '2011-04-20', 'This is the second comment, no parent, article 1', 0, 0, 2, 1),
-   (3, '2012-04-20', 'This is the third comment, replies to the first comment, article 1', 1, 1, 2, 1),
-   (4, '2010-04-20', 'This is the fourth comment, replies to the second comment, article 1', 1, 2, 2, 1),
-   (5, '2011-04-20', 'This is the fifth comment, replies to the third comment, article 1', 2, 3, 2, 1),
-   (6, '2012-04-20', 'This is the sixth comment, replies to the first comment, article 1', 1, 1, 2, 1),
-   (7, '2010-04-20', 'This is the seventh comment, replies to the fourth comment, article 1', 2, 4, 2, 1),
-   (8, '2011-04-20', 'This is the eigth comment, replies to the second comment, article 1', 1, 2, 2, 1),
-   (9, '2012-04-20', 'This is the ninth comment, replies to the second coment, article 1', 1, 2, 2, 1),
-   (10, '2010-04-20', 'This is the tenth comment, no parent, article 1', 0, 0, 2, 1),
-   (11, '2011-04-20', 'This is the elevnth comment, no parent, article 1', 0, 0, 2, 1),
-   (12, '2012-04-20', 'This is the twelth comment, replies to the 10th comment, artcile 1', 1, 10, 2, 1);
+   (1, '2021-06-01 23:10:09', 'This is the first comment, no parent, article 1', 0, 0, 4, 1),
+   (2, '2020-01-01 23:00:09', 'This is the second comment, no parent, article 1', 0, 0, 2, 1),
+   (3, '2011-01-20 23:00:09', 'This is the third comment, replies to the first comment, article 1', 1, 1, 2, 1),
+   (4, '2020-07-01 23:00:09', 'This is the fourth comment, replies to the second comment, article 1', 1, 2, 2, 1),
+   (5, '2021-08-08 23:00:09', 'This is the fifth comment, replies to the third comment, article 1', 2, 3, 2, 1),
+   (6, '2008-08-08 23:00:09', 'This is the sixth comment, replies to the first comment, article 1', 1, 1, 2, 1),
+   (7, '2012-06-01 23:00:09', 'This is the seventh comment, replies to the fourth comment, article 1', 2, 4, 2, 1),
+   (8, '2021-05-01 23:00:09', 'This is the eigth comment, replies to the second comment, article 1', 1, 2, 2, 1),
+   (9, '2021-05-21 23:00:09', 'This is the ninth comment, replies to the second coment, article 1', 1, 2, 2, 1),
+   (10, '2012-03-01 23:00:09', 'This is the tenth comment, no parent, article 1', 0, 0, 2, 1),
+   (11, '2021-02-02 23:00:09', 'This is the elevnth comment, no parent, article 1', 0, 0, 2, 1),
+   (12, '2021-06-01 23:00:09', 'This is the twelth comment, replies to the 10th comment, artcile 1', 1, 10, 2, 1);
    
    
  INSERT INTO votes VALUES

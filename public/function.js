@@ -321,11 +321,12 @@ window.addEventListener("load", async function () {
                 `
                 <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
                 <h5 class="comment-title">Name: ${newComment.commentAuthorID}</h5>
-                <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+                <h6 class = "comment-datetime text-muted">Date: ${newComment.commentDate}</h6>
                 <p>${newComment.commentText} </p>
                 <div class="vote-container">
                 <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
                     <span class="upvote-count">0</span>
+                    &emsp;
                 <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
                     <span class="downvote-count">0</span>
                 </div>
@@ -486,13 +487,13 @@ async function addListenersToSubmitBtn(e,submitbtn, parentCommentId, replyConten
         <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
         <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
         <p>${reply.commentText} <p>
-        <div class="vote-buttons">
-        <button class="vote-up">Upvote</button>
-            <p id="upvote"></p>
-        <p class="vote-sum">1</p>
-        <button class="vote-down">Downvote</button>
-            <p id="downvote"></p>
-        </div>
+        <div class="vote-container">
+            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                <span class="upvote-count">0</span>
+                &emsp;
+            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                <span class="downvote-count">0</span>
+            </div>
         <div class="commentreply-delete">
         <button class="comment-reply">Reply</button>
             <p id="commentreply"></p>

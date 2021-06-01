@@ -10,9 +10,8 @@ async function createComment(comment) {
     const db = await dbPromise;
     
     const result = await db.run(SQL`
-        INSERT INTO comments (commentDate, commentText, commentLevel, parentComment, authorID, parentArticleID) 
-        VALUES(
-            ${comment.commentDate}, 
+        INSERT INTO comments (commentText, commentLevel, parentComment, authorID, parentArticleID) 
+        VALUES(            
             ${comment.commentText}, 
             ${comment.commentLevel}, 
             ${comment.commentParent}, 
@@ -46,6 +45,7 @@ async function retrieveCommentsbyArticleID(articleId) {
     select * from comments
     where parentArticleID = ${articleId}`);
 
+
     return commentList;
 }
 
@@ -54,7 +54,9 @@ async function retrieveCommentbyParentCommentID(commentParentID) {
 
     const parentComment = await db.all(SQL`
     select * from comments
-    where commentID = ${commentParentID}`);
+    where commentID = ${commentParentID}
+    ORDER BY commentDate DESC
+    `);
 
     return parentComment;
 }
