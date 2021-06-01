@@ -65,7 +65,7 @@ router.post("/updateUseDetails", verifyAuthenticated, async function (req, res) 
         const userNewFirstName = req.body.fname;
         const userNewLastName = req.body.lname;
         const userNewBirthday = req.body.birthday;
-        const userNewDescription = req.body.description;
+        const userNewiIntroduction = req.body.introduction;
         const userNewAvatar = req.body.avatars;
     
         if (userNewName != "") { user.username = userNewName };
@@ -73,7 +73,7 @@ router.post("/updateUseDetails", verifyAuthenticated, async function (req, res) 
         if (userNewFirstName != "") { user.fname = userNewFirstName };
         if (userNewLastName != "") { user.lname = userNewLastName };
         if (userNewBirthday != "") { user.birthday = userNewBirthday };
-        if (userNewDescription != "") { user.description = userNewDescription };
+        if (userNewiIntroduction != "") { user.introduction = userNewiIntroduction };
         if (userNewAvatar != "") {user.avatarImage = userNewAvatar}
     
         await userDao.updateUser(user);

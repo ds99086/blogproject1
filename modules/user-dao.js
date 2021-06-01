@@ -28,7 +28,8 @@ async function updateUser(user) {
         lastName = ${user.lastName}, 
         dateOfBirth = ${user.dateOfBirth}, 
         authToken = ${user.authToken},
-        avatarImage = ${user.avatarImage}
+        avatarImage = ${user.avatarImage},
+        introduction = ${user.introduction}
         where userID = ${user.userID}`
         );
 
