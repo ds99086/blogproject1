@@ -18,6 +18,8 @@ async function createComment(comment) {
             ${comment.commentParent}, 
             ${comment.commentAuthorID}, 
             ${comment.commentArticleID})`);
+    
+    return result.lastID;
 }
 
 async function deleteCommentByUser(commentID) {
