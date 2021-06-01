@@ -20,10 +20,14 @@ router.get("/newArticle", async function(req, res) {
 router.post("/saveNewArticle", async function(req, res) {
 
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+    let title = req.body.articleTitle;
+    if (title == "") {
+        title = "Untitled Article";
+    }
     
     const article = {
         articleID: null,
-        articleTitle: req.body.articleTitle,
+        articleTitle: title,
         articlePubDate: req.body.articlePubDate,
         articleAuthorID: user.userID,
         articleContent: req.body.articleContent
@@ -42,9 +46,14 @@ router.post("/updateExistingArticle", async function(req, res) {
     const user = await retrieveUserWithAuthToken(req.cookies.authToken);
     const oldArticleID = req.body.articleID;
 
+    let title = req.body.articleTitle;
+    if (title = "") {
+        title = "Untitled Article";
+    }
+
     const article = {
         articleID: oldArticleID,
-        articleTitle: req.body.articleTitle,
+        articleTitle: title,
         articlePubDate: req.body.articlePubDate,
         articleAuthorID: user.userID,
         articleContent: req.body.articleContent
@@ -211,6 +220,63 @@ router.get("/article-details", async function (req, res) {
     res.render("single-article")
     
 })
+
+
+router.get("/deleteArticle", async function (req, res) {
+    console.log("attempting to load article");
+    const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+    const articleID = req.query.articleID;
+    const targetArticle = await articleDao.readArticlebyID(articleID);
+    const articleAuthorID = targetArticle.articleAuthorID;
+
+    if (user.userID != articleAuthorID) {
+        console.log(user.userID);
+        console.log(articleAuthorID);
+        res.render("permission-denied");
+    } else {
+    const articleID = req.query.articleID;
+    res.cookie("articleID",`${articleID}`)
+    res.locals.articleID = articleID;
+    function removeItemOnce(arr, value) {
+        var index = arr.indexOf(value);
+        if (index > -1) {
+          arr.splice(index, 1);
+        }
+        return arr;
+    }
+    res.render("delete-article-confirmation")  
+    }
+})
+
+router.get("/confirmDeleteArticle", async function (req, res) {
+    console.log("article deletion confirmed");
+    const user = await retrieveUserWithAuthToken(req.cookies.authToken);
+    const articleID = req.query.articleID;
+    const targetArticle = await articleDao.readArticlebyID(articleID);
+    const articleAuthorID = targetArticle.articleAuthorID;
+    
+    if (user.userID != articleAuthorID) {
+        console.log(user.userID);
+        console.log(articleAuthorID);
+        res.render("permission-denied");
+    } else {
+        const article = {
+            articleID: articleID,
+            articleTitle: "Deleted Article",
+            articlePubDate: targetArticle.articlePubDate,
+            articleAuthorID: user.userID,
+            articleContent: "This article has been deleted"
+        }
+    const updatedArticle = articleDao.writeUpdateArticle(article);
+
+    //Stuff to pass back to the client
+    res.locals.title = `Deleted ${targetArticle.articleTitle}`;
+    console.log("aiming for "+articleID);
+    res.redirect(`././article-details?articleID=${articleID}`);  
+    }
+})
+
+
 
 //get the required article from database
 router.get("/articleJSON", async function (req, res) {
