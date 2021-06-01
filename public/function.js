@@ -10,9 +10,7 @@ window.addEventListener("load", async function () {
     const homepage_articles_div = document.querySelector("#articles-inner")
     let list_of_replybtn = document.getElementsByClassName("comment-reply");
     let list_of_deletebtn = document.getElementsByClassName("comment-delete");
-    
-
-
+    const new_comment_submitbtn = document.getElementById("new-comment-submit");
 
     //const vote_up = document.getElementsByClassName("vote-up");
     //const vote_down = document.getElementsByClassName("vote-down");
@@ -154,119 +152,76 @@ window.addEventListener("load", async function () {
     //add eventlistener for each submit button to send the form. 
 
     if (list_of_replybtn) {
-        for (let i = 0; i < list_of_replybtn.length; i++) {
-            replybtn = list_of_replybtn[i];
-            replybtn.addEventListener('click', e => {
-                if (e.target.innerText == "Reply") {
-                    let buttonDiv = e.target;
-                    buttonDiv.innerHTML = "Cancel";
-                    const replyDiv = document.createElement("div");
-                    buttonDiv.parentElement.parentElement.appendChild(replyDiv);
-                    replyDiv.innerHTML = `
-                    <div class="new-comment-box">
-                        <div class="flex-col mb">
-                            <input type="hidden" name="parentcomment" id="parentcomment" value="">
-                            <label for="txtReply">Leave your comment:</label>
-                            <input type="text" name="commentText" id="txtReply" required>
-                        </div>
-                        <div class="flex-row justify-sb align-center">
-                        <button class="reply-submit">Submit</button>
-                        </div>
-                    </div>
-                    `;
-                    // list_of_replybtn = document.getElementsByClassName("comment-reply");
-                    // list_of_deletebtn = document.getElementsByClassName("comment-delete");
-                } else if (e.target.innerText == "Cancel") {
-                    let buttonDiv = e.target;
-                    buttonDiv.innerHTML = "Reply";
-                    let replyDiv = e.target.parentElement.parentElement.lastChild;
-                    replyDiv.remove();
-                }
-                
-                let list_of_submitbtn = document.getElementsByClassName("reply-submit");
-                for (let j = 0; j < list_of_submitbtn.length; j++) {
-                    const submitbtn = list_of_submitbtn[j];
-                    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.getAttribute("commentID");   
-                    //console.log("parent comment ID is");
-                    //console.log(parentCommentId);
-                    
-                    const replyContentDiv = submitbtn.parentElement.previousElementSibling.lastElementChild;
-                    //console.log(replyContentDiv);
-
-                    submitbtn.addEventListener('click', async e => {
-                        const replyContent = replyContentDiv.value;
-                        const parentComment = parentCommentId;
-                        const articleID = getCookie("articleID");
-
-                        const response = await createReplyToComment(parentComment, replyContent, articleID);
-                        const reply = await response.json();
-                        console.log(reply);
-
-                        let replyDiv = e.target.parentElement.parentElement.parentElement;
-                        //console.log(replyDiv);
-
-                        replyDiv.innerHTML = `
-                        <div class="comments-level-${reply.commentLevel}">
-                        <div class="comment-body" id="${reply.commentID}">
-                            <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
-                            <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
-                            ${reply.commentText} 
-                            <div class="vote-buttons">
-                            <button class="vote-up">Upvote</button>
-                                <p id="upvote"></p>
-                            <p class="vote-sum">1</p>
-                            <button class="vote-down">Downvote</button>
-                                <p id="downvote"></p>
-                            </div>
-                            <div class="commentreply-delete">
-                            <button class="comment-reply">Reply</button>
-                                <p id="commentreply"></p>
-                            <button class="comment-delete">Delete</button>
-                                <p id="commentdelete"></p>
-                            </div>
-                        </div>
-                        `;
-                    })
-                }
-            }
-            )
-        };
+            addReplyCommentEventListener();
+    
 
     //Allow user to delete comment and also modify SQL to show that user have deleted this comment.
     if(list_of_deletebtn) {
         for (let i = 0; i < list_of_deletebtn.length; i++) {
             let deletebtn = list_of_deletebtn[i];
             let commentID = deletebtn.parentElement.parentElement.getAttribute("commentID");
-            deletebtn.addEventListener('click', async e => {
-                let commentDiv = e.target.parentElement.parentElement;
-                let textDiv = commentDiv.getElementsByTagName("p")[0];
-                //console.log(commentDiv);
-                //console.log(textDiv);
-                textDiv.innerHTML = `
-                [User Have Deleted This Comment]
-                `;
-                let response = await fetch(`./deleteComment?commentID=${commentID}`);
-            })
+            addDeleteCommentEventListener();
         }
     }
 
+    if(new_comment_submitbtn) {
+        new_comment_submitbtn.addEventListener('click', async function (e) {
+        
+            const articleID = getCookie("articleID");
+            const newCommentTextDiv = new_comment_submitbtn.parentElement.previousElementSibling.lastElementChild;
+            //console.log(newCommentTextDiv);
+
+            const newCommentContent = newCommentTextDiv.value;
+
+            //console.log(newCommentContent);
+
+            const response =  await createNewComment(newCommentContent, articleID);
+            const newComment =  await response.json();
+
+            console.log(newComment);
+
+            const commentDiv = e.target.parentElement.parentElement.parentElement;
+
+            commentDiv.innerHTML += 
+            `
+            <h3>Comments</h3>
+            <div class="comments-level-0">
+            <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
+            <h5 class="comment-title">Name: ${newComment.commentAuthorID}</h5>
+            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+            <p>${newComment.commentText} </p>
+            <div class="vote-container">
+            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                <span class="upvote-count">0</span>
+            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                <span class="downvote-count">0</span>
+            </div>
+            <div class="commentreply-delete">
+            <button class="comment-reply">Reply</button>
+                <p id="commentreply"></p>
+            <button class="comment-delete">Delete</button>
+                <p id="commentdelete"></p>
+            </div>
+            </div>
+            `;
+            //console.log(commentDiv);
+            addReplyCommentEventListener();
+
+            //const newComment = await response.json();
+        })
+    }
 
         //check whether we are on article writing page.
         //if so, get the username and userID by cookie
         // if(writeNewArticlePageElements!=undefined){
         //     const usernameArea = document.querySelector(".articleAuthorusername")
         //     console.log(usernameArea)
-
         //     const authToken = getCookie("authToken");
         //     console.log(authToken)
         //     const usernameAndID = await retrieveUserByAuthToken(authToken);
         //     console.log(usernameAndID)
-
         //     usernameArea.setAttribute("value", `${usernameAndID.username}`)
-
         // }
-
-
         // in the window.addEventListener call the avatar live update function
 
         //WORK IN PROGRESS
@@ -281,7 +236,6 @@ window.addEventListener("load", async function () {
         //         })
         //     })
         // };
-
 
         //     item.addEventListener('click', function(event){
         //     console.log("I am detecting vote up");
@@ -352,29 +306,124 @@ window.addEventListener("load", async function () {
                 }
             })
         }
-    }
+    };
 });
 
-// async function retrieveUserByAuthToken(authToken){
-//     let response = await fetch(`./checkAuthToken?authToken=${authToken}`);
-//     let usernameAndIDObj = await response.json();
-//     return usernameAndIDObj;
-// }
+function addReplyCommentEventListener() {
+    let list_of_replybtn = document.getElementsByClassName("comment-reply");
+    for (let i = 0; i < list_of_replybtn.length; i++) {
+        replybtn = list_of_replybtn[i];
+        replybtn.addEventListener('click', e => {
+        if (e.target.innerText == "Reply") {
+            let buttonDiv = e.target;
+            buttonDiv.innerHTML = "Cancel";
+            const replyDiv = document.createElement("div");
+            buttonDiv.parentElement.parentElement.appendChild(replyDiv);
+            replyDiv.innerHTML = `
+            <div class="new-comment-box">
+                <div class="flex-col mb">
+                    <input type="hidden" name="parentcomment" id="parentcomment" value="">
+                    <label for="txtReply">Leave your comment:</label>
+                    <input type="text" name="commentText" id="txtReply" required>
+                </div>
+                <div class="flex-row justify-sb align-center">
+                <button class="reply-submit">Submit</button>
+                </div>
+            </div>
+            `;
+        } else if (e.target.innerText == "Cancel") {
+            let buttonDiv = e.target;
+            buttonDiv.innerHTML = "Reply";
+            let replyDiv = e.target.parentElement.parentElement.lastChild;
+            replyDiv.remove();
+        }
+        
+        let list_of_submitbtn = document.getElementsByClassName("reply-submit");
+        for (let j = 0; j < list_of_submitbtn.length; j++) {
+            const submitbtn = list_of_submitbtn[j];
+            const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.getAttribute("commentID");   
+            //console.log("parent comment ID is");
+            //console.log(parentCommentId);
+            
+            const replyContentDiv = submitbtn.parentElement.previousElementSibling.lastElementChild;
+            //console.log(replyContentDiv);
 
-// //get cookie by attribute from client side
-// function getCookie(cname) {
-//     const name = `${cname}=`;
-//     const decodedCookie = decodeURIComponent(document.cookie); 
-//     const cookieArray = decodedCookie.split(";");
-//     for(let i = 0; i <cookieArray.length; i++) {
-//         let cookie = cookieArray[i].trim(); 
-//         if (cookie.indexOf(name) === 0) {
-//             return cookie.substring(name.length); }
-//     }
-//     return undefined; 
-// }
+            submitbtn.addEventListener('click', async e => {
+                replybtnDiv = e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild;
+                if ( replybtnDiv.innerHTML != "Reply") {
+                    replybtnDiv.innerHTML = "Reply"    
+                }
+
+                //console.log(replybtnDiv);
+                const replyContent = replyContentDiv.value;
+                const parentComment = parentCommentId;
+                const articleID = getCookie("articleID");
+
+                const response = await createReplyToComment(parentComment, replyContent, articleID);
+                const reply = await response.json();
+                console.log(reply);
+
+                const commentBox = e.target.parentElement.parentElement;
+                console.log(commentBox);
+
+                //
+                let replyTargetDiv = e.target.parentElement.parentElement.parentElement.parentElement.parentElement;
+                //console.log(replyTargetDiv);
+                const replyDiv = document.createElement("div");
+                replyDiv.classList.add(`comments-level-${reply.commentLevel}`);
+                replyTargetDiv.appendChild(replyDiv);
+                replyDiv.innerHTML = `
+                <div class="comment-body" userID="${reply.authorID}" commentID="${reply.commentID}">
+                    <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
+                    <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
+                    <p>${reply.commentText} <p>
+                    <div class="vote-buttons">
+                    <button class="vote-up">Upvote</button>
+                        <p id="upvote"></p>
+                    <p class="vote-sum">1</p>
+                    <button class="vote-down">Downvote</button>
+                        <p id="downvote"></p>
+                    </div>
+                    <div class="commentreply-delete">
+                    <button class="comment-reply">Reply</button>
+                        <p id="commentreply"></p>
+                    <button class="comment-delete">Delete</button>
+                        <p id="commentdelete"></p>
+                    </div>
+                `;
+                commentBox.remove();
+                addReplyCommentEventListener();
+                addDeleteCommentEventListener();
+                
+            })
+        }
+    })
 
 
+
+    };
+    
+}
+
+function addDeleteCommentEventListener() {
+    let list_of_deletebtn = document.getElementsByClassName("comment-delete");
+    for (let i = 0; i < list_of_deletebtn.length; i++) {
+        let deletebtn = list_of_deletebtn[i];
+        let commentID = deletebtn.parentElement.parentElement.getAttribute("commentID");
+        deletebtn.addEventListener('click', async e => {
+            let commentDiv = e.target.parentElement.parentElement;
+            let textDiv = commentDiv.getElementsByTagName("p")[0];
+            textDiv.innerHTML = `[User Have Deleted This Comment]`;
+            let response = await fetch(`./deleteComment?commentID=${commentID}`);
+    });
+    }
+}
+
+function addGlobalEventListener(type, selector, object, callback) {
+    object.addEventListener(type, e => {
+        if (e.target.matches(selector)) callback (e)
+    })
+}
 
 async function getVoteCountByCommentID(commentID) {
     let response = await fetch(`./getvotecounts?commentID=${commentID}`);
@@ -388,7 +437,6 @@ async function updateVote(commentID, userID, voteValue) {
     let resultObj = await response.json()
     return resultObj;
 }
-
 
 async function retrieveUserByUsername(id) {
     let response = await fetch(`./checkUsername?input_username=${id}`);
@@ -450,12 +498,14 @@ function getCookie(cname) {
         }
     }
     return undefined;
-}
+};
 
 async function createReplyToComment(parentComment, replyContent, articleID) {
     const response = await fetch(`./replyComment?parentCommentID=${parentComment}&replyContent=${replyContent}&articleID=${articleID}`);
-
     return response;
-}
+};
 
-
+async function createNewComment(newCommentContent, articleID) {
+    const response = await fetch (`./newComment?commentContent=${newCommentContent}&articleID=${articleID}`);
+    return response;
+};
