@@ -20,9 +20,7 @@ router.get("/newComment", async function(req,res) {
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken; 
 
-    const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
-    //console.log(commentAuthor);
-    const authorID = commentAuthor.userID;
+
 
 
     const comment = {
@@ -38,8 +36,16 @@ router.get("/newComment", async function(req,res) {
     console.log(comment);
 
     const commentID = await commentDao.createComment(comment);
-    comment.commentAuthorID = authorID;
+    //console.log(authorID);
+        const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
+    //console.log(commentAuthor);
+    const authorID = commentAuthor.userID;
+    console.log(commentAuthor);
+    console.log(authorID);comment.commentAuthorID = authorID;
     comment.commentID = commentID;
+
+    console.log(comment);
+
     res.json(comment);
 })
 
