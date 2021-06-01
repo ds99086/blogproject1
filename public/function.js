@@ -28,8 +28,7 @@ window.addEventListener("load", async function () {
         //get the sorting info from the hidden elements in home page
         const article_sorting_attribute = document.querySelector(".sorting-attribute").innerText;
         const article_sorting_order = document.querySelector(".sorting-order").innerText;
-        const article_sorting_filter = document.querySelector(".sorting-filter").innerText;
-        const article_sorting_filter_name = document.querySelector(".sorting-filter-Name").innerText;
+        
            
 
         //load articles title on oage
@@ -39,7 +38,7 @@ window.addEventListener("load", async function () {
         async function displayNextArticlesOnPage() {
             document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
 
-            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order, article_sorting_filter_name, article_sorting_filter);
+            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order);
             //at this step articles are in order
             // console.log(articlesJsonArray)
 
@@ -87,18 +86,18 @@ window.addEventListener("load", async function () {
                     articleContentDiv.innerHTML = ``;
                     let readMoreButtonDiv = e.target;
                     readMoreButtonDiv.innerText = 'Show full content';
+    
                     readMoreButtonDiv.style.background = "teal";
                 }
             });
         }
 
         //get artiles array base on the ariticle numbers on page now
-        async function getArticleArray(from, count, arttibute, order, filterName, filter) {
-            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}&attribute=${arttibute}&order=${order}&filterName=${filterName}&filter=${filter}`);
+        async function getArticleArray(from, count, arttibute, order) {
+            let articlesResponseObj = await fetch(`./loadHomepageArticles?from=${from}&number=${count}&attribute=${arttibute}&order=${order}`);
             let articlesJsonArray = await articlesResponseObj.json();
             // console.log(articlesJsonArray)
             return articlesJsonArray;         
-
         }
 
         async function getArticleAuthorName(userID) {
@@ -107,17 +106,21 @@ window.addEventListener("load", async function () {
             return authorNameJson;
         }
 
-        //the author's search function
-        //once the "seach" btn is clicked, pass in the username to the router
-        //use the username to get user's all article
-        const authorSearchInput = document.querySelector("#txtAuthorUsername")
-        const authorSearchBtn = document.querySelector(".author-name-search-submission")
-
-        authorSearchBtn.addEventListener('click', async e=>{
-            const autherUsernameQuery = authorSearchInput.value;
-            let href = `./?sortingFilterName=username&sortingFilter=${autherUsernameQuery}`
-            location.href = href;
-        });
+  
+        //sorting function
+        let sortingByDateSelection = document.getElementById("dateSorting")
+        sortingByDateSelection.addEventListener('change', e=>{
+            window.location.href = sortingByDateSelection.value;
+        })       
+        let sortingByTitleSelection = document.getElementById("titleSorting")
+        sortingByTitleSelection.addEventListener('change', e=>{
+            window.location.href = sortingByTitleSelection.value;
+        }) 
+        let sortingByUsernameSelection = document.getElementById("usernameSorting")
+        sortingByUsernameSelection.addEventListener('change', e=>{
+            window.location.href = sortingByUsernameSelection.value;
+        })  
+        
 
     }
 
@@ -482,5 +485,6 @@ async function createReplyToComment(parentComment, replyContent, articleID) {
 
     return response;
 }
+
 
 
