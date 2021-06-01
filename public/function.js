@@ -183,7 +183,7 @@ window.addEventListener("load", async function () {
        // }
     }
 
-    newCommentButton();
+    // newCommentButton();
 
         //check whether we are on article writing page.
         //if so, get the username and userID by cookie
@@ -286,19 +286,49 @@ window.addEventListener("load", async function () {
             }
         }
     
-});
+    if (new_comment_submitbtn) {
+        new_comment_submitbtn.addEventListener('click', async function(e) {
+            console.log("clicked on newcomment submit");
+            const newCommentTextDiv = new_comment_submitbtn.parentElement.previousElementSibling.lastElementChild;
+            //console.log(newCommentTextDiv);
 
+            const newCommentContent = newCommentTextDiv.value;
+            //console.log(newCommentContent);
+
+            const articleID = getCookie("articleID");
+            const response = await fetch (`./newComment?commentContent=${newCommentContent}&articleID=${articleID}`);
+            const newComment = await response.json();
+
+            console.log(newComment);
+            const commentDivAppendTarget = e.target.parentElement.parentElement.parentElement;
+
+            const commentDiv = document.createElement("div");
+            commentDiv.classList.add("comments-level-0");
+            commentDivAppendTarget.appendChild(commentDiv)
+
+                commentDiv.innerHTML += 
+                `
+                <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
+                <h5 class="comment-title">Name: ${newComment.commentAuthorID}</h5>
+                <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+                <p>${newComment.commentText} </p>
+                <div class="vote-container">
+                <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                    <span class="upvote-count">0</span>
+                <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                    <span class="downvote-count">0</span>
+                </div>
+                <div class="commentreply-delete">
+                <button class="comment-reply">Reply</button>
+                    <p id="commentreply"></p>
+                <button class="comment-delete">Delete</button>
+                    <p id="commentdelete"></p>
+                </div>
+                `;
 addReplyCommentEventListener();
-
-//an async globle eventListener method
-//method allows to select any async element
-function addAsyncGlobalEventListener(type, selector, callback){
-    document.addEventListener(type, e =>{
-        if (e.target.matches(selector)) callback(e);
-    })
-}
-
-
+        } )
+    }
+});
 
 function addDeleteCommentEventListener() {
     let list_of_deletebtn = document.getElementsByClassName("comment-delete");
@@ -316,6 +346,14 @@ function addDeleteCommentEventListener() {
             deletebtn.setAttribute('listener', true);
         }
     }
+}
+
+//an async globle eventListener method
+//method allows to select any async element
+function addAsyncGlobalEventListener(type, selector, callback){
+    document.addEventListener(type, e =>{
+        if (e.target.matches(selector)) callback(e);
+    })
 }
 
 function addGlobalEventListener(type, selector, object, callback) {
@@ -404,10 +442,6 @@ async function createReplyToComment(parentComment, replyContent, articleID) {
     return response;
 };
 
-async function createNewComment(newCommentContent, articleID) {
-    let response = await fetch (`./newComment?commentContent=${newCommentContent}&articleID=${articleID}`);
-    return response;
-};
 
 async function addListenersToSubmitBtn(e,submitbtn, parentCommentId, replyContentDiv) {
     submitbtn.setAttribute('listener', true);
@@ -460,12 +494,12 @@ async function addListenersToSubmitBtn(e,submitbtn, parentCommentId, replyConten
     //addDeleteCommentEventListener();
 }    
 
-
-
 function addReplyCommentEventListener() {
     let list_of_replybtn = document.getElementsByClassName("comment-reply");
     for (let i = 0; i < list_of_replybtn.length; i++) {
         let new_replybtn = list_of_replybtn[i];
+
+        addDeleteCommentEventListener();
         //console.log('test function: '+new_replybtn.getAttribute('listener'));
         if(!(new_replybtn.getAttribute('listener'))) {
             //console.log("how many times do we add a listener?");
@@ -488,6 +522,7 @@ function addReplyCommentEventListener() {
                         </div>
                     </div>
                     `;
+                    
                 } else if (e.target.innerText == "Cancel") {
                     buttonDiv.innerHTML = "Reply";
                     let replyDiv = e.target.parentElement.parentElement.lastChild;
@@ -510,8 +545,6 @@ function addReplyCommentEventListener() {
                     //console.log(replyContentDiv);
                     if (submitbtn.getAttribute('listener')!= true) {
                         submitbtn.addEventListener('click', e => addListenersToSubmitBtn(e, submitbtn, parentCommentId, replyContentDiv))}
-                    
-
                     }
                     
                 }
@@ -527,6 +560,11 @@ function addReplyCommentEventListener() {
         //console.log('test function: '+new_replybtn.getAttribute('listener'));}
     }
 }
+
+// async function createNewComment(newCommentContent, articleID) {
+//     let response = await fetch (`./newComment?commentContent=${newCommentContent}&articleID=${articleID}`);
+//     return response;
+// };
 
 // function newCommentButton() {
 // if(new_comment_submitbtn) {
@@ -551,15 +589,17 @@ function addReplyCommentEventListener() {
 // async function submitComment(e, newCommentContent) {
 //     const articleID = getCookie("articleID");
 //     let response =  await createNewComment(newCommentContent, articleID);
+
+//     let newComment = await response.json();
 //     //console.log(response);
-//     try {
-//         window.testComment = response.json();
-//     } catch(err) {
-//         console.log("error "+err);
-//     }
+//     // try {
+//     //     window.testComment = response.json();
+//     // } catch(err) {
+//     //     console.log("error "+err);
+//     // }
     
-//     setTimeout(function(){console.log("waiting");}, 3000);
-//     let newComment = window.testComment;
+//     // setTimeout(function(){console.log("waiting");}, 3000);
+//     // let newComment = window.testComment;
 
 //     console.log(newComment);
 
@@ -589,5 +629,8 @@ function addReplyCommentEventListener() {
 //     `;
 //     //console.log(commentDiv);
 //     addReplyCommentEventListener();
-//     //addDeleteCommentEventListener();
-// }
+//     e.target.addEventListener('click', event => {
+//         createNewComment(event);
+//     })
+    //addDeleteCommentEventListener();
+
