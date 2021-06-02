@@ -272,6 +272,16 @@ form .form-group {
     cursor: pointer;
 }
 
+.yeti-animation {
+    text-align: center;
+}
+
+.yeti-images {
+    height: 200px;
+    width: 200px;
+}
+
+
 
 /*****************************************************************/
 

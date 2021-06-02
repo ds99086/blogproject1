@@ -181,29 +181,58 @@ router.get("/loadArticleAutherName", async function (req, res) {
 
 router.get("/article-details", async function (req, res) {
     
-    const articleID = req.query.articleID;
+    const articleID = parseInt(req.query.articleID);
+    res.cookie("articleID",`${articleID}`)
+    // console.log("this is the articleID: " + articleID)
 
-    const articleObj = await articleDao.readArticlebyID(articleID);
-    const articleAuthor = articleObj.articleAuthorID;
+    let articleObj = await articleDao.readArticlebyID(articleID);
+    // console.log("this is the articleObj: " + articleObj)
+
+    // //use authorID to get authorID
+    // let author = await userDao.retrieveUserByUserID(articleObj.articleAuthorID);
+    // // console.log(author)
+    // if (author.passwordFieldToUpdate == null){
+    //     author.username = "article deleted"
+    // }
+    // console.log(articleObj)
+    // res.locals.authorUsername = author.username;
+    // res.locals.articleTitle = articleObj.articleTitle;
+    // res.locals.publishDate = articleObj.articlePubDate;
+    // res.locals.articleContent = articleObj.articleContent;
+    // console.log(res.locals.authorUsername)
+    // console.log(res.locals.articleTitle)
+    // console.log(res.locals.publishDate)
+    // console.log(res.locals.articleContent)
+
+
+
+
+
+ 
+    // console.log(articleAuthor)
+    // console.log(articleObj.articleContent)
     // console.log("this is test to show and hide edit button in article page")
     // console.log(articleObj)
     // console.log(articleAuthor)
 
-    res.cookie("articleID",`${articleID}`)
-    res.locals.articleID = articleID;
+    
+
+
+    // res.locals.articleID = articleID;
     res.locals.articleTitle = articleObj.articleTitle;
+    // res.locals.articleObj = articleObj
     
     
-    
-    //
+    //to check whether user is the author
+    //if so, will give the permission to edit or delete article
     let user =  res.locals.user;
     // console.log(user)
     if (user == undefined){
         res.locals.userIsAuthor = false;
-    } else if (user.userID == articleAuthor){
+    } else if (user.userID == articleObj.articleAuthorID){
         
         res.locals.userIsAuthor = true;
-    } else if(user.userID != articleAuthor){
+    } else if(user.userID != articleObj.articleAuthorID){
         res.locals.userIsAuthor = false;
     }
 
@@ -247,8 +276,8 @@ router.get("/article-details", async function (req, res) {
         addChildren(comment, commentList, output);
     }}
 
-    console.log("output is");
-    console.log(output);
+    // console.log("output is");
+    // console.log(output);
     
     res.locals.commentlist = output;
     
