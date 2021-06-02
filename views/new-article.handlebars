@@ -1,13 +1,5 @@
 {{> user-navi-bar }}
 
-    <p style="text-align: center;">
-        {{#if articleTitle}}
-            Edit Article mode
-        {{else}}
-            New Article mode
-        {{/if}}
-    </p>
-
     <div class="editor">
                 <div class="toolbar">
                     <div class="line">
@@ -106,16 +98,7 @@
                         
                         
                         <div class="box" style="border: 1px solid; margin: auto">
-                            <div style="margin: 5px">
-                                <form method="POST" action="./editArticle">
-                                <p style="margin: 1px">Load Article by ID</p>
-                            </div>
-                            <div style="margin: 5px">
-                                    <input type="number" name="articleID" id="articleIDBox" text="number of article here">
-                            </div>
-                            <div style="margin: 5px">
-                                    <button type="submit" id="loadArticle" onclick="alert('Loading an existing article')">Loading an Article by Number</button></form>
-                            </div>
+                            
                         </div>
 
                         
@@ -151,8 +134,17 @@
                         </div>
 
                         <div class = "box">
-                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHeading()">
-                                <img loading="lazy" src="./icons/editor_icon_heading.svg" alt="toggle heading button">
+                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHTMLtags('h1')">
+                                <span style="border: solid grey 1px; margin: 2px; user-select: none;">H1</span>
+                            </span>
+                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHTMLtags('h2')">
+                                <span style="border: solid grey 1px; margin: 2px; user-select: none;">H2</span>
+                            </span>
+                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHTMLtags('h3')">
+                                <span style="border: solid grey 1px; margin: 2px; user-select: none;">H3</span>
+                            </span>
+                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHTMLtags('h4')">
+                                <span style="border: solid grey 1px; margin: 2px; user-select: none;">H4</span>
                             </span>
                             <span class="btn icon" data-action="save" title="Set text as plain paragraph" onclick="setPara()">
                                 <img loading="lazy" src="./icons/editor_icon_save.svg" alt="save button">
@@ -162,7 +154,7 @@
                             <form action="./articleUploadFile" method="POST" enctype="multipart/form-data">
                             <div>
                                 <label for="inpFile">Upload an image here:</label>
-                                <input id="inpFile" type="file" name="blogImage" accept=".jpg,.jpeg,.png">
+                                <input id="inpFile" type="file" name="blogImage" accept=".jpg,.jpeg,.png" required>
                                 <input type="hidden" id="imageUploadContent" name="imageUploadContent">
                                 {{#if articleTitle}}
                                 <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
@@ -212,3 +204,27 @@
 
             <div type="hidden" id="popupcontent">{{popupcontent}}</div>
             
+            {{#if admin}}
+            <div style="border: red solid 2px;">
+                    <p style="text-align: center;">
+                    {{#if articleTitle}}
+                        Edit Article mode
+                    {{else}}
+                        New Article mode
+                    {{/if}}
+                    </p>
+                <h2>Admin Functions</h2>
+                    <div style="border: grey solid 2px;">
+                        <div style="margin: 5px">
+                            <form method="POST" action="./editArticle">
+                            <p style="margin: 1px">Load Article by ID</p>
+                        </div>
+                        <div style="margin: 5px">
+                                <input type="number" name="articleID" id="articleIDBox" text="number of article here">
+                        </div>
+                        <div style="margin: 5px">
+                                <button type="submit" id="loadArticle" onclick="alert('Loading an existing article')">Loading an Article by Number</button></form>
+                        </div>
+                    </div>
+            </div>
+            {{/if}}

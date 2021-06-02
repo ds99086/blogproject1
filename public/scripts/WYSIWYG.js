@@ -53,7 +53,11 @@ function listenUp() {
     uploadButton.addEventListener('click', function() {
         processEditor()}
         );
-    loadArticleButton.addEventListener('click', loadArticle);
+    
+    if (loadArticleButton) {
+        loadArticleButton.addEventListener('click', loadArticle);
+    }
+    
 
     // add toolbar button actions
     let button;
@@ -210,22 +214,21 @@ function parentTagActive(elem) {
     return parentTagActive(elem.parentNode);
 }
 
-function setHeading() {
-    console.log("attemptingToToggleHeading");
+function setHTMLtags(tags) {
+    console.log(`Setting ${tags} tags`);
     if(window.getSelection().toString()) {
-        let h = document.createElement('h1');
+        let h = document.createElement(tags);
         window.getSelection().getRangeAt(0).surroundContents(h);
         }
-    
 }
+
 
 function setPara() {
     console.log("attemptingToSetAsParagraph");
     if(window.getSelection().toString()) {
-        let h = document.createElement('p');
-        window.getSelection().getRangeAt(0).surroundContents(h);
+        //let h = document.createElement('p');
+        unwrap(window.getSelection().getRangeAt(0));
         }
-    
 }
 
 function processEditor() {
@@ -252,6 +255,17 @@ function editExisitingArticle() {
     document.getElementById("articleContent").value = document.getElementById("editorContent").innerHTML;
     return true;
 }
+
+function stripTags(originalString) {
+    return originalString.replace(/(<([^>]+)>)/gi, "");
+}
+
+function unwrap(who){
+    var pa= who.parentNode;
+    while(who.firstChild){
+     pa.insertBefore(who.firstChild, who);
+    }
+   }
 
 //Doesn't do anything yet, but we will make it do things later with editing articles.
 function loadArticle() {
