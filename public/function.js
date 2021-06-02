@@ -229,7 +229,7 @@ window.addEventListener("load", async function () {
                 const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
                 // console.log(comment_ID);
                 // console.log(user_ID);
-                const updateResult = await updateVote(comment_ID, user_ID, voteValue);
+                const updateResult = await updateVote(comment_ID, voteValue);
                 // console.log(updateResult)
 
                 updateVoteDispalys(updateResult, e.target);
@@ -295,21 +295,24 @@ function updateVoteDispalys(updateResult, targetElement){
             } else if (updateResult.response == "vote deleted"){
                 currentCountElement.innerText = Math.max(0, parseInt(currentCountElement.innerText) - 1);
             }
-
 }
 
 async function newCommentSubmitFunction(e) {
         const newComment = await getNewComment();
         //console.log(newComment);
-
         const commentDivAppendTarget = e.target.parentElement.parentElement.parentElement;
+        console.log(commentDivAppendTarget)
+
+        const commentsList = commentDivAppendTarget.querySelector(".comments-list")
+
         const commentDiv = document.createElement("div");
         commentDiv.classList.add("comments-level-0");
-        commentDivAppendTarget.appendChild(commentDiv);
-        commentDiv.innerHTML += `
-            <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
-            <h5 class="comment-title">Name: ${newComment.commentAuthorID}</h5>
-            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
+        commentsList.prepend(commentDiv);
+        commentDiv.innerHTML += 
+            `
+            <div class="comment-body" userID="${newComment.authorID}" commentID="${newComment.commentID}">
+            <h5 class="comment-title">Name: ${newComment.authorID}</h5>
+            <h6 class = "comment-datetime text-muted">Date: ${newComment.commentDate}</h6>
             <p>${newComment.commentText} </p>
             <div class="vote-container">
             <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
@@ -375,9 +378,11 @@ async function getVoteCountByCommentID(commentID) {
     return voteCountObj
 }
 
-async function updateVote(commentID, userID, voteValue) {
-    let response = await fetch(`./updateVote?commentID=${commentID}&userID=${userID}&voteValue=${voteValue}`);
+async function updateVote(commentID, voteValue) {
+    let response = await fetch(`./updateVote?commentID=${commentID}&voteValue=${voteValue}`);
     let resultObj = await response.json()
+    // console.log("this is the voting result: ")
+    // console.log(resultObj)
     return resultObj;
 }
 
@@ -478,19 +483,19 @@ async function addListenersToSubmitBtn(e) {
     //console.log(replyTargetDiv);
     const replyDiv = document.createElement("div");
     replyDiv.classList.add(`comments-level-${reply.commentLevel}`);
-    replyTargetDiv.appendChild(replyDiv);
+    replyTargetDiv.prepend(replyDiv);
     replyDiv.innerHTML = `
     <div class="comment-body" userID="${reply.authorID}" commentID="${reply.commentID}">
         <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
         <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
         <p>${reply.commentText} <p>
-        <div class="vote-buttons">
-        <button class="vote-up">Upvote</button>
-            <p id="upvote"></p>
-        <p class="vote-sum">1</p>
-        <button class="vote-down">Downvote</button>
-            <p id="downvote"></p>
-        </div>
+        <div class="vote-container">
+            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                <span class="upvote-count">0</span>
+                &emsp;
+            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                <span class="downvote-count">0</span>
+            </div>
         <div class="commentreply-delete">
         <button class="comment-reply">Reply</button>
             <p id="commentreply"></p>

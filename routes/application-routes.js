@@ -13,16 +13,26 @@ router.get("/", async function(req, res) {
     res.locals.message = req.query.message;
 
     const LoginedUser = res.locals.user;
+
+
     // console.log(LoginedUser)
     let sortingFilterName = req.query.sortingFilterName;
     let sortingFilter = req.query.sortingFilter;
 
+    // if(LoginedUser==undefined){
+    //     res.render("permission-denied")
+    // }
+
     if (sortingFilterName == undefined){
         sortingFilterName = "None";
+
     }
-    if (sortingFilterName == "authorID"){
+    if (sortingFilterName == "authorID"&&LoginedUser!=undefined){
         sortingFilter = LoginedUser.userID;
+    } else if(sortingFilterName == "authorID"&&LoginedUser==undefined){
+        sortingFilter = -1;
     }
+    
 
 
 
