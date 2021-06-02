@@ -321,7 +321,7 @@ function updateVoteDispalys(updateResult, targetElement){
 
 async function newCommentSubmitFunction(e) {
         const newComment = await getNewComment();
-        //console.log(newComment);
+        console.log(newComment);
         const commentContainer = e.target.parentElement.parentElement.parentElement;
         console.log(commentContainer)
 
@@ -343,7 +343,7 @@ async function newCommentSubmitFunction(e) {
         commentDiv.innerHTML += `
             <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
                 <div>
-                    <img src="/images/Avatars/${newComment.avatarImage}.png" class="commentAvatarIcon">
+                    <img src="/images/Avatars/Avatars Set Flat Style-${newComment.avatarImage}.png" class="commentAvatarIcon">
                 </div>
                 <h5 class="comment-title">Name: ${newComment.username}</h5>
                 <h6 class = "comment-datetime text-muted">Date: ${newComment.commentDate}</h6>
@@ -551,7 +551,7 @@ async function addListenersToSubmitBtn(e) {
     replyDiv.innerHTML = `
         <div class="comment-body" userID="${reply.commentAuthorID}" commentID="${reply.commentID}">
         <div>
-        <img src="/images/Avatars/${reply.avatarImage}.png" class="commentAvatarIcon">
+        <img src="/images/Avatars/Avatars Set Flat Style-${reply.avatarImage}.png" class="commentAvatarIcon">
         </div>
         <h5 class="comment-title" >Name: ${reply.username}</h5>
         <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
