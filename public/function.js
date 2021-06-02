@@ -229,7 +229,7 @@ window.addEventListener("load", async function () {
                 const user_ID = e.target.parentElement.parentElement.getAttribute("userID");
                 // console.log(comment_ID);
                 // console.log(user_ID);
-                const updateResult = await updateVote(comment_ID, user_ID, voteValue);
+                const updateResult = await updateVote(comment_ID, voteValue);
                 // console.log(updateResult)
 
                 updateVoteDispalys(updateResult, e.target);
@@ -259,13 +259,19 @@ window.addEventListener("load", async function () {
 
 function showHideComment(e){
     const commentList = document.getElementById("comments-list");
-    const showHideBtn = document.getElementById("hide-show-comment");
-    if (e.target.value == "Show Comment") {
-        console.log("hiding comment");
-        e.target.innerText == `Hide Comment`;
-    } else if (e.target.value = "Hide Comment") {
-        e.target.innerText == `Show Comment`;
-        console.log("showing comment");
+    //const showHideBtn = document.getElementById("hide-show-comment");
+
+    if (e.target.innerHTML == "Hide Comments") {
+        //console.log("changing to hiding comment");
+        e.target.innerHTML = "Show Comments";
+        commentList.style.display = "none";
+        //console.log("changed button label: " + e.target.innerHTML);
+
+    } else if (e.target.innerHTML == "Show Comments") {
+        e.target.innerHTML = "Hide Comments";
+        commentList.style.display = "initial";
+        // console.log("changing to showing comment");
+        // console.log("changed button label: " + e.target.innerHTML);
     }
     // if (e.target.innerHTML = "Show Comments") {
 
@@ -289,21 +295,10 @@ function updateVoteDispalys(updateResult, targetElement){
             } else if (updateResult.response == "vote deleted"){
                 currentCountElement.innerText = Math.max(0, parseInt(currentCountElement.innerText) - 1);
             }
-
 }
 
-
 async function newCommentSubmitFunction(e) {
-        //console.log("clicked on newcomment submit");
-
-        const textbox = document.getElementsByName('commentText')[0];
-        let newCommentContent = textbox.value;
-        textbox.value="";
-        //console.log(newCommentContent);
-       
-        const articleID = getCookie("articleID");
-        const newComment = await newCommentFetch(newCommentContent, articleID);
-
+        const newComment = await getNewComment();
         //console.log(newComment);
         const commentDivAppendTarget = e.target.parentElement.parentElement.parentElement;
         console.log(commentDivAppendTarget)
@@ -330,8 +325,7 @@ async function newCommentSubmitFunction(e) {
                 <p id="commentreply"></p>
             <button class="comment-delete">Delete</button>
                 <p id="commentdelete"></p>
-            </div>
-            `;
+            </div>`;
 }    
 
 async function newCommentFetch(newCommentContent, articleID) {
@@ -340,6 +334,15 @@ async function newCommentFetch(newCommentContent, articleID) {
     return newComment;
 }
 
+async function getNewComment(){
+    const textbox = document.getElementsByName('commentText')[0];
+    let newCommentContent = textbox.value;
+    //console.log(newCommentContent);
+    textbox.value="";
+    const articleID = getCookie("articleID");
+    const newComment = await newCommentFetch(newCommentContent, articleID);
+    return newComment;
+}
 
 function deleteBtnFunction(e) {
     let deletebtn = e.target;
@@ -375,9 +378,11 @@ async function getVoteCountByCommentID(commentID) {
     return voteCountObj
 }
 
-async function updateVote(commentID, userID, voteValue) {
-    let response = await fetch(`./updateVote?commentID=${commentID}&userID=${userID}&voteValue=${voteValue}`);
+async function updateVote(commentID, voteValue) {
+    let response = await fetch(`./updateVote?commentID=${commentID}&voteValue=${voteValue}`);
     let resultObj = await response.json()
+    // console.log("this is the voting result: ")
+    // console.log(resultObj)
     return resultObj;
 }
 
@@ -531,4 +536,3 @@ function replyButtonFunction(e) {
 }
 
 })
-

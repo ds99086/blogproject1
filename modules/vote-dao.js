@@ -30,6 +30,7 @@ async function getSingleVote(commentID, userID){
     SELECT * FROM votes
     WHERE userID=${userID} AND commentID=${commentID}`
     );
+    console.log(vote)
     return vote;
 }
 

@@ -1,7 +1,7 @@
 const { v4: uuid } = require("uuid");
 const express = require("express");
 const router = express.Router();
-
+const fs = require("fs");
 
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
@@ -13,6 +13,18 @@ const { getUserPassword } = require("../modules/user-dao.js");
 
 router.get("/newAccount", function(req, res) {
     res.locals.message = req.query.message;
+
+    //return the images filenames to handlebars
+    let avatarImgNames = fs.readdirSync("public/images/Avatars");
+
+    const allowedFileTypes = [".png"];
+    avatarImgNames = avatarImgNames.filter(function(fileName) {
+        const extension = fileName.toLowerCase().substring(fileName.lastIndexOf("."));
+        return allowedFileTypes.includes(extension);
+    });
+
+    res.locals.avatarImages = avatarImgNames;
+
     res.render("new-account");
 });
 
