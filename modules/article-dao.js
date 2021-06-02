@@ -6,6 +6,9 @@ const userDao = require("./user-dao.js");
 async function readArticlebyID(articleID) {
     const db = await dbPromise;
     const article = await db.get(SQL`SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES WHERE articleID = ${articleID}`)
+    // console.log("article from articleDAO: " )
+    // // console.log(articleJSON)
+
     const articleJSON = {
         articleID: article.articleID,
         articleTitle: article.title,
@@ -14,6 +17,8 @@ async function readArticlebyID(articleID) {
         articleContent: article.bodyContentOrLinkToContent
         //directLink: "urlToArticle" //(If we actually deploy this, it is useful to have a url for each article (e.g. for articles to be shared) and we should probably store this value in the json and database)
     };
+    // console.log("ArticleJson from articleDAO: ")
+    // // console.log(articleJSON)
     return articleJSON;
 }
 
@@ -96,7 +101,7 @@ async function readArticleListBycolumnAndOrder(startIndex, lastIndex, Sortingcol
 async function updateArticlesAfterUserAccountDelect(userID){
     const db = await dbPromise;
 
-    const result1 = await db.run(SQL`
+    const result = await db.run(SQL`
         UPDATE articles
         SET title='This article has been deleted!', bodyContentOrLinkToContent='This article has been deleted!'
         WHERE authorID=${userID}

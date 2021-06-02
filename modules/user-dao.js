@@ -74,13 +74,16 @@ async function retrieveUserameByUserID(userID) {
 
 //need to update
 //delete user will also delete user's articles and comments
-async function deleteUser(username) {
+async function deleteUser(userID) {
     const db = await dbPromise;
 
-    await db.run(SQL`
-        delete from users
-        where username = ${username}`);
+    const result = await db.run(SQL`
+        UPDATE users
+        SET passwordFieldToUpdate=null, firstName=null, firstName=null, lastName=null, dateOfBirth=null, avatarImage="/deleteIcon", authToken=null, adminstratorLevel=null, introduction=null
+        WHERE userID=${userID}
+    `);
 }
+
 
 async function getUserPassword(username) {
     //console.log(`Getting the password of ${username}`);
