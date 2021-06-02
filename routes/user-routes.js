@@ -115,7 +115,7 @@ router.post("/deleteAccount", verifyAuthenticated, async function (req, res) {
     await commentDao.updateCommentsAfterUserAccountDelect(user.userID);
     await articleDao.updateArticlesAfterUserAccountDelect(user.userID);
 
-    await userDao.deleteUser(user.username);
+    await userDao.deleteUser(user.userID);
 
 
     //clear cookies

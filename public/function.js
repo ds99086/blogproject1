@@ -8,7 +8,7 @@ window.addEventListener("load", async function () {
     const username_alert_message = document.getElementById("username_alert_message");
     const password_alert_message = document.getElementById("password_alert_message");
     const create_account_button = document.getElementById("create_account_btn");
-    const single_article_div = document.querySelector("#signle-article");
+    const single_article_div = document.querySelector("#single-article");
     const homepage_articles_div = document.querySelector("#articles-inner")
 
     //const vote_up = document.getElementsByClassName("vote-up");
@@ -41,7 +41,7 @@ window.addEventListener("load", async function () {
 
             for (let i = 0; i < articlesJsonArray.length; i++) {
                 //need to add await here, otherwise the article might not display in desired order!
-                console.log(articlesJsonArray[i])
+                // console.log(articlesJsonArray[i])
                 await displayPartialArticleOnPage(articlesJsonArray[i]);
             }
 
@@ -120,6 +120,23 @@ window.addEventListener("load", async function () {
 
     }
 
+    //add yeti animation to login and sign up page
+    if(document.querySelector(".yeti-animation")!=undefined){
+        const yetiAnimationDiv = document.querySelector(".yeti-animation")
+        yetiAnimationDiv.innerHTML = `<img src="/images/login-animation/general.png" class="yeti-images" yeti="general">`
+        document.querySelector(".container").addEventListener('click', async e=>{
+            if (e.target && (e.target.matches("#txtUsername")||e.target.matches("#new_acount_username"))){
+                yetiAnimationDiv.innerHTML = `<img src="/images/login-animation/username.png" class="yeti-images" yeti="general">`
+            } else if (e.target && (e.target.matches("#txtPassword")||e.target.matches("#new_account_password1")|| e.target.matches("#new_account_password2"))){
+                yetiAnimationDiv.innerHTML = `<img src="/images/login-animation/password.png" class="yeti-images" yeti="general">`
+            } else {
+                yetiAnimationDiv.innerHTML = `<img src="/images/login-animation/general.png" class="yeti-images" yeti="general">`
+            }
+        });
+    }
+
+    
+
     //if it is on the user setting page
     if(document.querySelector(".user-profile")){
         const profileUpdateBtn = document.querySelector(".profile-update-div-btn")
@@ -189,34 +206,11 @@ window.addEventListener("load", async function () {
     if (single_article_div != undefined) {
         const article_ID = getCookie("articleID");
         const article = await retrieveArticleByArticleID(article_ID);
-        single_article_div.innerHTML = `<h3 class="article-title"><${article.articleTitle}</a></h3>
+        single_article_div.innerHTML = `
         <h4 class="article-author" author-username="${article.articleAuthorUsername}">Published by:${article.articleAuthorUsername}</h4>
         <h6 class="article-publishDate" data-publishDate="${article.articlePubDate}">Published on: ${article.articlePubDate} </h6>
         <p class="article-body">${article.articleContent}</p>`        
-    };
-
-
-        //WORK IN PROGRESS
-        //Trialing comment upvote downvote system
-        //if comment box exists, then add event listner to monitor button clicked.
-        // if (vote_up) {
-        //     const vote_sum = document.querySelector("vote-sum");
-        //     console.log(vote_sum);
-        //     vote_up.forEach(item => {
-        //         item.addEventListener('click', event => {
-        //             vote_sum ++;
-        //         })
-        //     })
-        // };
-
-        //     item.addEventListener('click', function(event){
-        //     console.log("I am detecting vote up");
-        //     vote_sum ++;
-        // })}
-        // // vote_down.addEventListener('click', function(event) {
-        // //     vote_sum --;
-        // // });
-
+    
 
 
         //display all the vote count once the page load
@@ -278,6 +272,7 @@ window.addEventListener("load", async function () {
             }
 
         })
+    };
 
 function showHideComment(e){
     const commentList = document.getElementById("comments-list");
@@ -318,21 +313,21 @@ function updateVoteDispalys(updateResult, targetElement){
 
 async function newCommentSubmitFunction(e) {
         const newComment = await getNewComment();
-        console.log(newComment);
+        // console.log(newComment);
         const commentContainer = e.target.parentElement.parentElement.parentElement;
-        console.log(commentContainer)
+        // console.log(commentContainer)
 
         let commentsList = commentContainer.querySelector(".comments-list")
 
         if((!commentsList)) {
-            console.log("making commentsList");
+            // console.log("making commentsList");
             let commentsList = document.createElement("div");
             commentsList.classList.add("comments-list");
             commentContainer.append(commentsList);
         }
 
         commentsList = document.getElementsByClassName("comments-list");
-        console.log(commentsList);
+        // console.log(commentsList);
         const commentDiv = document.createElement("div");
         commentDiv.classList.add("comments-level-0");
 
@@ -441,6 +436,7 @@ async function retrieveUserByUsername(id) {
 }
 
 async function retrieveArticleByArticleID(articleID) {
+    // console.log(articleID)
     let response = await fetch(`./articleJSON?articleID=${articleID}`)
     let articleObj = await response.json();
     return articleObj;

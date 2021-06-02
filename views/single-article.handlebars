@@ -9,7 +9,12 @@
             <h2>{{articleTitle}}</h2>
     
             <!-- Loaded articles should appear here -->
-            <div id="single-article"></div>
+            <div id="single-article">
+
+                {{!-- <h4 class="article-author" author-username={{authorUsername}}>Published by:{{authorUsername}}</h4>
+                <h5 class="article-publishDate">Published on:{{publishDate}} </h5>
+                <div>{{articleContent}}</div> --}}
+            </div>
 
             {{#if userIsAuthor}}
             <a href="./editArticle?articleID={{articleID}}"><div class="article-edit button" data-article-id="${articleObj.articleID}">Edit Article</div></a>
