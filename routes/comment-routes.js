@@ -62,10 +62,12 @@ router.get("/checkAuthor", verifyAuthenticatedWithAlertOnly, async function(req,
 
     const commentID = req.query.commentID;
 
-    const userID = user.ID;
+    const userID = user.userID;
+    console.log(userID);
 
     const commentDetail = await commentDao.retrieveCommentbyCommentID(commentID);
     const commentAuthor = commentDetail.authorID;
+    console.log(commentAuthor);
 
     if (userID == commentAuthor) {
         result = {
