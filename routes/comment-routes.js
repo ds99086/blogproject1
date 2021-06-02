@@ -8,13 +8,7 @@ const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 const { verifyAuthenticatedWithAlertOnly } = require("../middleware/auth-middleware.js");
 const { createComment } = require("../modules/comment-dao.js");
 
-// const io = require('socket.io')();
-// io.on('connection', client => { ... });
-// io.listen(3000);
 
-
-
-//Hardcode user details
 router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
     
     const commentContent = req.query.commentContent;
@@ -53,15 +47,37 @@ router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,r
     res.json(comment);
 })
 
+router.get("/deleteComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
 
-//Hardcode comment details
-//must check if user authToken matches to be able to delete. 
-router.get("/deleteComment", async function(req,res) {
     const commentID = req.query.commentID;
-    console.log("deleting comment");
     await commentDao.deleteCommentByUser(commentID);
-    res.json()
+ 
+    res.json();
+
     //res.redirect("/single-article");
+})
+
+router.get("/checkAuthor", verifyAuthenticatedWithAlertOnly, async function(req,res) {
+    const user = res.locals.user;
+
+    const commentID = req.query.commentID;
+
+    const userID = user.ID;
+
+    const commentDetail = await commentDao.retrieveCommentbyCommentID(commentID);
+    const commentAuthor = commentDetail.authorID;
+
+    if (userID == commentAuthor) {
+        result = {
+            response: "Comment deleted"
+        }
+    } else if (userID != commentAuthor) {
+        result = {
+            response: "Warning"
+        }
+    }
+
+    res.json(result);
 })
 
 router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
@@ -108,5 +124,8 @@ router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req
 
     res.json(reply);
 });
+
+
+
 
 module.exports = router;

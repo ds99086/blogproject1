@@ -288,9 +288,6 @@ function showHideComment(e){
         // console.log("changing to showing comment");
         // console.log("changed button label: " + e.target.innerHTML);
     }
-    // if (e.target.innerHTML = "Show Comments") {
-
-    // }
 }
 
 //function for update vote count display
@@ -374,13 +371,27 @@ async function getNewComment(){
     return newComment;
 }
 
-function deleteBtnFunction(e) {
+async function deleteBtnFunction(e) {
     let deletebtn = e.target;
         let commentID = deletebtn.parentElement.parentElement.getAttribute("commentID");
-            let commentDiv = e.target.parentElement.parentElement;
-            let textDiv = commentDiv.getElementsByTagName("p")[0];
-            textDiv.innerHTML = `[User Have Deleted This Comment]`;
-            deleteCommentFetch(commentID);
+        const result = await checkCommentAuthorID(commentID);
+        
+        const status = result.response;
+        if (status == "Warning") {
+            alert("User does not have access to this comment!");
+        } else if (status == "Comment deleted") {
+
+        let commentDiv = e.target.parentElement.parentElement;
+        let textDiv = commentDiv.getElementsByTagName("p")[0];
+        textDiv.innerHTML = `[User Have Deleted This Comment]`;
+        deleteCommentFetch(commentID);
+        }
+}
+
+async function checkCommentAuthorID(commentID) {
+    let response = await fetch(`./checkAuthor?commentID=${commentID}`);
+    let result = await response.json();
+    return result;
 }
 
 async function deleteCommentFetch(commentID) {
