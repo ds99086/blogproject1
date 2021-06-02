@@ -218,7 +218,7 @@ router.get("/article-details", async function (req, res) {
     
 
     const commentList = await commentDao.retrieveCommentsbyArticleID(articleID);
-    console.log(commentList)
+    // console.log(commentList)
 
 
     //assumes comment #0 is the earliest comment. 

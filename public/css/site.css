@@ -8,6 +8,8 @@
     line-height: 23px;
 }
 
+* { border: 1px solid black; }
+
 p, pre, th, td, li {
     font-size: 14px;
 }
@@ -300,6 +302,8 @@ form .form-group {
     align-items: baseline;
 
 }
+
+
 
 
 

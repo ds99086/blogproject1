@@ -47,7 +47,6 @@ async function retrieveCommentsbyArticleID(articleId) {
     ORDER BY commentDate DESC
     `);
 
-
     return commentList;
 }
 
