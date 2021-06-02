@@ -5,6 +5,7 @@ const router = express.Router();
 const userDao = require("../modules/user-dao.js");
 const commentDao = require("../modules/comment-dao.js");
 const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
+const { verifyAuthenticatedWithAlertOnly } = require("../middleware/auth-middleware.js");
 const { createComment } = require("../modules/comment-dao.js");
 
 // const io = require('socket.io')();
@@ -14,13 +15,13 @@ const { createComment } = require("../modules/comment-dao.js");
 
 
 //Hardcode user details
-router.get("/newComment", async function(req,res) {
+router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
     
     const commentContent = req.query.commentContent;
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken; 
-
     const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
+
     const authorID = commentAuthor.userID;
     const avatarImage = commentAuthor.avatarImage;
     console.log("Made new comment");
@@ -42,8 +43,10 @@ router.get("/newComment", async function(req,res) {
     console.log(comment);
 
     const commentID = await commentDao.createComment(comment);
-
+    const commentMade = await commentDao.retrieveCommentbyCommentID(commentID);
+    const commentDate = commentMade.commentDate
     comment.commentID = commentID;
+    comment.commentDate = commentDate;
 
     //console.log(comment);
 
@@ -61,7 +64,7 @@ router.get("/deleteComment", async function(req,res) {
     //res.redirect("/single-article");
 })
 
-router.get("/replyComment", async function(req,res) {
+router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
     const commentParentID = req.query.parentCommentID;
     const replyContent = req.query.replyContent;
     const articleID = req.query.articleID;
@@ -84,7 +87,6 @@ router.get("/replyComment", async function(req,res) {
     //console.log(commentLevel);
 
     const reply = {
-        commentDate: '2020-02-02', 
         commentText: replyContent, 
         commentLevel: commentLevel, 
         commentParent: commentParentID, 
@@ -96,11 +98,15 @@ router.get("/replyComment", async function(req,res) {
     
     //console.log(reply);
     const replyID = await commentDao.createComment(reply);
+    const commentMade = await commentDao.retrieveCommentbyCommentID(replyID);
+    const commentDate = commentMade.commentDate
+
     //console.log(replyID);
     reply.commentID = replyID;
+    reply.commentDate = commentDate;
     //console.log(reply);
+
     res.json(reply);
 });
-
 
 module.exports = router;

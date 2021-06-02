@@ -10,9 +10,8 @@ async function createComment(comment) {
     const db = await dbPromise;
     
     const result = await db.run(SQL`
-        INSERT INTO comments (commentDate, commentText, commentLevel, parentComment, authorID, parentArticleID) 
-        VALUES(
-            ${comment.commentDate}, 
+        INSERT INTO comments (commentText, commentLevel, parentComment, authorID, parentArticleID) 
+        VALUES(            
             ${comment.commentText}, 
             ${comment.commentLevel}, 
             ${comment.commentParent}, 
@@ -58,12 +57,24 @@ async function retrieveCommentsbyArticleID(articleId) {
     return commentList;
 }
 
+async function retrieveCommentbyCommentID(commentID) {
+    const db = await dbPromise;
+
+    const singleComment = await db.get(SQL`
+    select * from comments
+    where commentID = ${commentID}`);
+
+
+    return singleComment;
+}
+
 async function retrieveCommentbyParentCommentID(commentParentID) {
     const db = await dbPromise;
 
     const parentComment = await db.all(SQL`
     select * from comments
-    where commentID = ${commentParentID}`);
+    where commentID = ${commentParentID}
+    `);
 
     return parentComment;
 }
@@ -86,5 +97,6 @@ module.exports = {
     retrieveCommentsbyArticleID,
     retrieveCommentbyParentCommentID,
     deleteCommentByUser,
-    updateCommentsAfterUserAccountDelect
+    updateCommentsAfterUserAccountDelect,
+    retrieveCommentbyCommentID
 }
