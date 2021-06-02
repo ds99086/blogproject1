@@ -153,3 +153,6 @@ INSERT INTO comments VALUES
 	(2, 3, 1);
    
 
+select comments.commentID, comments.commentDate, comments.commentLevel, comments.commentText, comments.parentArticleID,
+comments.parentComment, users.userID, users.avatarImage from comments LEFT JOIN users ON comments.authorID = users.userID
+    where parentArticleID = 1;

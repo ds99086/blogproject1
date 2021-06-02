@@ -321,33 +321,48 @@ function updateVoteDispalys(updateResult, targetElement){
 
 async function newCommentSubmitFunction(e) {
         const newComment = await getNewComment();
-        //console.log(newComment);
-        const commentDivAppendTarget = e.target.parentElement.parentElement.parentElement;
-        console.log(commentDivAppendTarget)
+        console.log(newComment);
+        const commentContainer = e.target.parentElement.parentElement.parentElement;
+        console.log(commentContainer)
 
-        const commentsList = commentDivAppendTarget.querySelector(".comments-list")
+        let commentsList = commentContainer.querySelector(".comments-list")
 
+        if((!commentsList)) {
+            console.log("making commentsList");
+            let commentsList = document.createElement("div");
+            commentsList.classList.add("comments-list");
+            commentContainer.append(commentsList);
+        }
+
+        commentsList = document.getElementsByClassName("comments-list");
+        console.log(commentsList);
         const commentDiv = document.createElement("div");
         commentDiv.classList.add("comments-level-0");
-        commentsList.prepend(commentDiv);
-        commentDiv.innerHTML += 
-            `
-            <div class="comment-body" userID="${newComment.authorID}" commentID="${newComment.commentID}">
-            <h5 class="comment-title">Name: ${newComment.authorID}</h5>
-            <h6 class = "comment-datetime text-muted">Date: ${newComment.commentDate}</h6>
-            <p>${newComment.commentText} </p>
-            <div class="vote-container">
-            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
-                <span class="upvote-count">0</span>
-            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
-                <span class="downvote-count">0</span>
+
+        commentsList[0].prepend(commentDiv);
+        commentDiv.innerHTML += `
+            <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
+                <div>
+                    <img src="/images/Avatars/Avatars Set Flat Style-${newComment.avatarImage}.png" class="commentAvatarIcon">
+                </div>
+                <h5 class="comment-title">Name: ${newComment.username}</h5>
+                <h6 class = "comment-datetime text-muted">Date: ${newComment.commentDate}</h6>
+                <p>${newComment.commentText} </p>
+                <div class="vote-container">
+                    <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                    <span class="upvote-count">0</span>
+                    <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                    <span class="downvote-count">0</span>
+                </div>
+                <div class="commentreply-delete">
+                    <button class="comment-reply">Reply</button>
+                    <p id="commentreply"></p>
+                    <button class="comment-delete">Delete</button>
+                    <p id="commentdelete"></p>
+                </div>
             </div>
-            <div class="commentreply-delete">
-            <button class="comment-reply">Reply</button>
-                <p id="commentreply"></p>
-            <button class="comment-delete">Delete</button>
-                <p id="commentdelete"></p>
-            </div>`;
+                <div class="child-comment">
+                </div>`;
 }    
 
 async function newCommentFetch(newCommentContent, articleID) {
@@ -487,16 +502,25 @@ async function createReplyToComment(parentComment, replyContent, articleID) {
     return response;
 };
 
+
 async function addListenersToSubmitBtn(e) {
     const submitbtn = e.target;
-    const parentCommentId = submitbtn.parentElement.parentElement.parentElement.parentElement.getAttribute("commentid");   
+
+    const parentCommentDiv = submitbtn.parentElement.parentElement.parentElement.parentElement;   
+    const parentCommentId = parentCommentDiv.getAttribute("commentid");   
     //console.log("parent comment ID is");
     //console.log(parentCommentId);
     
     const replyContentDiv = submitbtn.parentElement.previousElementSibling.lastElementChild;
+    //console.log(replyContentDiv);
+    
+    //removed previous element sibling. 
+    //console.log(parentCommentDiv.parentElement.className);
 
     replybtnDiv = e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild;
+    
     //console.log(replybtnDiv);
+    
     if (replybtnDiv.innerHTML != "Reply") {
         replybtnDiv.innerHTML = "Reply" ;   
     }
@@ -508,19 +532,28 @@ async function addListenersToSubmitBtn(e) {
 
     const response = await createReplyToComment(parentComment, replyContent, articleID);
     const reply = await response.json();
-    //console.log(reply);
+    console.log("this is reply");
+    console.log(reply);
 
     const commentBox = e.target.parentElement.parentElement.parentElement;
     //console.log(commentBox);
 
-    let replyTargetDiv = e.target.parentElement.parentElement.parentElement.parentElement.parentElement;
-    //console.log(replyTargetDiv);
+    //wrong placement because childcomment div doesnot exist. 
+    let replyTargetDiv = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.lastElementChild;
+    console.log(replyTargetDiv);
     const replyDiv = document.createElement("div");
     replyDiv.classList.add(`comments-level-${reply.commentLevel}`);
+    
     replyTargetDiv.prepend(replyDiv);
+
+    //replyTargetDiv.prepend(replyDiv);
+
     replyDiv.innerHTML = `
-    <div class="comment-body" userID="${reply.authorID}" commentID="${reply.commentID}">
-        <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
+        <div class="comment-body" userID="${reply.commentAuthorID}" commentID="${reply.commentID}">
+        <div>
+        <img src="/images/Avatars/Avatars Set Flat Style-${reply.avatarImage}.png" class="commentAvatarIcon">
+        </div>
+        <h5 class="comment-title" >Name: ${reply.username}</h5>
         <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
         <p>${reply.commentText} <p>
         <div class="vote-container">
@@ -536,8 +569,11 @@ async function addListenersToSubmitBtn(e) {
         <button class="comment-delete">Delete</button>
             <p id="commentdelete"></p>
         </div>
-    `;
+        </div>
+        <div class="child-comment"></div>`;
     commentBox.remove();
+
+    //shiftDownPreviousComments(replyTargetDiv);
 }    
 
 function replyButtonFunction(e) {
@@ -545,8 +581,9 @@ function replyButtonFunction(e) {
     if (e.target.innerText == "Reply") {
         buttonDiv.innerHTML = "Cancel";
         const replyDiv = document.createElement("div");
+        console.log(buttonDiv.parentElement.parentElement);
         buttonDiv.parentElement.parentElement.appendChild(replyDiv);
-        //console.log(buttonDiv.parentElement.parentElement);
+        
         replyDiv.innerHTML = `
         <div class="new-comment-box">
             <div class="flex-col mb">

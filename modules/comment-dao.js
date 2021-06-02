@@ -38,15 +38,21 @@ async function deleteComment(commentID) {
     );
 }
 
+//has commentID, commentDate, commentLevel, commentText, 
+//parentArticleID, parentComment, userID, avatarImage
+//consider having authorID and authToken separate. 
 async function retrieveCommentsbyArticleID(articleId) {
     const db = await dbPromise;
 
     const commentList = await db.all(SQL`
-    select * from comments
-    where parentArticleID = ${articleId}
-    ORDER BY commentDate DESC
-    `);
+    select comments.commentID, comments.commentDate, comments.commentLevel, 
+    comments.commentText, comments.parentArticleID,
+    comments.parentComment, users.userID, users.avatarImage, users.username 
+    from comments LEFT JOIN users 
+    ON comments.authorID = users.userID
+    where parentArticleID = ${articleId}`);
 
+    console.log(commentList.userID);
 
     return commentList;
 }
