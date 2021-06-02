@@ -11,9 +11,9 @@
                         <span class="editorfield">
                         <label for="articleTitle">
                             {{#if articleTitle}}<span>Previous Title: {{articleTitle}}</span>&nbsp;&nbsp;New Title:</label>
-                                <input type="text" name="articleTitle" id="articleTitleBox" value="{{articleTitle}}">
+                                <input type="text" name="articleTitle" id="articleTitleBox" value="{{articleTitle}}" maxlength="100">
                             {{else}}New Article Title: </label>
-                                <input type="text" name="articleTitle" id="articleTitleBox" placeholder="Untitled Article">
+                                <input type="text" name="articleTitle" id="articleTitleBox" placeholder="Untitled Article" maxlength="100">
                             {{/if}}
                         </span>
                         <span class="editorfield">
@@ -33,7 +33,7 @@
                         {{else}}
                         <span class="editorfield">
                             <input type="hidden" id="articleContent" name="articleContent">
-                            <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Create New Article</button>
+                            <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Save as New Article</button>
                             </form>
                         </span>
                         {{/if}}
