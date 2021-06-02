@@ -20,13 +20,13 @@ router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,r
     const commentContent = req.query.commentContent;
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken; 
+    const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
 
-    const comment = {
-        commentDate: '2020-02-01',
+    let comment = {        
         commentText: commentContent,
         commentLevel: 0,
         commentParent: 0,
-        commentAuthorID: authToken,
+        commentAuthorID: commentAuthor.userID,
         commentArticleID: articleID
     }
 
@@ -35,14 +35,16 @@ router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,r
 
     const commentID = await commentDao.createComment(comment);
     //console.log(authorID);
-        const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
+    // const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
     //console.log(commentAuthor);
     const authorID = commentAuthor.userID;
     console.log(commentAuthor);
-    console.log(authorID);comment.commentAuthorID = authorID;
-    comment.commentID = commentID;
+    console.log(authorID);
+    // comment.commentAuthorID = authorID;
+    // comment.commentID = commentID;
+    comment = await commentDao.retrieveCommentbyCommentID(commentID)
 
-    console.log(comment);
+    // console.log(comment);
 
     res.json(comment);
 })

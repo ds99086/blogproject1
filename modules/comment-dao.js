@@ -43,10 +43,23 @@ async function retrieveCommentsbyArticleID(articleId) {
 
     const commentList = await db.all(SQL`
     select * from comments
-    where parentArticleID = ${articleId}`);
+    where parentArticleID = ${articleId}
+    ORDER BY commentDate DESC
+    `);
 
 
     return commentList;
+}
+
+async function retrieveCommentbyCommentID(commentID) {
+    const db = await dbPromise;
+
+    const singleComment = await db.get(SQL`
+    select * from comments
+    where commentID = ${commentID}`);
+
+
+    return singleComment;
 }
 
 async function retrieveCommentbyParentCommentID(commentParentID) {
@@ -55,7 +68,6 @@ async function retrieveCommentbyParentCommentID(commentParentID) {
     const parentComment = await db.all(SQL`
     select * from comments
     where commentID = ${commentParentID}
-    ORDER BY commentDate DESC
     `);
 
     return parentComment;
@@ -79,5 +91,6 @@ module.exports = {
     retrieveCommentsbyArticleID,
     retrieveCommentbyParentCommentID,
     deleteCommentByUser,
-    updateCommentsAfterUserAccountDelect
+    updateCommentsAfterUserAccountDelect,
+    retrieveCommentbyCommentID
 }

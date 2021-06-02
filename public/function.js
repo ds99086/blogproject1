@@ -306,14 +306,17 @@ async function newCommentSubmitFunction(e) {
 
         //console.log(newComment);
         const commentDivAppendTarget = e.target.parentElement.parentElement.parentElement;
+        console.log(commentDivAppendTarget)
+
+        const commentsList = commentDivAppendTarget.querySelector(".comments-list")
 
         const commentDiv = document.createElement("div");
         commentDiv.classList.add("comments-level-0");
-        commentDivAppendTarget.appendChild(commentDiv);
+        commentsList.prepend(commentDiv);
         commentDiv.innerHTML += 
             `
-            <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
-            <h5 class="comment-title">Name: ${newComment.commentAuthorID}</h5>
+            <div class="comment-body" userID="${newComment.authorID}" commentID="${newComment.commentID}">
+            <h5 class="comment-title">Name: ${newComment.authorID}</h5>
             <h6 class = "comment-datetime text-muted">Date: ${newComment.commentDate}</h6>
             <p>${newComment.commentText} </p>
             <div class="vote-container">
@@ -475,7 +478,7 @@ async function addListenersToSubmitBtn(e) {
     //console.log(replyTargetDiv);
     const replyDiv = document.createElement("div");
     replyDiv.classList.add(`comments-level-${reply.commentLevel}`);
-    replyTargetDiv.appendChild(replyDiv);
+    replyTargetDiv.prepend(replyDiv);
     replyDiv.innerHTML = `
     <div class="comment-body" userID="${reply.authorID}" commentID="${reply.commentID}">
         <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
