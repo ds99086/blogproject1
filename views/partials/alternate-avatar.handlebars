@@ -1,5 +1,8 @@
-<div class="AvatarsDiv">
-    {{#each avatarImgNames}}
-    
-    {{/each}}
+<div class="avatar-gallery-div">
+    <p>Choose your avatar!</p>
+    <div>
+        {{#each avatarImgNames}}
+         <img src="/images/Avatars/{{this}}" class="avatar-gallery-icon" avatarFileName="{{this}}">
+        {{/each}}
+    </div>
 </div>

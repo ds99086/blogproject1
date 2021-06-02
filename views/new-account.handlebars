@@ -48,7 +48,11 @@
             <input type="text" name="introduction" id="txtIntroduction" required>
         </div>
 
-        {{> avatar }}
+        <div class="flex-col mb">
+            <input type="hidden" id="txtAvatarID" name="avatars" value="1">
+        </div>
+
+        {{> alternate-avatar }}
 
         <br>
 

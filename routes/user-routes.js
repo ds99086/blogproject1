@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
 
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
@@ -11,6 +12,16 @@ const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 router.get("/profile-setting", verifyAuthenticated, async function (req, res) {
 
     res.locals.profileChangingMessage = req.query.profileChangingMessage;
+    let avatarImgNames = fs.readdirSync("public/images/Avatars");
+
+    const allowedFileTypes = [".png"];
+    avatarImgNames = avatarImgNames.filter(function(fileName) {
+        const extension = fileName.toLowerCase().substring(fileName.lastIndexOf("."));
+        return allowedFileTypes.includes(extension);
+    });
+    //console.log(avatarImgNames)
+    res.locals.avatarImgNames = avatarImgNames;
+    console.log(res.locals.avatarImages)
 
     res.render("profile");
 });
@@ -56,37 +67,29 @@ router.post("/updateUseDetails", verifyAuthenticated, async function (req, res) 
     //get the user details by cookies
     //missing the middleware for now
     const user = res.locals.user;
-    const userCurrentPassword = req.body.passwordc;
 
-    //check user's password is correct or not
-    const passwordCorrect = await passwordSec.checkHashPassword(user.username, userCurrentPassword); 
+    const userNewName = req.body.new_account_username;
+    const userNewPassword = req.body.password2;
+    const userNewFirstName = req.body.fname;
+    const userNewLastName = req.body.lname;
+    const userNewBirthday = req.body.birthday;
+    const userNewiIntroduction = req.body.introduction;
+    const userNewAvatar = req.body.avatars;
 
-    if (passwordCorrect){
-        const userNewName = req.body.new_account_username;
-        const userNewPassword = req.body.password2;
-        const userNewFirstName = req.body.fname;
-        const userNewLastName = req.body.lname;
-        const userNewBirthday = req.body.birthday;
-        const userNewiIntroduction = req.body.introduction;
-        const userNewAvatar = req.body.avatars;
-    
-        if (userNewName != "") { user.username = userNewName };
-        if (userNewPassword != "") { user.password = await passwordSec.newHashPassword(userNewPassword) };
-        if (userNewFirstName != "") { user.fname = userNewFirstName };
-        if (userNewLastName != "") { user.lname = userNewLastName };
-        if (userNewBirthday != "") { user.birthday = userNewBirthday };
-        if (userNewiIntroduction != "") { user.introduction = userNewiIntroduction };
-        if (userNewAvatar != "") {user.avatarImage = userNewAvatar}
-    
-        await userDao.updateUser(user);
-        let profileChangingMessage = "Your profile has been updated!"
-    
-        res.redirect(`./profile-setting?profileChangingMessage=${profileChangingMessage}`);
-    } else {
-        let profileChangingMessage = "Your password is wrong! Nothing is changed!"
-        res.redirect(`./profile-setting?profileChangingMessage=${profileChangingMessage}`);
-    }
-    
+    if (userNewName != "") { user.username = userNewName };
+    if (userNewPassword != "") { user.password = await passwordSec.newHashPassword(userNewPassword) };
+    if (userNewFirstName != "") { user.fname = userNewFirstName };
+    if (userNewLastName != "") { user.lname = userNewLastName };
+    if (userNewBirthday != "") { user.birthday = userNewBirthday };
+    if (userNewiIntroduction != "") { user.introduction = userNewiIntroduction };
+    if (userNewAvatar != "") { user.avatarImage = userNewAvatar }
+
+    await userDao.updateUser(user);
+    let profileChangingMessage = "Your profile has been updated!"
+
+    res.redirect(`./profile-setting?profileChangingMessage=${profileChangingMessage}`);
+
+
 });
 
 

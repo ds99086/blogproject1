@@ -2,6 +2,7 @@ const { v4: uuid } = require("uuid");
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
+const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
@@ -22,9 +23,9 @@ router.get("/newAccount", function(req, res) {
         const extension = fileName.toLowerCase().substring(fileName.lastIndexOf("."));
         return allowedFileTypes.includes(extension);
     });
-
-    res.locals.avatarImages = avatarImgNames;
-
+    //console.log(avatarImgNames)
+    res.locals.avatarImgNames = avatarImgNames;
+    console.log(res.locals.avatarImages)
     res.render("new-account");
 });
 
@@ -108,6 +109,27 @@ router.get("/checkUsername", async function (req, res) {
         //console.log("This username is good to go!");
         const response = {
             username_availability: true
+        }
+        res.json(response);
+    }
+});
+
+//checking whether user type in correct password in order to change user profile
+router.get("/checkUserPassword", verifyAuthenticated, async function (req, res) {
+    const user = res.locals.user;
+    const input_password = req.query.input_password;
+
+    const passwordCorrect = await passwordSec.checkHashPassword(user.username, input_password);     
+    if (passwordCorrect) {
+        const response = {
+            result: true
+        }
+        res.json(response);
+
+    } else {
+        //console.log("This username is good to go!");
+        const response = {
+            result: false
         }
         res.json(response);
     }
