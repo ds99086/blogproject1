@@ -33,8 +33,11 @@
 
   {{#each commentlist}}
     <div class="comments-level-0">
-        <div class="comment-body" userID="{{authorID}}" commentID="{{commentID}}">
-            <h5 class="comment-title">Name: {{authorID}}</h5>
+        <div>
+            <img src="/images/Avatars/{{avatarImage}}.png" class="commentAvatarIcon">
+        </div>
+        <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
+            <h5 class="comment-title">Name: {{username}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
             <p>{{commentText}} </p>
             <div class="vote-container">
@@ -52,13 +55,14 @@
             </div>
         </div>
 
-    
-
     {{#each children}}
 
         <div class="comments-level-1">
-        <div class="comment-body" userID="{{authorID}}" commentID="{{commentID}}">
-            <h5 class="comment-title">Name: {{commentID}}</h5>
+            <div>
+            <img src="/images/Avatars/{{avatarImage}}.png" class="commentAvatarIcon">
+        </div>
+        <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
+            <h5 class="comment-title">Name: {{username}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
             <p>{{commentText}} </p>
 
@@ -81,8 +85,11 @@
     {{#each children}}
 
         <div class="comments-level-2">
-        <div class="comment-body" userID="{{authorID}}" commentID="{{commentID}}">
-            <h5 class="comment-title">Name: {{commentID}}</h5>
+            <div>
+            <img src="/images/Avatars/{{avatarImage}}.png" class="commentAvatarIcon">
+        </div>
+        <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
+            <h5 class="comment-title">Name: {{username}}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
             <p>{{commentText}} </p>
 

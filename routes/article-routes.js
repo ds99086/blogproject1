@@ -245,6 +245,9 @@ router.get("/article-details", async function (req, res) {
         i--;
         addChildren(comment, commentList, output);
     }}
+
+    console.log("output is");
+    console.log(output);
     
     res.locals.commentlist = output;
     

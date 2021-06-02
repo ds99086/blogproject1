@@ -20,28 +20,32 @@ router.get("/newComment", async function(req,res) {
     const articleID = req.query.articleID;
     const authToken = req.cookies.authToken; 
 
+    const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
+    const authorID = commentAuthor.userID;
+    const avatarImage = commentAuthor.avatarImage;
+    console.log("Made new comment");
+    console.log(commentAuthor);
+    const username = commentAuthor.username;
+
     const comment = {
         commentDate: '2020-02-01',
         commentText: commentContent,
         commentLevel: 0,
         commentParent: 0,
-        commentAuthorID: authToken,
-        commentArticleID: articleID
+        commentAuthorID: authorID,
+        commentArticleID: articleID,
+        avatarImage: avatarImage,
+        username: username
     }
 
     console.log("making comment");
     console.log(comment);
 
     const commentID = await commentDao.createComment(comment);
-    //console.log(authorID);
-        const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
-    //console.log(commentAuthor);
-    const authorID = commentAuthor.userID;
-    console.log(commentAuthor);
-    console.log(authorID);comment.commentAuthorID = authorID;
+
     comment.commentID = commentID;
 
-    console.log(comment);
+    //console.log(comment);
 
     res.json(comment);
 })
@@ -66,6 +70,8 @@ router.get("/replyComment", async function(req,res) {
     const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
     //console.log(commentAuthor);
     const authorID = commentAuthor.userID;
+    const username = commentAuthor.username;
+    const avatarImage = commentAuthor.avatarImage;
 
     //console.log("parent commentID is: " + commentParentID);
     const parentComment = await commentDao.retrieveCommentbyParentCommentID(commentParentID);
@@ -82,14 +88,15 @@ router.get("/replyComment", async function(req,res) {
         commentText: replyContent, 
         commentLevel: commentLevel, 
         commentParent: commentParentID, 
-        commentAuthorID: authToken, 
-        commentArticleID: articleID
+        commentAuthorID: authorID, 
+        commentArticleID: articleID,
+        username: username,
+        avatarImage: avatarImage
     };
     
     //console.log(reply);
     const replyID = await commentDao.createComment(reply);
     //console.log(replyID);
-    reply.commentAuthorID = authorID;
     reply.commentID = replyID;
     //console.log(reply);
     res.json(reply);

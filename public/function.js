@@ -307,8 +307,11 @@ async function newCommentSubmitFunction(e) {
         commentDiv.classList.add("comments-level-0");
         commentDivAppendTarget.appendChild(commentDiv);
         commentDiv.innerHTML += `
+            <div>
+            <img src="/images/Avatars/${newComment.avatarImage}.png" class="commentAvatarIcon">
+            </div>
             <div class="comment-body" userID="${newComment.commentAuthorID}" commentID="${newComment.commentID}">
-            <h5 class="comment-title">Name: ${newComment.commentAuthorID}</h5>
+            <h5 class="comment-title">Name: ${newComment.username}</h5>
             <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
             <p>${newComment.commentText} </p>
             <div class="vote-container">
@@ -478,10 +481,15 @@ async function addListenersToSubmitBtn(e) {
     //console.log(replyTargetDiv);
     const replyDiv = document.createElement("div");
     replyDiv.classList.add(`comments-level-${reply.commentLevel}`);
+    
+    //Not prepending
     replyTargetDiv.appendChild(replyDiv);
     replyDiv.innerHTML = `
-    <div class="comment-body" userID="${reply.authorID}" commentID="${reply.commentID}">
-        <h5 class="comment-title" >Name: ${reply.commentAuthorID}</h5>
+        <div>
+        <img src="/images/Avatars/${reply.avatarImage}.png" class="commentAvatarIcon">
+        </div>
+        <div class="comment-body" userID="${reply.commentAuthorID}" commentID="${reply.commentID}">
+        <h5 class="comment-title" >Name: ${reply.username}</h5>
         <h6 class = "comment-datetime text-muted">Date: ${reply.commentDate}</h6>
         <p>${reply.commentText} <p>
         <div class="vote-buttons">
