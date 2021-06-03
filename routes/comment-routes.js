@@ -1,25 +1,18 @@
-const express = require("express");
-const router = express.Router();
+const { Router } = require("express");
+const router = Router();
 
-// The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
 const commentDao = require("../modules/comment-dao.js");
-const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 const { verifyAuthenticatedWithAlertOnly } = require("../middleware/auth-middleware.js");
-const { createComment } = require("../modules/comment-dao.js");
-
 
 router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
     
     const commentContent = req.query.commentContent;
     const articleID = req.query.articleID;
-    const authToken = req.cookies.authToken; 
-    const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
+    const commentAuthor = res.locals.user;
 
     const authorID = commentAuthor.userID;
     const avatarImage = commentAuthor.avatarImage;
-    console.log("Made new comment");
-    console.log(commentAuthor);
     const username = commentAuthor.username;
 
     const comment = {
@@ -33,41 +26,28 @@ router.get("/newComment", verifyAuthenticatedWithAlertOnly, async function(req,r
         username: username
     }
 
-    console.log("making comment");
-    console.log(comment);
-
     const commentID = await commentDao.createComment(comment);
     const commentMade = await commentDao.retrieveCommentbyCommentID(commentID);
     const commentDate = commentMade.commentDate
     comment.commentID = commentID;
     comment.commentDate = commentDate;
 
-    //console.log(comment);
-
     res.json(comment);
 })
 
 router.get("/deleteComment", verifyAuthenticatedWithAlertOnly, async function(req,res) {
-
     const commentID = req.query.commentID;
     await commentDao.deleteCommentByUser(commentID);
- 
     res.json();
-
-    //res.redirect("/single-article");
 })
 
 router.get("/checkAuthor", verifyAuthenticatedWithAlertOnly, async function(req,res) {
     const user = res.locals.user;
-
     const commentID = req.query.commentID;
-
     const userID = user.userID;
-    console.log(userID);
 
     const commentDetail = await commentDao.retrieveCommentbyCommentID(commentID);
     const commentAuthor = commentDetail.authorID;
-    console.log(commentAuthor);
 
     if (userID == commentAuthor) {
         result = {
@@ -78,7 +58,6 @@ router.get("/checkAuthor", verifyAuthenticatedWithAlertOnly, async function(req,
             response: "Warning"
         }
     }
-
     res.json(result);
 })
 
@@ -89,7 +68,7 @@ router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req
     const authToken = req.cookies.authToken;    
 
     const commentAuthor = await userDao.retrieveUserWithAuthToken(authToken);
-    //console.log(commentAuthor);
+
     const authorID = commentAuthor.userID;
     const username = commentAuthor.username;
     const avatarImage = commentAuthor.avatarImage;
@@ -126,8 +105,5 @@ router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req
 
     res.json(reply);
 });
-
-
-
 
 module.exports = router;

@@ -2,29 +2,22 @@ const SQL = require("sql-template-strings");
 const dbPromise = require("./database.js");
 
 async function createUser(user) {
-    
     const db = await dbPromise;
-    
     const result = await db.run(SQL`
-        INSERT INTO users (username, passwordFieldToUpdate, firstName, lastName, dateOfBirth, avatarImage, introduction) 
+        INSERT INTO users (username, hashPassword, firstName, lastName, dateOfBirth, avatarImage, introduction) 
         VALUES(${user.username}, ${user.password}, ${user.fname}, ${user.lname}, ${user.birthday}, ${user.avatarImage}, ${user.introduction})
         `);
+    // server log user updated
+    return result;
 }
 
-//does not include user profile image for now. 
-//user must be json object
 async function updateUser(user) {
-
-    // console.log("updateUser function received user");
-     //console.log(user);
-
     const db = await dbPromise;
 
-    //issue datbase not updating. not data type issue. 
-    await db.run(SQL`
+    const result = await db.run(SQL`
         update users
         set username = ${user.username}, 
-        passwordFieldToUpdate = ${user.passwordFieldToUpdate},
+        hashPassword = ${user.hashPassword},
         firstName = ${user.firstName}, 
         lastName = ${user.lastName}, 
         dateOfBirth = ${user.dateOfBirth}, 
@@ -33,15 +26,13 @@ async function updateUser(user) {
         introduction = ${user.introduction}
         where userID = ${user.userID}`
         );
-
-    // console.log("completed updating database");
+    // server log user updated
+    return result;
 }
-
 
 async function retrieveAllUsers() {
     const db = await dbPromise;
     const users = await db.all(SQL`select * from users`);
-
     return users;
 }
 
@@ -53,60 +44,56 @@ async function retrieveUserByUsername(username) {
     return user;
 }
 
+//returns a user Object
 async function retrieveUserByUserID(userID) {
     const db = await dbPromise;
-
     const user = await db.get(SQL`
         select * from users
         where userID = ${userID}`);
-
     return user;
 }
 
-
-async function retrieveUserameByUserID(userID) {
+//returns a user JSON with username
+async function retrieveUsernameByUserID(userID) {
     const db = await dbPromise;
-    const user = await db.get(SQL`
+    const username = await db.get(SQL`
         select username from users
         where userID = ${userID}`);
-    return user;
+    return username;
 }
 
-//need to update
-//delete user will also delete user's articles and comments
 async function deleteUser(userID) {
     const db = await dbPromise;
-
     const result = await db.run(SQL`
         UPDATE users
-        SET passwordFieldToUpdate=null, firstName=null, firstName=null, lastName=null, dateOfBirth=null, avatarImage="/deleteIcon", authToken=null, adminstratorLevel=null, introduction=null
+        SET hashPassword=null, firstName=null, lastName=null, dateOfBirth=null, avatarImage="/deleteIcon", authToken=null, adminstratorLevel=null, introduction='User was deleted at ' || CURRENT_TIMESTAMP 
         WHERE userID=${userID}
     `);
+    return result;
 }
 
-
 async function getUserPassword(username) {
-    //console.log(`Getting the password of ${username}`);
     const db = await dbPromise;
-    const hashPassword = await db.get(SQL`SELECT passwordFieldToUpdate FROM users WHERE username = ${username}`);
-    if(hashPassword != undefined){
-        return hashPassword.passwordFieldToUpdate;
-    } else {return undefined};
+    const hashPassword = await db.get(SQL`
+    SELECT hashPassword 
+    FROM users 
+    WHERE username = ${username}`);
+
+    if (hashPassword != undefined) {
+        return hashPassword.hashPassword;
+    } else { 
+        return undefined;
+    };
 }
 
 async function retrieveUserWithAuthToken(authToken) {
     const db = await dbPromise;
-
     const user = await db.get(SQL`
         select * from users
         where authToken = ${authToken}`);
-
     return user;
 }
 
-
-
-// Export functions.
 module.exports = {
     createUser,
     retrieveAllUsers,
@@ -116,5 +103,5 @@ module.exports = {
     retrieveUserByUserID,
     getUserPassword,
     retrieveUserWithAuthToken,
-    retrieveUserameByUserID
+    retrieveUsernameByUserID
 };

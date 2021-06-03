@@ -1,12 +1,13 @@
-const express = require("express");
-const router = express.Router();
-const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
+const { Router } = require("express");
+const router = Router();
 const userDao = require("../modules/user-dao");
 
 //const testDao = require("../modules/test-dao.js");
 const articleDao = require("../modules/article-dao.js");
 
 router.get("/", async function(req, res) {
+
+    res.locals.homepage = true;
 
     res.locals.title = "My route title!";
     //res.locals.allTestData = await testDao.retrieveAllTestData();

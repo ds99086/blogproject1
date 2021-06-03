@@ -1,31 +1,24 @@
 const { v4: uuid } = require("uuid");
-const express = require("express");
-const router = express.Router();
+const { Router } = require("express");
+const router = Router();
 const fs = require("fs");
 const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
+const { avatarFileReader } = require("../modules/avatar-file-reader.js");
 
 // The DAO that handles CRUD operations for users.
 const userDao = require("../modules/user-dao.js");
 const passwordSec = require("../modules/passwordSec.js");
-const { getUserPassword } = require("../modules/user-dao.js");
-//const { createUser } = require("../modules/test-dao.js");
-//const { addUserToLocals } = require("../middleware/auth-middleware.js");
-//const messagesDao = require("../modules/messages-dao.js");
+
 
 router.get("/newAccount", function(req, res) {
     res.locals.message = req.query.message;
+    res.locals.yeti = true;
+    res.locals.newaccountpage = true;
 
     //return the images filenames to handlebars
-    let avatarImgNames = fs.readdirSync("public/images/Avatars");
+    let avatarImgNames = avatarFileReader();
 
-    const allowedFileTypes = [".png"];
-    avatarImgNames = avatarImgNames.filter(function(fileName) {
-        const extension = fileName.toLowerCase().substring(fileName.lastIndexOf("."));
-        return allowedFileTypes.includes(extension);
-    });
-    //console.log(avatarImgNames)
     res.locals.avatarImgNames = avatarImgNames;
-    console.log(res.locals.avatarImages)
     res.render("new-account");
 });
 
@@ -39,19 +32,18 @@ router.post("/newAccount", async function(req, res) {
         introduction: req.body.introduction,
         avatarImage: req.body.avatars
     };
-    console.log(user)
 
     try {
         await userDao.createUser(user);
         res.redirect("/login?message=Account creation successful. Please login using your new credentials.");
     }
     catch (err) {
-        //console.log(err)
-        res.redirect("/newAccount?message=That username was already taken!");
+        res.redirect("/newAccount?message=That username was just taken by someone else!");
     }
 });
 
 router.get("/login", function(req, res) {
+    res.locals.yeti = true;
     res.locals.message = req.query.message;
     res.render("login");
 });
@@ -67,23 +59,11 @@ router.post("/login", async function (req, res) {
         //Auth success - give that user an authToken, save the token in a cookie, and redirect to the homepage.
         
         const user = await userDao.retrieveUserByUsername(username); 
-        // console.log("Before updating with authToken");
-        //console.log(user);
         
         const authToken = uuid();
         user.authToken = authToken;
 
-        // console.log("Give authToken to this user.");
-        // console.log(user);
-
         await userDao.updateUser(user);
-        // console.log("After updating with authToken, call the same user const");
-        // console.log(user);
-
-        const checkuser = await userDao.retrieveUserByUsername(username);
-        
-        // console.log("After updating with authToken, call the same user with ANOTHER const");
-        // console.log(checkuser);
 
         res.cookie("authToken", authToken);
 
@@ -106,7 +86,6 @@ router.get("/checkUsername", async function (req, res) {
         res.json(response);
 
     } else {
-        //console.log("This username is good to go!");
         const response = {
             username_availability: true
         }
@@ -127,7 +106,6 @@ router.get("/checkUserPassword", verifyAuthenticated, async function (req, res) 
         res.json(response);
 
     } else {
-        //console.log("This username is good to go!");
         const response = {
             result: false
         }
@@ -147,9 +125,7 @@ router.get("/checkAuthToken", async function (req, res) {
     
 });
 
-//route to login page
 router.get("/login", async function(req, res) {
-
     res.render("login");
 });
 

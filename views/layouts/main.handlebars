@@ -2,29 +2,51 @@
 <html>
 
 <head>
-    
     <meta charset="UTF-8">
     {{#if title}}
     <title>{{title}}</title>
     {{else}}
-    <title>Default title.</title>
+    <title>ABY</title>
     {{/if}}
 
+{{!-- TO DO Break up function.js --}}
     <link rel="stylesheet" href="./css/site.css">
-    {{!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
+
+    {{#if homepage}}
+    <script type="text/javascript" src="./scripts/home-page-function.js"></script>
+    {{/if }}
 
 
+    {{#if newaccountpage}}
+    <script type="text/javascript" src="./scripts/user-signup-function.js"></script>
+    {{/if }}
+
+    {{#if profilepage}}
+        <script type="text/javascript" src="./scripts/user-profile-function.js"></script>
+    {{/if}}
+
+    {{#if singlearticlepage}}
+        <script type="text/javascript" src="./scripts/single-article-function.js"></script>
+    {{/if}}
+
+    
+    {{#if yeti}}
+        <script type="text/javascript" src="./scripts/yeti-function.js"></script>
+    {{/if}}
+            
     {{#if WYSIWYG}}
     <title>WYSIWYG EDITOR</title>
     <link rel="stylesheet" type="text/css" href="./css/WYSIWYG_Style.css">
     <script type="text/javascript" src="./scripts/WYSIWYG.js"></script>
     {{/if}}
-    <script type="text/javascript" src="function.js"></script>
+
 </head>
 
 
 <body>
-    <div class="header"><h2>this is the name of the blog</h1></div>
+    <div class="header">
+        <h2>this is the name of the blog</h1>
+    </div>
     {{{body}}}
 </body>
 
