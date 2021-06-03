@@ -3,7 +3,7 @@
 <div class="editor">
     <div class="toolbar">
         <div class="line">
-            {{#if articleTitle}}
+            {{#if articleID}}
             <form method="post" action="./updateExistingArticle">
                 {{else}}
                 <form method="post" action="./saveNewArticle">
@@ -23,7 +23,7 @@
                         <input type="date" name="articlePubDate" id="articlePubDateBox" value={{date}}>
                     </span>
 
-                    {{#if articleTitle}}
+                    {{#if articleID}}
                     <span class="editorfield">
                         <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
                         <input type="hidden" id="articleContent" name="articleContent">
@@ -171,6 +171,7 @@
                             <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
                             {{/if}}
                             <input type="hidden" id="articleTitleHidden" name="articleTitleHidden">
+                            <input type="hidden" name="articlePubDateHidden" id="articlePubDateBoxHidden" value={{date}}>
                             <button id="uploadButton" type="submit">Upload!</button>
                         </div>
                     </form>
