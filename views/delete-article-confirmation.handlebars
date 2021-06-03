@@ -5,14 +5,17 @@
 {{/if}}
 
 <div class="grid-container">
-        <div id="articles" class="panel">
-            <h2>Articles</h2>
-            <a href="./confirmDeleteArticle?articleID={{articleID}}"><div class="article-edit button" style="background-color: red;" data-article-id="${articleObj.articleID}">After much consideration, I have decided to delete this article</div></a>
-    
-            <!-- Loaded articles should appear here -->
-            <div id="signle-article"></div>
-    
-        </div>    
-        {{> sorting-column }}
+    <div id="articles" class="panel">
+        <h2>Articles</h2>
+        <a href="./confirmDeleteArticle?articleID={{articleID}}">
+            <div class="article-edit button" style="background-color: red;" data-article-id="${articleObj.articleID}">
+                After much consideration, I have decided to delete this article</div>
+        </a>
+
+        <!-- Loaded articles should appear here -->
+        <div id="signle-article"></div>
+
+    </div>
+    {{> sorting-column }}
 </div>
 {{> comment }}

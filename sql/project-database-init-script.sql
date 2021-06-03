@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	userID INTEGER NOT NULL PRIMARY KEY,
 	username VARCHAR(100),
-    passwordFieldToUpdate VARCHAR(100),
+    hashPassword VARCHAR(100),
     firstName VARCHAR(100),
 	lastName VARCHAR(100),
 	dateOfBirth DATE,
@@ -75,7 +75,7 @@ CREATE TABLE articleVotes (
 	);
 	
 --users(userID, username, passwordFieldsToUpdate, firstName, lastName, dateOfBirth)
-INSERT INTO users (userID, username, passwordFieldToUpdate, firstName, lastName, dateOfBirth, avatarImage, authToken) VALUES
+INSERT INTO users (userID, username, hashPassword, firstName, lastName, dateOfBirth, avatarImage, authToken) VALUES
    (1, 'enigmaCracker', '$2b$10$rQAvdV7Ka58JUxUx5siKsusBcEF71QDmfsChx6B39reCfD2.FdxbS', 'Alan', 'Turing', '1912-06-23', '1', null),
    (2, 'theAdmiral', '$2b$10$rQAvdV7Ka58JUxUx5siKsusBcEF71QDmfsChx6B39reCfD2.FdxbS', 'Grace', 'Hopper', '1906-12-09', '2', null),
    (3, 'don', '$2b$10$rQAvdV7Ka58JUxUx5siKsusBcEF71QDmfsChx6B39reCfD2.FdxbS', 'Donald', 'Knuth', '1938-01-10', '3', null),

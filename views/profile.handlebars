@@ -9,87 +9,78 @@
     <h1>Hello, {{user.username}}!</h1>
     <p>Your introduction: {{user.introduction}}</p>
 
-     <div class="flex-row justify-center align-center">
-            <button class="profile-update-div-btn" type="submit">Thinking about changing your information?</button>
+    <div class="flex-row justify-center align-center">
+        <button class="profile-update-div-btn" type="submit">Thinking about changing your information?</button>
     </div>
 
     <div class="profile-update-div invisible-class">
 
+        <h3>Update your information:</h3>
+        <p>In order to update your information, you need to type in your current password</p>
+        <form action="./updateUseDetails" method="POST">
+            <div class="flex-col mb" id="new_acount_username_div">
+                <label for="new_acount_username">Username:</label>
+                <input type="text" name="new_account_username" id="new_acount_username" value={{user.username}}>
+                <p id="username_alert_message"></p>
+            </div>
 
-    <h3>Update your information:</h3>
-    <p>In order to update your information, you need to type in your current password</p>
-    <form action="./updateUseDetails" method="POST">
-        <div class="flex-col mb" id="new_acount_username_div">
-            <label for="new_acount_username">Username:</label>
-            <input type="text" name="new_account_username" id="new_acount_username" value={{user.username}}>
-            <p id="username_alert_message"></p>
-        </div>
+            <div class="flex-col mb">
+                <label for="passwordc">Enter your current password:</label>
+                <input type="password" name="passwordc" id="current_password" required>
+                <p id="current_password_alert_message"></p>
+            </div>
 
-        <div class="flex-col mb">
-            <label for="passwordc">Enter your current password:</label>
-            <input type="password" name="passwordc" id="current_password" required> 
-            <p id="current_password_alert_message"></p>
-        </div>
-        
-        
-        <div class="flex-col mb">
-            <label for="new_account_password1">Enter your new password:</label>
-            <input type="password" name="password1" id="new_account_password1">
-        </div>
+            <div class="flex-col mb">
+                <label for="new_account_password1">Enter your new password:</label>
+                <input type="password" name="password1" id="new_account_password1">
+            </div>
 
-        <div class="flex-col mb">
-            <label for="new_account_password2">Re-enter your new password:</label>
-            <input type="password" name="password2" id="new_account_password2">
-            <p id="password_alert_message"></p>
-        </div>
+            <div class="flex-col mb">
+                <label for="new_account_password2">Re-enter your new password:</label>
+                <input type="password" name="password2" id="new_account_password2">
+                <p id="password_alert_message"></p>
+            </div>
 
-        <div class="flex-col mb">
-            <label for="txtFName">First name:</label>
-            <input type="text" name="fname" id="txtFName" value={{user.firstName}}>
-        </div>
+            <div class="flex-col mb">
+                <label for="txtFName">First name:</label>
+                <input type="text" name="fname" id="txtFName" value={{user.firstName}}>
+            </div>
 
-        <div class="flex-col mb">
-            <label for="txtLName">Last name:</label>
-            <input type="text" name="lname" id="txtLName" value={{user.lastName}}>
-        </div>
+            <div class="flex-col mb">
+                <label for="txtLName">Last name:</label>
+                <input type="text" name="lname" id="txtLName" value={{user.lastName}}>
+            </div>
 
-        <div>
-            <label for="txtdob">Birthday:</label>
-            <input type="date" name="birthday" id="txtdob" value={{user.dateOfBirth}}>
-        </div>
+            <div>
+                <label for="txtdob">Birthday:</label>
+                <input type="date" name="birthday" id="txtdob" value={{user.dateOfBirth}}>
+            </div>
 
-        <div class="flex-col mb">
-            <label for="txtDescription">Re-introduction about you!:</label>
-            <input type="text" name="introduction" id="txtDescription" value="{{user.introduction}}">
-        </div>
+            <div class="flex-col mb">
+                <label for="txtDescription">Re-introduction about you!:</label>
+                <input type="text" name="introduction" id="txtDescription" value="{{user.introduction}}">
+            </div>
 
-        <div class="flex-col mb">
-            <input type="hidden" id="txtAvatarID" name="avatars" value="{{user.avatarImage}}">
-        </div>
+            <div class="flex-col mb">
+                <input type="hidden" id="txtAvatarID" name="avatars" value="{{user.avatarImage}}">
+            </div>
 
 
-        {{> alternate-avatar }}
-        
+            {{> avatar }}
 
-        <div class="flex-row justify-center align-center">
-            <button type="submit">Update your profile!</button>
-        </div>
 
-    </form>
-    {{!-- <br>
-     <form action="./updateUserAvatar" method="POST">
-     
-        {{> avatar }}
-        <div class="flex-row justify-center align-center">
-            <button type="submit">Update your Avatar!</button>
-        </div>
-     </form> --}}
-</div>
+            <div class="flex-row justify-center align-center">
+                <button type="submit">Update your profile!</button>
+            </div>
+
+        </form>
+
+    </div>
     <br>
 
     <form action="./deleteAccount" method="POST">
         <div class="flex-row justify-center align-center">
-            <button type="submit"  onclick="return confirm('Are you sure?')">Delete your account!</button>
+            <button type="submit" onclick="return confirm('Are you sure?')">Delete your account!</button>
         </div>
     </form>
 </div>

@@ -1,8 +1,5 @@
 const SQL = require("sql-template-strings");
 const dbPromise = require("./database.js");
-const userDao = require("./user-dao.js");
-const commentDao = require("../modules/comment-dao.js");
-
 
 async function getVotesCount(commentID){
     const db = await dbPromise;
@@ -10,17 +7,14 @@ async function getVotesCount(commentID){
         SELECT * FROM votes
         WHERE commentID = ${commentID} AND voteValue = 1;
     `);
-    //console.log(upVotes)
     const downVotes = await db.all(SQL`
         SELECT * FROM votes
         WHERE commentID = ${commentID} AND voteValue = -1;
     `);
-    //console.log(downVotes)
     const votesCount = {
         upVotesCount: upVotes.length,
         downVotesCount: downVotes.length
     }
-    //console.log(votesCount)
     return votesCount;
 }
 
@@ -30,10 +24,8 @@ async function getSingleVote(commentID, userID){
     SELECT * FROM votes
     WHERE userID=${userID} AND commentID=${commentID}`
     );
-    console.log(vote)
     return vote;
 }
-
 
 async function updateVote(voteObject){
     const db = await dbPromise;
@@ -42,8 +34,8 @@ async function updateVote(voteObject){
     WHERE userID = ${voteObject.userID} AND commentID=${voteObject.commentID}
     `);
     await addVote(voteObject);
+    return result;
 }
-
 
 async function addVote(voteObject){
     const db = await dbPromise;
@@ -51,6 +43,7 @@ async function addVote(voteObject){
         INSERT INTO votes (userID, commentID, voteValue)
         VALUES(${voteObject.userID}, ${voteObject.commentID}, ${voteObject.voteValue})
     `);
+    return result;
 }
 
 async function delectSingleVote(voteObject){
@@ -59,6 +52,7 @@ async function delectSingleVote(voteObject){
         DELETE FROM votes
         WHERE userID = ${voteObject.userID} AND commentID=${voteObject.commentID}
     `)
+    return result;
 }
 
 async function deleteUserAllVotes(userID){
@@ -67,6 +61,7 @@ async function deleteUserAllVotes(userID){
     DELETE FROM votes
     WHERE userID = ${userID}`
     );
+    return result;
 }
 
 

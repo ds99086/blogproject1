@@ -1,28 +1,21 @@
-
- <p>this is the area for comments</p>
-
-
 <div class="comment-container">
 
     <h3>Comments</h3>
 
-
-
-
-        <div class="new-comment-box">
-            <div class="flex-col mb">
-                <input type="hidden" name="parentcomment" id="parentcomment" value="">
-                <label for="txtNewComment">Leave your comment:</label>
-                <input type="text" name="commentText" id="txtNewComment" required>
-            </div>
-            <div class="flex-row justify-sb align-center">
-                <button id="new-comment-submit">Submit</button>
-            </div>
+    <div class="new-comment-box">
+        <div class="flex-col mb">
+            <input type="hidden" name="parentcomment" id="parentcomment" value="">
+            <label for="txtNewComment">Leave your comment:</label>
+            <input type="text" name="commentText" id="txtNewComment" required>
         </div>
+        <div class="flex-row justify-sb align-center">
+            <button id="new-comment-submit">Submit</button>
+        </div>
+    </div>
 
 
 
-{{#if commentlist}}
+    {{#if commentlist}}
     <br>
 
     <div class="flex-row justify-sb align-center">
@@ -30,117 +23,103 @@
     </div>
     <div class="comments-list" id="comments-list">
 
-  {{#each commentlist}}
-    <div class="comments-level-0">
+        {{#each commentlist}}
+        <div class="comments-level-0">
 
-        <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
-                    <div>
-            <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png" class="commentAvatarIcon">
-        </div>
-            <h5 class="comment-title">Name: {{username}}</h5>
-            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
-            <p>{{commentText}} </p>
-            <div class="vote-container">
-            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
-                <span class="upvote-count">0</span>
-                &emsp;
-            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
-                <span class="downvote-count">0</span>
+            <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
+                <div>
+                    <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png" class="commentAvatarIcon">
+                </div>
+                <h5 class="comment-title">Name: {{username}}</h5>
+                <h6 class="comment-datetime text-muted">Date: {{commentDate}}</h6>
+                <p>{{commentText}} </p>
+                <div class="vote-container">
+                    <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                    <span class="upvote-count">0</span>
+                    &emsp;
+                    <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                    <span class="downvote-count">0</span>
+                </div>
+
+                <div class="commentreply-delete">
+                    <button class="comment-reply">Reply</button>
+                    <p id="commentreply"></p>
+                    <button class="comment-delete">Delete</button>
+                    <p id="commentdelete"></p>
+                </div>
             </div>
+            <div class="child-comment">
 
-            <div class="commentreply-delete">
-            <button class="comment-reply">Reply</button>
-                <p id="commentreply"></p>
-            <button class="comment-delete">Delete</button>
-                <p id="commentdelete"></p>
-            </div>
-        </div>
-        <div class="child-comment">
+                {{#each children}}
 
-    {{#each children}}
+                <div class="comments-level-1">
 
-        <div class="comments-level-1">
-
-        <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
+                    <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
                         <div>
-            <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png" class="commentAvatarIcon">
-        </div>
-            <h5 class="comment-title">Name: {{username}}</h5>
-            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
-            <p>{{commentText}} </p>
+                            <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png"
+                                class="commentAvatarIcon">
+                        </div>
+                        <h5 class="comment-title">Name: {{username}}</h5>
+                        <h6 class="comment-datetime text-muted">Date: 2021-05-21</h6>
+                        <p>{{commentText}} </p>
 
-           <div class="vote-container">
-            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
-                <span class="upvote-count">0</span>
-            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
-                <span class="downvote-count">0</span>
-            </div>
+                        <div class="vote-container">
+                            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                            <span class="upvote-count">0</span>
+                            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                            <span class="downvote-count">0</span>
+                        </div>
 
                         <div class="commentreply-delete">
-            <button class="comment-reply">Reply</button>
-                <p id="commentreply"></p>
-            <button class="comment-delete">Delete</button>
-                <p id="commentdelete"></p>
+                            <button class="comment-reply">Reply</button>
+                            <p id="commentreply"></p>
+                            <button class="comment-delete">Delete</button>
+                            <p id="commentdelete"></p>
+                        </div>
+                    </div>
+                    <div class="child-comment">
+
+
+                        {{#each children}}
+
+                        <div class="comments-level-2">
+
+                            <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
+                                <div>
+                                    <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png"
+                                        class="commentAvatarIcon">
+                                </div>
+                                <h5 class="comment-title">Name: {{username}}</h5>
+                                <h6 class="comment-datetime text-muted">Date: 2021-05-21</h6>
+                                <p>{{commentText}} </p>
+
+                                <div class="vote-container">
+                                    <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
+                                    <span class="upvote-count">0</span>
+                                    <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
+                                    <span class="downvote-count">0</span>
+                                </div>
+
+                                <div class="commentreply-delete">
+                                    <button class="comment-reply">Reply</button>
+                                    <p id="commentreply"></p>
+                                    <button class="comment-delete">Delete</button>
+                                    <p id="commentdelete"></p>
+                                </div>
+                            </div>
+                            <div class="child-comment"></div>
+                        </div>
+
+                        {{/each}}
+                    </div>
+                </div>
+
+                {{/each}}
             </div>
         </div>
-        <div class="child-comment">
-    
-    
-    {{#each children}}
 
-        <div class="comments-level-2">
+        {{/each}}
 
-        <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
-                        <div>
-            <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png" class="commentAvatarIcon">
-        </div>
-            <h5 class="comment-title">Name: {{username}}</h5>
-            <h6 class = "comment-datetime text-muted">Date: 2021-05-21</h6>
-            <p>{{commentText}} </p>
-
-           <div class="vote-container">
-            <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
-                <span class="upvote-count">0</span>
-            <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
-                <span class="downvote-count">0</span>
-            </div>
-
-                        <div class="commentreply-delete">
-            <button class="comment-reply">Reply</button>
-                <p id="commentreply"></p>
-            <button class="comment-delete">Delete</button>
-                <p id="commentdelete"></p>
-            </div>
-        </div>
-        <div class="child-comment"></div>
+        {{/if}}
     </div>
-
-    {{/each}}
-</div></div>
-
-    {{/each}}
-    </div></div>
-    
-    {{/each}}
-
-{{!-- 
-    {{else}}
-
-
-
-        <p>No comments yet!</p>
-                <div class="new-comment-box">
-                <div class="flex-col mb">
-                    <input type="hidden" name="parentcomment" id="parentcomment" value="">
-                    <label for="txtNewComment">Leave your comment:</label>
-                    <input type="text" name="commentText" id="txtNewComment" required>
-                </div>
-                <div class="flex-row justify-sb align-center">
-                    <button id="new-comment-submit">Submit</button>
-                </div>
-            </div>
- --}}
-
-    {{/if}}
-</div>
 </div>

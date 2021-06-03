@@ -5,16 +5,21 @@
 {{/if}}
 
 <div class="grid-container">
-        <div id="articles" class="panel">
-            <h2>{{articleTitle}}</h2>
-    
-            <!-- Loaded articles should appear here -->
-            <div id="single-article"></div>
+    <div id="articles" class="panel">
+        <h2>{{articleTitle}}</h2>
 
-            {{#if userIsAuthor}}
-            <a href="./editArticle?articleID={{articleID}}"><div class="article-edit button" data-article-id="${articleObj.articleID}">Edit Article</div></a>
-            <a href="./deleteArticle?articleID={{articleID}}"><div class="article-edit button" style="background-color: red;" data-article-id="${articleObj.articleID}">Delete Article</div></a>
-            {{/if}}
-        </div>    
+        <!-- Loaded articles should appear here -->
+        <div id="single-article"></div>
+
+        {{#if userIsAuthor}}
+        <a href="./editArticle?articleID={{articleID}}">
+            <div class="article-edit button">Edit Article</div>
+        </a>
+        <a href="./deleteArticle?articleID={{articleID}}">
+            <div class="article-edit button" style="background-color: red;">
+                Delete Article</div>
+        </a>
+        {{/if}}
+    </div>
 </div>
 {{> comment }}

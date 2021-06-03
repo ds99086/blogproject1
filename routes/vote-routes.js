@@ -1,25 +1,14 @@
-const express = require("express");
-const router = express.Router();
-const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
+const { Router } = require("express");
+const router = Router();
+
 const { verifyAuthenticatedWithAlertOnly } = require("../middleware/auth-middleware.js");
-const userDao = require("../modules/user-dao");
 const voteDao = require("../modules/vote-dao")
 
-
-
-//const testDao = require("../modules/test-dao.js");
-const articleDao = require("../modules/article-dao.js");
-
-
 router.get('/getvotecounts', async function(req,res) {
-
     const commentID = req.query.commentID;
-    //console.log(commentID)
     const voteCountObj = await voteDao.getVotesCount(commentID);
-    //console.log(voteCountObj)
 
     res.json(voteCountObj)   
-    
 });
 
 router.get('/updateVote', verifyAuthenticatedWithAlertOnly, async function (req, res) {
@@ -59,6 +48,5 @@ router.get('/updateVote', verifyAuthenticatedWithAlertOnly, async function (req,
         res.json(result);
     }   
 });
-
 
 module.exports = router;

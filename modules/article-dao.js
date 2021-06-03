@@ -1,49 +1,34 @@
 const SQL = require("sql-template-strings");
-const { stringify } = require("uuid");
 const dbPromise = require("./database.js");
 const userDao = require("./user-dao.js");
 
-async function readArticlebyID(articleID) {
-    const db = await dbPromise;
-    const article = await db.get(SQL`SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES WHERE articleID = ${articleID}`)
-    // console.log("article from articleDAO: " )
-    // // console.log(articleJSON)
 
+async function readArticlebyID(articleID) {
+
+    const db = await dbPromise;
+    const article = await db.get(SQL`
+    SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent 
+    FROM ARTICLES 
+    WHERE articleID = ${articleID}`)
     const articleJSON = {
         articleID: article.articleID,
         articleTitle: article.title,
         articlePubDate: article.publishDate,
         articleAuthorID: article.authorID,
         articleContent: article.bodyContentOrLinkToContent
-        //directLink: "urlToArticle" //(If we actually deploy this, it is useful to have a url for each article (e.g. for articles to be shared) and we should probably store this value in the json and database)
     };
-    // console.log("ArticleJson from articleDAO: ")
-    // // console.log(articleJSON)
     return articleJSON;
-}
-
-async function readArticleInfobyID(articleID) {
-    const db = await dbPromise;
-    const article = await db.get(SQL`SELECT articleID, title, publishDate, authorID FROM articles WHERE articleID = ${articleID}`)
-    const articleInfoJSON = {
-        articleID: article.articleID,
-        articleTitle: article.title,
-        articlePubDate: article.publishDate,
-        articleAuthorID: article.authorID,
-        //directLink: "urlToArticle" //(If we actually deploy this, it is useful to have a url for each article (e.g. for articles to be shared) and we should probably store this value in the json and database)
-    };
-    return articleInfoJSON;
 }
 
 async function writeNewArticle(articleObject) {
     const db = await dbPromise;
     const result = await db.run(SQL`
     INSERT INTO articles (title, publishDate, lastEditDate, bodyContentOrLinkToContent, authorID) 
-        VALUES(${articleObject.articleTitle}, ${articleObject.articlePubDate}, CURRENT_TIMESTAMP, ${articleObject.articleContent}, ${articleObject.articleAuthorID})`);
-    console.log("created article "+result.lastID);
+    VALUES(${articleObject.articleTitle}, ${articleObject.articlePubDate}, CURRENT_TIMESTAMP, ${articleObject.articleContent}, ${articleObject.articleAuthorID})`);
     return result;
 }
 
+//updates an existing article in the database by articleID
 async function writeUpdateArticle(articleObject) {
     const db = await dbPromise;
     const result = await db.run(SQL`
@@ -55,50 +40,59 @@ async function writeUpdateArticle(articleObject) {
             authorID = ${articleObject.articleAuthorID}
         WHERE
             articleID = ${articleObject.articleID};`);
-    console.log("updated article "+result.lastID);
+
     return result;
 }
 
+//returns user JSON object from articleID
 async function readAuthor(articleID) {
     const db = await dbPromise;
-    const userID = await db.get(SQL`SELECT authorID FROM ARTICLES WHERE articleID = ${articleID}`)
+    const userID = await db.get(SQL`
+    SELECT authorID 
+    FROM ARTICLES 
+    WHERE articleID = ${articleID}`)
     const user = await userDao.retrieveUserByUserID(userID);
     return user;
 }
 
+//returns a JSON object of authorID from articleID
 async function readAuthorID(articleID) {
     const db = await dbPromise;
-    console.log("Reading Author ID of "+articleID);
-    return db.get(SQL`SELECT authorID FROM ARTICLES WHERE articleID = ${articleID}`);
+    return db.get(SQL`
+    SELECT authorID 
+    FROM ARTICLES WHERE articleID = ${articleID}`);
 }
 
+//placeholder function for JSON validation
 function checkIsArticle(article) {
     let value = true;
-    //if article.articleID.
     return value;
 }
 
-//using append to force SQL in use
-async function readArticleListBycolumnAndOrder(startIndex, lastIndex, SortingcolumeName, order, filterColumnName, filter){
+//returns an array of JSON article objects between two indices
+//can be filtered by column name, if column is present, 
+//or not by passing 'none' as col name.
+async function readArticleListBycolumnAndOrder(startIndex, lastIndex, SortingcolumeName, order, filterColumnName, filter) {
     const db = await dbPromise;
     const query = SQL`
-    SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent FROM ARTICLES `
-    if(SortingcolumeName == "username"){
-        query.append(`LEFT JOIN users 
+    SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent 
+    FROM ARTICLES `
+    if (SortingcolumeName == "username") {
+        query.append(`
+        LEFT JOIN users 
         ON authorID = userID `)
     }
-    if(filterColumnName != "None"){
-        query.append(`WHERE ${filterColumnName} = ${filter} `)
+    if (filterColumnName != "None") {
+        query.append(`WHERE ${filterColumnName} = ${filter} `);
     }
     query.append(`ORDER BY LOWER(${SortingcolumeName}) ${order}
     LIMIT ${startIndex}, ${lastIndex};`);
-    // console.log(query)
-    const articleList = await db.all(query)
-    // console.log(articleList)
-    return articleList;    
+    const articleList = await db.all(query);
+    return articleList;
 }
 
-async function updateArticlesAfterUserAccountDelect(userID){
+//removes content from all articles of a user by userID
+async function updateArticlesAfterUserAccountDelete(userID) {
     const db = await dbPromise;
 
     const result = await db.run(SQL`
@@ -108,16 +102,12 @@ async function updateArticlesAfterUserAccountDelect(userID){
     `)
 }
 
-
-
-//Export funcitons
 module.exports = {
     readArticlebyID,
-    readArticleInfobyID,
     writeNewArticle,
     writeUpdateArticle,
     readAuthor,
     readAuthorID,
     readArticleListBycolumnAndOrder,
-    updateArticlesAfterUserAccountDelect
+    updateArticlesAfterUserAccountDelete
 }

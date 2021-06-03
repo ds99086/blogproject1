@@ -1,230 +1,240 @@
 {{> user-navi-bar }}
 
-    <div class="editor">
-                <div class="toolbar">
-                    <div class="line">
-                        {{#if articleTitle}}
-                            <form method="post" action="./updateExistingArticle">
-                        {{else}}
-                            <form method="post" action="./saveNewArticle">                                
-                        {{/if}}
-                        <span class="editorfield">
+<div class="editor">
+    <div class="toolbar">
+        <div class="line">
+            {{#if articleTitle}}
+            <form method="post" action="./updateExistingArticle">
+                {{else}}
+                <form method="post" action="./saveNewArticle">
+                    {{/if}}
+                    <span class="editorfield">
                         <label for="articleTitle">
                             {{#if articleTitle}}<span>Previous Title: {{articleTitle}}</span>&nbsp;&nbsp;New Title:</label>
-                                <input type="text" name="articleTitle" id="articleTitleBox" value="{{articleTitle}}" maxlength="100">
-                            {{else}}New Article Title: </label>
-                                <input type="text" name="articleTitle" id="articleTitleBox" placeholder="Untitled Article" maxlength="100">
-                            {{/if}}
-                        </span>
-                        <span class="editorfield">
-                        <label for="articlePubDate">Date of Publication:</label>
-                        <input type="date"  name="articlePubDate" id="articlePubDateBox" value={{date}}>
-                        {{!-- <label for="articleAuthorusername">Article Author Username:</label>
-                        <input type="text" name="articleAuthorUsername" id="articleAuthorusername"> --}}
-                        </span>
-                        
-                        {{#if articleTitle}}
-                        <span class="editorfield">
-                            <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
-                            <input type="hidden" id="articleContent" name="articleContent">
-                            <button type="submit" id="updateExisitingArticle" onclick="alert('Updating existing article!')">Update Exisiting Article</button>
-                            </form>
-                        </span>
-                        {{else}}
-                        <span class="editorfield">
-                            <input type="hidden" id="articleContent" name="articleContent">
-                            <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Save as New Article</button>
-                            </form>
-                        </span>
+                        <input type="text" name="articleTitle" id="articleTitleBox" value="{{articleTitle}}"
+                            maxlength="100">
+                        {{else}}New Article Title: </label>
+                        <input type="text" name="articleTitle" id="articleTitleBox" placeholder="Untitled Article"
+                            maxlength="100">
                         {{/if}}
-                    </div>
-                    <!--First row of buttons in the editor-->
-                    <!--Currently button svg images come from https://www.flaticon.com/packs/font-awesome-->
-                    <div class="line">
-                        
-                        <div class="box">
-                        <span class="btn icon smaller" data-action="bold" data-tag-name="b" title="Bold">
-                            <img loading="lazy" src="./icons/editor_icon_bold.svg" alt="toggle text bold button">
-                        </span>
-                        <span class="btn icon smaller" data-action="italic" data-tag-name="i" title="Italic">
-                            <img loading="lazy" src="./icons/editor_icon_italics.svg" alt="toggle text italics">
-                        </span>
-                        <span class="btn icon smaller" data-action="underline" data-tag-name="u" title="Underline">
-                            <img loading="lazy" src="./icons/editor_icon_underline.svg" alt="toggle text underline">
-                        </span>
-                        <span class="btn icon smaller" data-action="strikeThrough" data-tag-name="strike" title="Strike through">
-                            <img loading="lazy" src="./icons/editor_icon_strikethrough.svg" alt="toggle text strikethrough button">
-                        </span>
-                        </div>
-                        
-                        <div class="box">
-                        <span class="btn icon has-submenu">
-                            <img loading="lazy" src="./icons/editor_icon_textalign_left.svg" alt="text align sub-menu">
-                            <div class="submenu">
-                            <span class="btn icon" data-action="justifyLeft" data-style="textAlign:left" title="Justify left">
-                                <img loading="lazy" src="./icons/editor_icon_textalign_left.svg" alt="text align left button">  
-                            </span>
-                            <span class="btn icon" data-action="justifyCenter" data-style="textAlign:center" title="Justify center">
-                                <img loading="lazy" src="./icons/editor_icon_textalign_center.svg" alt="text align center button">  
-                            </span>
-                            <span class="btn icon" data-action="justifyRight" data-style="textAlign:right" title="Justify right">
-                                <img loading="lazy" src="./icons/editor_icon_textalign_right.svg" alt="text align right button">  
-                            </span>
-                            <span class="btn icon" data-action="formatBlock" data-style="textAlign:justify" title="Justify block">
-                                <img loading="lazy" src="./icons/editor_icon_textalign_justify.svg" alt="text align justify button">  
-                            </span>
-                            </div>
-                        </span>
-                        <span class="btn icon" data-action="insertOrderedList" data-tag-name="ol" title="Insert ordered list">
-                            <img loading="lazy" src="./icons/editor_icon_list_ordered.svg" alt="insert ordered list button">  
-                        </span>
-                        <span class="btn icon" data-action="insertUnorderedList" data-tag-name="ul" title="Insert unordered list">
-                            <img loading="lazy" src="./icons/editor_icon_list_unordered.svg" alt="insert unordered list button">  
-                        </span>
-                        <span class="btn icon" data-action="outdent" title="Outdent">
-                            <img loading="lazy" src="./icons/editor_icon_outdent.svg" alt="outdent button">  
-                        </span>
-                        <span class="btn icon" data-action="indent" title="Indent">
-                            <img loading="lazy" src="./icons/editor_icon_indent.svg" alt="indent button">  
-                        </span>
-                        
-                        </div>
-                        <div class="box">
-                        <span class="btn icon" data-action="insertHorizontalRule" title="Insert horizontal rule">
-                            <img loading="lazy" src="./icons/editor_icon_horizontalrule.svg" alt="Insert horizontal rule button">  
-                        </span>
-                        </div>
-                        
-                        
-                        
-                        <div class="box" style="border: 1px solid; margin: auto">
-                            
-                        </div>
+                    </span>
+                    <span class="editorfield">
+                        <label for="articlePubDate">Date of Publication:</label>
+                        <input type="date" name="articlePubDate" id="articlePubDateBox" value={{date}}>
+                    </span>
 
-                        
-                        
-                        
-                    </div>
-
-                    <!--Second row of buttons in the editor-->
-                    <div class="line">
-                        
-                        <div class="box">
-                        <span class="btn icon smaller" data-action="undo" title="Undo">
-                            <img loading="lazy" src="./icons/editor_icon_undo.svg" alt="undo button">
-                        </span>
-                        <span class="btn icon" data-action="removeFormat" title="Remove format">
-                            <img loading="lazy" src="./icons/editor_icon_remove_format.svg" alt="remove formatting button">  
-                        </span>
-                        </div>
-                        
-                        <div class="box">
-                        <span class="btn icon smaller" data-action="createLink" title="Insert Link">
-                            <img loading="lazy" src="./icons/editor_icon_link.svg" alt="create hyperlink button">
-                        </span>
-                        <span class="btn icon smaller" data-action="unlink" data-tag-name="a" title="Unlink">
-                            <img loading="lazy" src="./icons/editor_icon_link_break.svg" alt="break hyperlink button">
-                        </span>
-                        </div>
-                        
-                        <div class="box">
-                        <span class="btn icon" data-action="code" title="Show HTML-Code">
-                            <img loading="lazy" src="./icons/editor_icon_code.svg" alt="Reveal HTML Code button">
-                        </span>
-                        </div>
-
-                        <div class = "box">
-                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHTMLtags('h1')">
-                                <span style="border: solid grey 1px; margin: 2px; user-select: none;">H1</span>
-                            </span>
-                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHTMLtags('h2')">
-                                <span style="border: solid grey 1px; margin: 2px; user-select: none;">H2</span>
-                            </span>
-                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHTMLtags('h3')">
-                                <span style="border: solid grey 1px; margin: 2px; user-select: none;">H3</span>
-                            </span>
-                            <span class="btn icon" id="headingButton" title="Set text as Heading Level 1" onclick="setHTMLtags('h4')">
-                                <span style="border: solid grey 1px; margin: 2px; user-select: none;">H4</span>
-                            </span>
-                            <span class="btn icon" data-action="save" title="Set text as plain paragraph" onclick="setPara()">
-                                <img loading="lazy" src="./icons/editor_icon_save.svg" alt="save button">
-                            </span>
-                        
-                        <div class="box" style="border: 1px solid; margin: auto 50px">
-                            <form action="./articleUploadFile" method="POST" enctype="multipart/form-data">
-                            <div>
-                                <label for="inpFile">Upload an image here:</label>
-                                <input id="inpFile" type="file" name="blogImage" accept=".jpg,.jpeg,.png" required>
-                                <input type="hidden" id="imageUploadContent" name="imageUploadContent">
-                                {{#if articleTitle}}
-                                <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
-                                <input type="hidden" id="articleTitleHidden" name="articleTitleHidden">
-                                {{/if}}
-                                <button id="uploadButton" type="submit">Upload!</button>
-                            </div>
-                            </form>
-                        </div>
-
-
-
-                        
-                        </div>
-
-                    </div>
-                        </form>
-
-                </div>
-                <div class="content-area">
-                <div class="visuell-view" id="editorContent" contenteditable>
-                    {{#if returnText}}
-                    {{{returnText}}}
-                    {{else}}
-                    <div id="bodyHintText"><h1>You can write your article here</h1></div>
-                    {{/if}}
-                </div>
-                <textarea class="html-view"></textarea>
-                </div>
-            </div>
-            
-            <div class="modal">
-                <div class="modal-bg"></div>
-                <div class="modal-wrapper">
-                <div class="close">✖</div>
-                <div class="modal-content" id="modalCreateLink">
-                    <h3>Insert Link</h3>
-                    <input type="text" id="linkValue" placeholder="Link (example: https://berglabs.com/)">
-                    <div class="row">
-                    <input type="checkbox" id="new-tab">
-                    <label for="new-tab">Open in new Tab?</label>
-                    </div>
-                    <button class="done">Done</button>
-                </div>
-                </div>
-            </div>
-
-            <div type="hidden" id="popupcontent">{{popupcontent}}</div>
-            
-            {{#if admin}}
-            <div style="border: red solid 2px;">
-                    <p style="text-align: center;">
                     {{#if articleTitle}}
-                        Edit Article mode
-                    {{else}}
-                        New Article mode
-                    {{/if}}
-                    </p>
-                <h2>Admin Functions</h2>
-                    <div style="border: grey solid 2px;">
-                        <div style="margin: 5px">
-                            <form method="POST" action="./editArticle">
-                            <p style="margin: 1px">Load Article by ID</p>
-                        </div>
-                        <div style="margin: 5px">
-                                <input type="number" name="articleID" id="articleIDBox" text="number of article here">
-                        </div>
-                        <div style="margin: 5px">
-                                <button type="submit" id="loadArticle" onclick="alert('Loading an existing article')">Loading an Article by Number</button></form>
-                        </div>
+                    <span class="editorfield">
+                        <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
+                        <input type="hidden" id="articleContent" name="articleContent">
+                        <button type="submit" id="updateExisitingArticle"
+                            onclick="alert('Updating existing article!')">Update Exisiting Article</button>
+                </form>
+                </span>
+                {{else}}
+                <span class="editorfield">
+                    <input type="hidden" id="articleContent" name="articleContent">
+                    <button type="submit" id="makeNewArticle" onclick="alert('Making a new article!')">Save as New Article</button>
+            </form>
+            </span>
+            {{/if}}
+        </div>
+
+        <!--First row of buttons in the editor-->
+        <!--Currently button svg images come from https://www.flaticon.com/packs/font-awesome-->
+        <div class="line">
+
+            <div class="box">
+                <span class="btn icon smaller" data-action="bold" data-tag-name="b" title="Bold">
+                    <img loading="lazy" src="./icons/editor_icon_bold.svg" alt="toggle text bold button">
+                </span>
+                <span class="btn icon smaller" data-action="italic" data-tag-name="i" title="Italic">
+                    <img loading="lazy" src="./icons/editor_icon_italics.svg" alt="toggle text italics">
+                </span>
+                <span class="btn icon smaller" data-action="underline" data-tag-name="u" title="Underline">
+                    <img loading="lazy" src="./icons/editor_icon_underline.svg" alt="toggle text underline">
+                </span>
+                <span class="btn icon smaller" data-action="strikeThrough" data-tag-name="strike"
+                    title="Strike through">
+                    <img loading="lazy" src="./icons/editor_icon_strikethrough.svg"
+                        alt="toggle text strikethrough button">
+                </span>
+            </div>
+
+            <div class="box">
+                <span class="btn icon has-submenu">
+                    <img loading="lazy" src="./icons/editor_icon_textalign_left.svg" alt="text align sub-menu">
+                    <div class="submenu">
+                        <span class="btn icon" data-action="justifyLeft" data-style="textAlign:left"
+                            title="Justify left">
+                            <img loading="lazy" src="./icons/editor_icon_textalign_left.svg"
+                                alt="text align left button">
+                        </span>
+                        <span class="btn icon" data-action="justifyCenter" data-style="textAlign:center"
+                            title="Justify center">
+                            <img loading="lazy" src="./icons/editor_icon_textalign_center.svg"
+                                alt="text align center button">
+                        </span>
+                        <span class="btn icon" data-action="justifyRight" data-style="textAlign:right"
+                            title="Justify right">
+                            <img loading="lazy" src="./icons/editor_icon_textalign_right.svg"
+                                alt="text align right button">
+                        </span>
+                        <span class="btn icon" data-action="formatBlock" data-style="textAlign:justify"
+                            title="Justify block">
+                            <img loading="lazy" src="./icons/editor_icon_textalign_justify.svg"
+                                alt="text align justify button">
+                        </span>
                     </div>
+                </span>
+                <span class="btn icon" data-action="insertOrderedList" data-tag-name="ol" title="Insert ordered list">
+                    <img loading="lazy" src="./icons/editor_icon_list_ordered.svg" alt="insert ordered list button">
+                </span>
+                <span class="btn icon" data-action="insertUnorderedList" data-tag-name="ul"
+                    title="Insert unordered list">
+                    <img loading="lazy" src="./icons/editor_icon_list_unordered.svg" alt="insert unordered list button">
+                </span>
+                <span class="btn icon" data-action="outdent" title="Outdent">
+                    <img loading="lazy" src="./icons/editor_icon_outdent.svg" alt="outdent button">
+                </span>
+                <span class="btn icon" data-action="indent" title="Indent">
+                    <img loading="lazy" src="./icons/editor_icon_indent.svg" alt="indent button">
+                </span>
+
+            </div>
+            <div class="box">
+                <span class="btn icon" data-action="insertHorizontalRule" title="Insert horizontal rule">
+                    <img loading="lazy" src="./icons/editor_icon_horizontalrule.svg"
+                        alt="Insert horizontal rule button">
+                </span>
+            </div>
+
+            <div class="box" style="border: 1px solid; margin: auto"></div>
+
+        </div>
+
+        <!--Second row of buttons in the editor-->
+        <div class="line">
+
+            <div class="box">
+                <span class="btn icon smaller" data-action="undo" title="Undo">
+                    <img loading="lazy" src="./icons/editor_icon_undo.svg" alt="undo button">
+                </span>
+                <span class="btn icon" data-action="removeFormat" title="Remove format">
+                    <img loading="lazy" src="./icons/editor_icon_remove_format.svg" alt="remove formatting button">
+                </span>
+            </div>
+
+            <div class="box">
+                <span class="btn icon smaller" data-action="createLink" title="Insert Link">
+                    <img loading="lazy" src="./icons/editor_icon_link.svg" alt="create hyperlink button">
+                </span>
+                <span class="btn icon smaller" data-action="unlink" data-tag-name="a" title="Unlink">
+                    <img loading="lazy" src="./icons/editor_icon_link_break.svg" alt="break hyperlink button">
+                </span>
+            </div>
+
+            <div class="box">
+                <span class="btn icon" data-action="code" title="Show HTML-Code">
+                    <img loading="lazy" src="./icons/editor_icon_code.svg" alt="Reveal HTML Code button">
+                </span>
+            </div>
+
+            <div class="box">
+                <span class="btn icon" id="headingButton" title="Set text as Heading Level 1"
+                    onclick="setHTMLtags('h1')">
+                    <span style="border: solid grey 1px; margin: 2px; user-select: none;">H1</span>
+                </span>
+                <span class="btn icon" id="headingButton" title="Set text as Heading Level 1"
+                    onclick="setHTMLtags('h2')">
+                    <span style="border: solid grey 1px; margin: 2px; user-select: none;">H2</span>
+                </span>
+                <span class="btn icon" id="headingButton" title="Set text as Heading Level 1"
+                    onclick="setHTMLtags('h3')">
+                    <span style="border: solid grey 1px; margin: 2px; user-select: none;">H3</span>
+                </span>
+                <span class="btn icon" id="headingButton" title="Set text as Heading Level 1"
+                    onclick="setHTMLtags('h4')">
+                    <span style="border: solid grey 1px; margin: 2px; user-select: none;">H4</span>
+                </span>
+                <span class="btn icon" data-action="save" title="Set text as plain paragraph" onclick="setPara()">
+                    <img loading="lazy" src="./icons/editor_icon_save.svg" alt="save button">
+                </span>
+
+                <div class="box" style="border: 1px solid; margin: auto 50px">
+                    <form action="./articleUploadFile" method="POST" enctype="multipart/form-data">
+                        <div>
+                            <label for="inpFile">Upload an image here:</label>
+                            <input id="inpFile" type="file" name="blogImage" accept=".jpg,.jpeg,.png" required>
+                            <input type="hidden" id="imageUploadContent" name="imageUploadContent">
+                            {{#if articleTitle}}
+                            <input type="hidden" id="articleID" name="articleID" value="{{articleID}}">
+                            <input type="hidden" id="articleTitleHidden" name="articleTitleHidden">
+                            {{/if}}
+                            <button id="uploadButton" type="submit">Upload!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        </form>
+
+    </div>
+    <div class="content-area">
+        <div class="visuell-view" id="editorContent" contenteditable>
+            {{#if returnText}}
+            {{{returnText}}}
+            {{else}}
+            <div id="bodyHintText">
+                <h1>You can write your article here</h1>
             </div>
             {{/if}}
+        </div>
+        <textarea class="html-view"></textarea>
+    </div>
+</div>
+
+<div class="modal">
+    <div class="modal-bg"></div>
+    <div class="modal-wrapper">
+        <div class="close">✖</div>
+        <div class="modal-content" id="modalCreateLink">
+            <h3>Insert Link</h3>
+            <input type="text" id="linkValue" placeholder="Link (example: https://berglabs.com/)">
+            <div class="row">
+                <input type="checkbox" id="new-tab">
+                <label for="new-tab">Open in new Tab?</label>
+            </div>
+            <button class="done">Done</button>
+        </div>
+    </div>
+</div>
+
+<div type="hidden" id="popupcontent">{{popupcontent}}</div>
+
+{{#if admin}}
+<div style="border: red solid 2px;">
+    <p style="text-align: center;">
+        {{#if articleTitle}}
+        Edit Article mode
+        {{else}}
+        New Article mode
+        {{/if}}
+    </p>
+    <h2>Admin Functions</h2>
+    <div style="border: grey solid 2px;">
+        <div style="margin: 5px">
+            <form method="POST" action="./editArticle">
+                <p style="margin: 1px">Load Article by ID</p>
+        </div>
+        <div style="margin: 5px">
+            <input type="number" name="articleID" id="articleIDBox" text="number of article here">
+        </div>
+        <div style="margin: 5px">
+            <button type="submit" id="loadArticle" onclick="alert('Loading an existing article')">Loading an Article by
+                Number</button></form>
+        </div>
+    </div>
+</div>
+{{/if}}

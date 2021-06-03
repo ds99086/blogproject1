@@ -1,35 +1,35 @@
 const userDao = require("../modules/user-dao.js");
-//const alert = require('alert');  
 const alert = require("alert")
 
-//it will automatically use authToken from cookies everytime a page opens
+//called by app.js to authenticate the user on every route
 async function addUserToLocals(req, res, next) {
     const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
     res.locals.user = user;
     next();
 }
 
+//call this to identify whether user is logged in
+//if user is not logged in it will redirect to 'permission denied' page. 
 function verifyAuthenticated(req, res, next) {
     if (res.locals.user) {
+        //log permission granted
         next();
     }
     else {
-        console.log("An action was NOT performred as user could not be verified");
-        console.log("Redirecting to the homepage");
-        //alert("You are not logged in!");
-        res.render("permission-denied")
+        //log access denied
+        res.render("permission-denied");
     }
 }
 
-function verifyAuthenticatedWithAlertOnly(req, res, next){
+//if user is not logged in it will alert the user. 
+function verifyAuthenticatedWithAlertOnly(req, res, next) {
     if (res.locals.user) {
+        //log permission granted
         next();
     }
     else {
-        // console.log("An action was NOT performred as user could not be verified");
-        // console.log("show the alert");
-        //alert("You are not logged in!");
-        alert('You need to login before doing this!')
+        //log access denied
+        alert('You need to login before doing this!');
     }
 }
 
