@@ -7,6 +7,7 @@ const multerUploader = require("../modules/multer-uploader.js")
 const fs = require("fs");
 const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 const date = require("../modules/date.js");
+const imageProcessing = require("../modules/image-processing.js");
 
 router.get("/newArticle", verifyAuthenticated, async function (req, res) {
     res.locals.title = "Create a New Article";
@@ -19,8 +20,8 @@ router.get("/newArticle", verifyAuthenticated, async function (req, res) {
 router.post("/saveNewArticle", verifyAuthenticated, async function (req, res) {
     const user = res.locals.user;
     let title = req.body.articleTitle;
-    if (title == "") {
-        title = "Untitled Article";
+    if (!title.match(/\\S/)) {
+        title = `${user.username}'s Untitled Article`;
     }
 
     const article = {
@@ -39,8 +40,8 @@ router.post("/updateExistingArticle", verifyAuthenticated, async function (req, 
     const oldArticleID = req.body.articleID;
 
     let title = req.body.articleTitle;
-    if (title = "") {
-        title = "Untitled Article";
+    if (!title.match(/\\S/)) {
+        title = `${user.username}'s Untitled Article`;
     }
 
     const article = {
@@ -106,16 +107,10 @@ router.post("/editArticle", verifyAuthenticated, async function (req, res) {
 router.post("/articleUploadFile", verifyAuthenticated, multerUploader.single("blogImage"), async function (req, res) {
     const articleContent = req.body.imageUploadContent;
     const user = res.locals.user;
+    
+    imageProcessing.userFolder(user);
 
-    const fileInfo = req.file;
-    const oldFileName = fileInfo.path;
-    if (!fs.existsSync(`./public/userUploads/user_${user.userID}`)) {
-        fs.mkdirSync(`./public/userUploads/user_${user.userID}`);
-    }
-    const newFileName = `./public/userUploads/user_${user.userID}/${fileInfo.originalname.replace(/\s/g, '')}`;
-    fs.renameSync(oldFileName, newFileName);
-
-    let imageUrl = `userUploads/user_${user.userID}/${fileInfo.originalname.replace(/\s/g, '')}`;
+    const imageUrl = await imageProcessing.uploadUserImage(user, req.file);
 
     //TO DO pass article title on image upload also date
     const articleID = req.body.articleID;
@@ -125,7 +120,7 @@ router.post("/articleUploadFile", verifyAuthenticated, multerUploader.single("bl
         res.locals.articleID = articleID;
     }
 
-    let text = `<img src=${imageUrl} width="300"><br><br>
+    let text = `<img src=${imageUrl} width="400"><br><br>
     ${articleContent}`;
 
     //TO DO Change the url
