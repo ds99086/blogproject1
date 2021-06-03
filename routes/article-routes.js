@@ -20,10 +20,9 @@ router.get("/newArticle", verifyAuthenticated, async function (req, res) {
 router.post("/saveNewArticle", verifyAuthenticated, async function (req, res) {
     const user = res.locals.user;
     let title = req.body.articleTitle;
-    if (!title.match(/\\S/)) {
+    if (!title.match(/\S/)) {
         title = `${user.username}'s Untitled Article`;
     }
-
     const article = {
         articleID: null,
         articleTitle: title,
@@ -40,7 +39,7 @@ router.post("/updateExistingArticle", verifyAuthenticated, async function (req, 
     const oldArticleID = req.body.articleID;
 
     let title = req.body.articleTitle;
-    if (!title.match(/\\S/)) {
+    if (!title.match(/\S/)) {
         title = `${user.username}'s Untitled Article`;
     }
 
@@ -115,17 +114,22 @@ router.post("/articleUploadFile", verifyAuthenticated, multerUploader.single("bl
     //TO DO pass article title on image upload also date
     const articleID = req.body.articleID;
     if (articleID != null) {
-        res.locals.articleTitle = req.body.articleTitleHidden;
-        res.locals.date = req.body.articlePubDateHidden;
         res.locals.articleID = articleID;
     }
+    const articleTitle = req.body.articleTitleHidden;
+    if (articleTitle != null) {
+        res.locals.articleTitle = articleTitle;
+    }
+    
+
 
     let text = `<img src=${imageUrl} width="400"><br><br>
     ${articleContent}`;
 
     //TO DO Change the url
     res.locals.popupcontent = `Image successfully uploaded! The link to the image is: www.blogurl.com/${imageUrl}`;
-
+    res.locals.articleTitle = req.body.articleTitleHidden;
+    res.locals.date = req.body.articlePubDateHidden;
     res.locals.title = "WYSIWYG Editor"
     res.locals.WYSIWYG = true;
     res.locals.returnText = text;
