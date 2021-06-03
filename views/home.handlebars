@@ -1,35 +1,40 @@
+
+
 {{#if user}}
 {{> user-navi-bar }}
 {{else}}
 {{> default-navi-bar }}
 {{/if}}
 
-{{#if message}}
-<p>{{message}} {{user.username}}</p>
-{{/if}}
+{{> sorting-column}}
+
+<div class="message">
+    {{#if message}}
+    <p>{{message}} {{user.username}}</p>
+    {{/if}}
+</div>
 
 
-    <div class="grid-container">
-        <div id="articles" class="panel">
-            <h2>Articles</h2>
-            {{#if searchingWarning}}
-            <p>{{searchingWarning}}</p>
-            {{/if}}
-    
-            <!-- Loaded articles should appear here -->
-            <div id="articles-inner"></div>
-            <div id="article-load-button" class="article-load button">Load more articles</div>
-        </div>    
-        {{> sorting-column }}
+
+
+<div class="grid-container">
+    <div id="articles">
+        {{#if searchingWarning}}
+        <p>{{searchingWarning}}</p>
+        {{/if}}
+
+        <!-- Loaded articles should appear here -->
+        <div id="articles-inner"></div>
+        <div id="article-load-button" class="article-load button">Load more articles</div>
     </div>
+
+</div>
 
 {{!-- hidden element stores information about sorting attributes --}}
 <div class="sorting-info-container" hidden=true>
-    <span class="sorting-attribute">{{attribute}}</span> 
-    <span class="sorting-order">{{order}}</span> 
+    <span class="sorting-attribute">{{attribute}}</span>
+    <span class="sorting-order">{{order}}</span>
     <span class="sorting-filter-Name">{{filterName}}</span>
     <span class="sorting-filter">{{filter}}</span>
+    <span class="sorting-userID">{{LoginedUserID}}</span>
 </div>
-  
-</div>
-

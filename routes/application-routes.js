@@ -8,27 +8,26 @@ const articleDao = require("../modules/article-dao.js");
 router.get("/", async function(req, res) {
 
     res.locals.homepage = true;
+    res.locals.sortingColumn = true;
 
-    res.locals.title = "My route title!";
-    //res.locals.allTestData = await testDao.retrieveAllTestData();
     res.locals.message = req.query.message;
 
     const LoginedUser = res.locals.user;
 
 
-    // console.log(LoginedUser)
+    let sortingAttribute = req.query.sortingAttribute;
+    let sortingOrder = req.query.sortingOrder;
     let sortingFilterName = req.query.sortingFilterName;
-    let sortingFilter = req.query.sortingFilter;
-
+    let sortingFilter = req.query.sortingFilter;   
+   
+    
     // if(LoginedUser==undefined){
     //     res.render("permission-denied")
     // }
 
     if (sortingFilterName == undefined){
         sortingFilterName = "None";
-
-    }
-    if (sortingFilterName == "authorID"&&LoginedUser!=undefined){
+    } else if (sortingFilterName == "authorID"&&LoginedUser!=undefined){
         sortingFilter = LoginedUser.userID;
     } else if(sortingFilterName == "authorID"&&LoginedUser==undefined){
         sortingFilter = -1;
@@ -40,8 +39,6 @@ router.get("/", async function(req, res) {
     //get the sorting requirement from the query
     //if there is no sorting requirement
     //the default will be desc in publishDate
-    let sortingAttribute = req.query.sortingAttribute;
-    let sortingOrder = req.query.sortingOrder;
 
     if (sortingAttribute == undefined){
         sortingAttribute = "publishDate";
@@ -54,6 +51,7 @@ router.get("/", async function(req, res) {
 
     res.locals.attribute = sortingAttribute;
     res.locals.order = sortingOrder;
+
 
     res.locals.sortingDateDesc = false;
     res.locals.sortingDateAsc = false;
@@ -84,12 +82,10 @@ router.get("/", async function(req, res) {
     res.locals.filterName = sortingFilterName
     res.locals.filter = sortingFilter
 
+    if(LoginedUser!=undefined){
+    res.locals.LoginedUserID = LoginedUser.userID;
+}
 
-
-    // console.log(sortingAttribute);
-    // console.log(sortingOrder);
-    // console.log(sortingFilterName);
-    // console.log(sortingFilter);
     res.render("home");
 });
 

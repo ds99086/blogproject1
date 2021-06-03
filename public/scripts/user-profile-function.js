@@ -20,10 +20,10 @@ window.addEventListener("load", async function () {
         const user_current_password_alert = profileUpdateDiv.querySelector("#current_password_alert_message")
         user_current_password.addEventListener('input', async function (event) {
             if (await checkUserPassWordCorrect(user_current_password.value)) {
-                user_current_password_alert.innerHTML = `Great! Your password is good!`;
+                user_current_password_alert.innerHTML = `<p style="color: green">Great! Your password is good!</p>`;
                 profileUpdateSubmitBtn.disabled = false;
             } else {
-                user_current_password_alert.innerHTML = `Your password is wrong!`;
+                user_current_password_alert.innerHTML = `<p style="color: red">Your password is wrong!</p>`;
                 profileUpdateSubmitBtn.disabled = true;
             }
         });

@@ -1,11 +1,15 @@
 {{> default-navi-bar }}
+<div class="message">
+    {{#if message}}
+    <p>{{message}}</p>
+    {{/if}}
+</div>
 <div class="container">
-
+    <div class="login-card">
+    
     <div class="yeti-animation"></div>
 
-        {{#if message}}
-        <p>{{message}}</p>
-        {{/if}}
+        
 
 
         <h2>Login</h2>
@@ -20,6 +24,8 @@
                 <input type="password" name="password" id="txtPassword" required>
             </div>
 
+            
+
             <div class="flex-row justify-sb align-center">
                 <button type="submit">Log in</button>
             </div>
@@ -32,6 +38,6 @@
             </div>
         </form>
 
-    </ul>
+    </div>
 
 </div>

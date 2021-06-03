@@ -1,13 +1,14 @@
 {{> user-navi-bar }}
-
-{{profileChangingMessage}}
-
+<div class="message">
+<p>{{profileChangingMessage}}</p>
+</div>
 <div class="container user-profile">
+    <div class="login-card">
     <div class="userAvatarDiv">
         <img src="/images/Avatars/Avatars Set Flat Style-{{user.avatarImage}}.png" class="avatarIcon">
     </div>
     <h1>Hello, {{user.username}}!</h1>
-    <p>Your introduction: {{user.introduction}}</p>
+    <h5>Your introduction: {{user.introduction}}</h5>
 
     <div class="flex-row justify-center align-center">
         <button class="profile-update-div-btn" type="submit">Thinking about changing your information?</button>
@@ -83,4 +84,5 @@
             <button type="submit" onclick="return confirm('Are you sure?')">Delete your account!</button>
         </div>
     </form>
+    </div>
 </div>

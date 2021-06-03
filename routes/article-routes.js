@@ -148,8 +148,12 @@ router.get("/article-details", async function (req, res) {
     
     const articleID = parseInt(req.query.articleID);
     res.cookie("articleID", `${articleID}`)
-
+    
     let articleObj = await articleDao.readArticlebyID(articleID);
+    if(articleObj==null){
+        res.render("404-page-not-found")
+        return
+    }
     res.locals.articleID = articleID;
     res.locals.articleTitle = articleObj.articleTitle;
 
@@ -262,7 +266,12 @@ router.get("/confirmDeleteArticle", verifyAuthenticated, async function (req, re
 //get the required article from database
 router.get("/articleJSON", async function (req, res) {
     const articleID = req.query.articleID;
+ 
     const article = await articleDao.readArticlebyID(articleID);
+    if(article==null){
+        res.render("404-page-not-found")
+        return
+    }
     let user = await userDao.retrieveUsernameByUserID(article.articleAuthorID);
     if (user == undefined) {
         user = { username: "article deleted" }
