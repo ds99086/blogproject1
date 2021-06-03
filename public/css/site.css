@@ -8,7 +8,7 @@
     line-height: 23px;
 }
 
-/* * { border: 1px solid blue; } */
+* { border: 1px solid blue; }
 
 a{
     text-decoration: none;
@@ -394,16 +394,12 @@ form .form-group {
 /*****************************************************************/
 /* comments */
 /*****************************************************************/
-.comment-container {
-    
+.comment-container {  
 
-    width: 700px;
-
+    width: auto;
     height: 100%;
     margin: auto;
-    padding: 0 10%;
-
-    border: 1px solid transparent;
+    /* padding: 0 10%; */
 }
 
 /* .comments-list {
@@ -411,6 +407,9 @@ form .form-group {
 } */
 
  .comment-body {
+    margin: 1% auto;
+    width: 85%;
+    box-shadow:rgba(80, 80, 80, 0.247) 2px 2px 2px 2px;
     display: grid;  
     grid-template-columns: 7em auto ;
     grid-template-rows: 30px 30px auto auto;
@@ -420,25 +419,8 @@ form .form-group {
     "v ct "
     "rd ct "
     "cmb cmb";
-    /* border: solid 3px orange;
-    border-radius: 15px;
-    padding: 3px; */
-    /* height: 50px;
-    font-size: 14px; */
 } 
-/* 
-.comment-body >p, .comment-body >h5, .comment-body >h6 {
-    border: 5px red solid;
-    width: 80%;
-    word-wrap: break-word;
-} */
 
-/* .comment-title {
-    grid-area: name;
-    /* border: 2px blue solid; */
-    /* max-width: inherit;
-
-} */
 
 .comment-title>*{
     margin: 0;
@@ -461,6 +443,7 @@ form .form-group {
 }
 
 .commentAvatarIcon {
+    border-radius: 50%;
     height: 100%;
     display: block;
     margin-left: auto;
@@ -493,6 +476,7 @@ form .form-group {
     grid-area:rd;
     display:flex;
     flex-direction: row;
+    justify-content: space-around;
 }
 
 .child-comment {
@@ -512,18 +496,6 @@ form .form-group {
 .comments-level-2 {
     padding-left: 15%;
 }
-
-/* .commentreply-delete, .vote-buttons{
-
-
-} */
-
-
-
-/* .comments-list {
-    padding-top: 5%;
-
-} */
 
 
 
@@ -590,12 +562,7 @@ form .form-group {
 
 /*****************************************************************/
 /* comments */
-.comment-body{
-    border: 1px solid black;
-    box-shadow:rgba(80, 80, 80, 0.247) 5px 5px 5px 5px;
-    width: auto;
 
-}
 
 .homepage-article-body {
     text-align: center;
