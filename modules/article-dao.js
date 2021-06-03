@@ -7,7 +7,9 @@ const userDao = require("./user-dao.js");
 async function readArticlebyID(articleID) {
 
     const db = await dbPromise;
-    
+    while (articleID < 1) {
+        articleID++
+    }    
     try {
         const article = await db.get(SQL`
     SELECT articleID, title, publishDate, authorID, bodyContentOrLinkToContent 
