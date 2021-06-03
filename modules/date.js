@@ -1,5 +1,3 @@
-
-
 function getDate() {
     let now = new Date();
     let dd = now.getDate();

@@ -26,6 +26,7 @@ router.get("/logout", verifyAuthenticated, async function (req, res) {
     await userDao.updateUser(user);
 
     res.clearCookie("authToken");
+    res.clearCookie("checkiuserSortingOwnArticles");
     res.locals.user = null;
 
     //redirect to home page with the message

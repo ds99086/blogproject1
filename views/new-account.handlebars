@@ -1,10 +1,12 @@
 {{> default-navi-bar }}
-
-<div class="container">
-
+<div class="message">
     {{#if message}}
     <p>{{message}}</p>
     {{/if}}
+</div>
+<div class="container">
+<div class="login-card">
+   
 
     <div class="yeti-animation"></div>
 
@@ -46,12 +48,12 @@
         <br>
 
         <div class="flex-col mb">
-            <label for="txtIntroduction">Brief introduction about you!:</label>
+            <label for="txtIntroduction">Brief introduction about you!</label>
             <input type="text" name="introduction" id="txtIntroduction" required>
         </div>
 
         <div class="flex-col mb">
-            <input type="hidden" id="txtAvatarID" name="avatars" value="1">
+            <input type="hidden" id="txtAvatarID" name="avatars" value="01">
         </div>
 
         {{> avatar }}
@@ -63,5 +65,5 @@
         </div>
 
     </form>
-
+</div>
 </div>

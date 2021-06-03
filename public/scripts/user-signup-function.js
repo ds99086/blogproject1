@@ -14,20 +14,20 @@ window.addEventListener("load", async function () {
     if (username_alert_message) {
         username_input.addEventListener('input', async function (event) {
             if (await checkUsernameExist(username_input)) {
-                username_alert_message.innerHTML = `Username is not available`;
+                username_alert_message.innerHTML = `<p style="color: red">Username is not available</p>`;
                 create_account_button.disabled = true;
             } else {
-                username_alert_message.innerHTML = `Username is available`;
+                username_alert_message.innerHTML = `<p style="color: green">Username is available</p>`;
                 create_account_button.disabled = false;
             }
         });
 
         password2_input.addEventListener('input', function (event) {
             if (checkUserPasswordConsistency(password1_input, password2_input)) {
-                password_alert_message.innerHTML = `Matching password`;
+                password_alert_message.innerHTML = `<p style="color: green">Matching password</p>`;
                 create_account_button.disabled = false;
             } else {
-                password_alert_message.innerHTML = `Password does not match!`;
+                password_alert_message.innerHTML = `<p style="color: red">Password does not match!</p>`;
                 create_account_button.disabled = true;
             }
         });

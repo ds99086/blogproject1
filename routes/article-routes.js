@@ -153,8 +153,9 @@ router.get("/article-details", async function (req, res) {
     
     const articleID = parseInt(req.query.articleID);
     res.cookie("articleID", `${articleID}`)
-
+    
     let articleObj = await articleDao.readArticlebyID(articleID);
+
     res.locals.articleID = articleID;
     res.locals.articleTitle = articleObj.articleTitle;
 

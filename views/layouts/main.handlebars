@@ -12,6 +12,10 @@
 {{!-- TO DO Break up function.js --}}
     <link rel="stylesheet" href="./css/site.css">
 
+    <script type="text/javascript" src="./scripts/dropdown-sorting-function.js"></script>
+
+    <script type="text/javascript" src="./scripts/user-sorting-cookie-function.js"></script>
+
     {{#if homepage}}
     <script type="text/javascript" src="./scripts/home-page-function.js"></script>
     {{/if }}
@@ -45,9 +49,13 @@
 
 <body>
     <div class="header">
-        <h2>this is the name of the blog</h1>
+        <h1>this is the name of the blog</h1>
     </div>
-    {{{body}}}
+    <div class="html-body">
+        {{{body}}}
+    </div>
+
+    
 </body>
 
 </html>

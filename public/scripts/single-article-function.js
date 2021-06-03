@@ -10,8 +10,15 @@ window.addEventListener("load", async function () {
     single_article_div.innerHTML = `
         <h4 class="article-author" author-username="${article.articleAuthorUsername}">Published by:${article.articleAuthorUsername}</h4>
         <h6 class="article-publishDate" data-publishDate="${article.articlePubDate}">Published on: ${article.articlePubDate} </h6>
-        <p class="article-body">${article.articleContent}</p>`
-
+        <p class="article-body">${article.articleContent}</p>
+        `
+    const grid_container_div = document.querySelector(".grid-container")
+    const siblingArticles_div = document.createElement("div")
+    siblingArticles_div.setAttribute("class", "siblingArticles");
+    grid_container_div.appendChild(siblingArticles_div);
+    let lastArticleID = parseInt(article_ID)+1;
+    let nextArticleID = parseInt(article_ID)-1;
+    siblingArticles_div.innerHTML = `<p><a href="./article-details?articleID=${lastArticleID}">Last Article</a></p><p><p><a href="./article-details?articleID=${nextArticleID}">Next Article</a></p>`
     //display all the vote count once the page load
     //select all the vote-container
     const vote_containers = document.querySelectorAll(".vote-container");
