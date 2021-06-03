@@ -210,7 +210,7 @@ router.get("/article-details", async function (req, res) {
         }
     }
 
-
+    console.log(output);
 
     res.locals.commentlist = output;
 
