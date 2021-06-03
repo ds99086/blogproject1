@@ -1,13 +1,11 @@
 window.addEventListener("load", async function () {
 
-
     const username_input = document.getElementById("new_acount_username");
     const password1_input = document.getElementById("new_account_password1");
     const password2_input = document.getElementById("new_account_password2");
     const username_alert_message = document.getElementById("username_alert_message");
     const password_alert_message = document.getElementById("password_alert_message");
     const create_account_button = document.getElementById("create_account_btn");
-
 
     //this this checking whether we are on the new account page
     //then add event listener to monitor the input
@@ -36,25 +34,11 @@ window.addEventListener("load", async function () {
         choiceAvatar()
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
     async function retrieveUserByUsername(id) {
         let response = await fetch(`./checkUsername?input_username=${id}`);
         let username_availability_obj = await response.json();
         return username_availability_obj;
     }
-
-
 
     //check whether the username has already taken
     //if the username exist, return true, otherwise return false
@@ -67,7 +51,6 @@ window.addEventListener("load", async function () {
             return false;
         };
     };
-
 
     //check the re-enter password is consist or not.
     //if consist, return true, otherwise return false

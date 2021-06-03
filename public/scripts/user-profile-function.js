@@ -4,7 +4,6 @@ window.addEventListener("load", async function () {
     //if it is on the user setting page
     if (document.querySelector(".user-profile")) {
         const profileUpdateBtn = document.querySelector(".profile-update-div-btn")
-
         const profileUpdateDiv = document.querySelector(".profile-update-div")
         const profileUpdateSubmitBtn = profileUpdateDiv.querySelector("button")
         profileUpdateSubmitBtn.disabled = true
@@ -36,10 +35,8 @@ window.addEventListener("load", async function () {
     //if not show the warning and disable the update button
     async function checkUserPassWordCorrect(password_input) {
         const user_input = password_input;
-        console.log(user_input)
         let response = await fetch(`./checkUserPassword?input_password=${user_input}`);
         let use_password_checking_obj = await response.json();
-        console.log(use_password_checking_obj.result)
         return use_password_checking_obj.result;
     };
 
@@ -54,7 +51,6 @@ window.addEventListener("load", async function () {
             return true
         };
     };
-
 
     function choiceAvatar() {
         const avatarIcons = document.querySelectorAll(".avatar-gallery-icon")
@@ -73,8 +69,5 @@ window.addEventListener("load", async function () {
             }
         })
     }
-
-
-
 
 })

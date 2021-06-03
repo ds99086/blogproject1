@@ -1,8 +1,8 @@
 window.addEventListener("load", async function () {
 
-        //Variables to control where the application is with loading articles and how many it should load at a time
-        const loadArticleCount = 5;
-        let loadArticleNext = 0;
+    //Variables to control where the application is with loading articles and how many it should load at a time
+    const loadArticleCount = 5;
+    let loadArticleNext = 0;
 
         //get the sorting info from the hidden elements in home page
         const article_sorting_attribute = document.querySelector(".sorting-attribute").innerText;
@@ -19,19 +19,19 @@ window.addEventListener("load", async function () {
         }
         
 
-        //load articles title on oage
-        displayNextArticlesOnPage();
-        document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
+    //load articles title on oage
+    displayNextArticlesOnPage();
+    document.querySelector('#article-load-button').addEventListener("click", displayNextArticlesOnPage);
 
-        async function displayNextArticlesOnPage() {
-            document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
+    async function displayNextArticlesOnPage() {
+        document.querySelector('#article-load-button').removeEventListener("click", displayNextArticlesOnPage);
 
-            let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order, article_sorting_filter_name, article_sorting_filter);
-            //at this step articles are in order
+        let articlesJsonArray = await getArticleArray(loadArticleNext, loadArticleCount, article_sorting_attribute, article_sorting_order, article_sorting_filter_name, article_sorting_filter);
+        //at this step articles are in order
 
-            for (let i = 0; i < articlesJsonArray.length; i++) {
-                await displayPartialArticleOnPage(articlesJsonArray[i]);
-            }
+        for (let i = 0; i < articlesJsonArray.length; i++) {
+            await displayPartialArticleOnPage(articlesJsonArray[i]);
+        }
 
             if (articlesJsonArray.length < loadArticleCount) {
                 document.querySelector('#article-load-button').style.background = "rgba(112, 112, 112, 0.486)";
@@ -41,6 +41,7 @@ window.addEventListener("load", async function () {
                 loadArticleNext += loadArticleCount;
             }
         }
+    
 
         async function displayPartialArticleOnPage(articleObj) {
             let articleDivElement = document.createElement("div");

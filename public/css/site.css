@@ -394,35 +394,136 @@ form .form-group {
 /*****************************************************************/
 /* comments */
 /*****************************************************************/
-/* .comment-container * {
-    border: 1px solid black;
+.comment-container {
+    
+
+    width: 700px;
+
+    height: 100%;
+    margin: auto;
+    padding: 0 10%;
+
+    border: 1px solid transparent;
+}
+
+/* .comments-list {
+    
 } */
 
-.comment-container {
-    background-color: lightblue;
-    margin: 1em;
-    padding: 1em 1em 2em 2em;
+ .comment-body {
+    display: grid;  
+    grid-template-columns: 7em auto ;
+    grid-template-rows: 30px 30px auto auto;
+    grid-template-areas:
+    "a name "
+    "a d  "
+    "v ct "
+    "rd ct "
+    "cmb cmb";
+    /* border: solid 3px orange;
+    border-radius: 15px;
+    padding: 3px; */
+    /* height: 50px;
+    font-size: 14px; */
+} 
+/* 
+.comment-body >p, .comment-body >h5, .comment-body >h6 {
+    border: 5px red solid;
+    width: 80%;
+    word-wrap: break-word;
+} */
+
+/* .comment-title {
+    grid-area: name;
+    /* border: 2px blue solid; */
+    /* max-width: inherit;
+
+} */
+
+.comment-title>*{
+    margin: 0;
 }
 
-.comments-level-1 {
-    padding: 1em 1em 3em 2em;
+.comment-datetime {
+    grid-area: d;
+    /* border: 2px green solid; */
 }
 
-.comments-level-2 {
-    padding: 1em 1em 3em 4em;
+.comment-datetime>* {
+    /* background-color: lightgreen; */
+
+    margin: 0;
 }
 
-.commentreply-delete, .vote-buttons{
-    display:flex;
-    align-items: baseline;
-
+.user-avatar {
+    grid-area: a;
+    /* border: 5px red dashed; */
 }
 
 .commentAvatarIcon {
-    height: 3em;
+    height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.comment-content {
+    grid-area: ct;
+    /* border: 5px violet dashed; */
+    /* overflow: hidden; */
+    height: auto;
+    overflow-wrap: break-word;
+    overflow-x: auto; 
+
+}
+
+.comment-content>* {
+    /* background-color: red; */
+    /* word-wrap: break-word; */
+    margin: 5px;
+}
+
+.vote-container {
+    grid-area: v;
+    display: flex;
+    justify-content: center;
+    /* border: 5px purple dotted; */
+}
+
+.commentreply-delete {
+    grid-area:rd;
+    display:flex;
+    flex-direction: row;
+}
+
+.child-comment {
+    grid-area: cc;
 }
 
 
+
+.new-comment-box {
+    grid-area: cmb;
+} 
+
+.comments-level-1 {
+    padding-left: 15%;
+}
+
+.comments-level-2 {
+    padding-left: 15%;
+}
+
+/* .commentreply-delete, .vote-buttons{
+
+
+} */
+
+
+
+/* .comments-list {
+    padding-top: 5%;
+
+} */
 
 
 

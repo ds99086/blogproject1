@@ -27,12 +27,20 @@
         <div class="comments-level-0">
 
             <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
-                <div>
-                    <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png" class="commentAvatarIcon">
+                <div class="user-avatar">
+                    <img class="commentAvatarIcon" src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png">
                 </div>
-                <h5 class="comment-title">Name: {{username}}</h5>
-                <h6 class="comment-datetime text-muted">Date: {{commentDate}}</h6>
-                <p>{{commentText}} </p>
+                <div class="comment-title">
+                    <h5> {{username}} says..</h5>
+                </div>
+                <div class="comment-datetime text-muted">
+                    <h6>Date: {{commentDate}}</h6>
+                </div>
+
+                <div class="comment-content">
+                    <p>{{commentText}} </p>
+                </div>
+
                 <div class="vote-container">
                     <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
                     <span class="upvote-count">0</span>
@@ -55,17 +63,24 @@
                 <div class="comments-level-1">
 
                     <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
-                        <div>
-                            <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png"
-                                class="commentAvatarIcon">
+                        <div class="user-avatar">
+                            <img class="commentAvatarIcon"
+                                src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png">
                         </div>
-                        <h5 class="comment-title">Name: {{username}}</h5>
-                        <h6 class="comment-datetime text-muted">Date: 2021-05-21</h6>
-                        <p>{{commentText}} </p>
+                        <div class="comment-title">
+                            <h5> {{username}} says..</h5>
+                        </div>
+                        <div class="comment-datetime text-muted">
+                            <h6>Date: {{commentDate}}</h6>
+                        </div>
 
+                        <div class="comment-content">
+                            <p>{{commentText}} </p>
+                        </div>
                         <div class="vote-container">
                             <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
                             <span class="upvote-count">0</span>
+                            &emsp;
                             <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
                             <span class="downvote-count">0</span>
                         </div>
@@ -85,17 +100,24 @@
                         <div class="comments-level-2">
 
                             <div class="comment-body" userID="{{userID}}" commentID="{{commentID}}">
-                                <div>
-                                    <img src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png"
-                                        class="commentAvatarIcon">
+                                <div class="user-avatar">
+                                    <img class="commentAvatarIcon"
+                                        src="/images/Avatars/Avatars Set Flat Style-{{avatarImage}}.png">
                                 </div>
-                                <h5 class="comment-title">Name: {{username}}</h5>
-                                <h6 class="comment-datetime text-muted">Date: 2021-05-21</h6>
-                                <p>{{commentText}} </p>
+                                <div class="comment-title">
+                                    <h5> {{username}} says..</h5>
+                                </div>
+                                <div class="comment-datetime text-muted">
+                                    <h6>Date: {{commentDate}}</h6>
+                                </div>
 
+                                <div class="comment-content">
+                                    <p>{{commentText}} </p>
+                                </div>
                                 <div class="vote-container">
                                     <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
                                     <span class="upvote-count">0</span>
+                                    &emsp;
                                     <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
                                     <span class="downvote-count">0</span>
                                 </div>
@@ -109,17 +131,21 @@
                             </div>
                             <div class="child-comment"></div>
                         </div>
-
                         {{/each}}
-                    </div>
-                </div>
 
+                    </div>
+
+                    
+                </div>
                 {{/each}}
             </div>
+
+
+
+           
         </div>
+            {{/each}}
 
-        {{/each}}
-
-        {{/if}}
-    </div>
+    </div> 
+    {{/if}}
 </div>
