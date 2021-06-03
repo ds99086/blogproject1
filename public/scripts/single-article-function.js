@@ -136,7 +136,7 @@ window.addEventListener("load", async function () {
             <h5> ${newComment.username} says..</h5>
         </div>
         <div class="comment-datetime text-muted">
-            <h6>Date: ${newComment.commentDate}</h6>
+            <h6>Posted on: ${newComment.commentDate}</h6>
         </div>
 
         <div class="comment-content">
@@ -152,9 +152,9 @@ window.addEventListener("load", async function () {
     </div>
 
     <div class="commentreply-delete">
-        <button class="comment-reply">Reply</button>
+        <div class="comment-reply">Reply</div>
         <p id="commentreply"></p>
-        <button class="comment-delete">Delete</button>
+        <div class="comment-delete">Delete</div>
         <p id="commentdelete"></p>
     </div>
     </div>
@@ -295,10 +295,10 @@ window.addEventListener("load", async function () {
             <img class="commentAvatarIcon" src="/images/Avatars/Avatars Set Flat Style-${reply.avatarImage}.png">
         </div>
         <div class="comment-title">
-            <h5> ${reply.username}says..</h5>
+            <h5> ${reply.username} says..</h5>
         </div>
         <div class="comment-datetime text-muted">
-            <h6>Date: ${reply.commentDate}</h6>
+            <h6>Posted on: ${reply.commentDate}</h6>
         </div>
 
         <div class="comment-content">
@@ -314,9 +314,9 @@ window.addEventListener("load", async function () {
     </div>
 
     <div class="commentreply-delete">
-        <button class="comment-reply">Reply</button>
+        <div class="comment-reply">Reply</div>
         <p id="commentreply"></p>
-        <button class="comment-delete">Delete</button>
+        <div class="comment-delete">Delete</div>
         <p id="commentdelete"></p>
     </div>
     </div>

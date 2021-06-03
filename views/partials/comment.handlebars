@@ -18,9 +18,10 @@
     {{#if commentlist}}
     <br>
 
-    <div class="flex-row justify-sb align-center">
+    <div class="flex-row justify-sb align-center hide-comment">
         <button id="hide-show-comment">Hide Comments</button>
     </div>
+    <br>
     <div class="comments-list" id="comments-list">
 
         {{#each commentlist}}
@@ -34,7 +35,7 @@
                     <h5> {{username}} says..</h5>
                 </div>
                 <div class="comment-datetime text-muted">
-                    <h6>Date: {{commentDate}}</h6>
+                    <h6>Posted on: {{commentDate}}</h6>
                 </div>
 
                 <div class="comment-content">
@@ -42,17 +43,18 @@
                 </div>
 
                 <div class="vote-container">
+                    {{!-- <img src="/images/upvote.png" class="vote-icon" voteType="Upvote"> --}}
                     <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
                     <span class="upvote-count">0</span>
-                    &emsp;
+                    
                     <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
                     <span class="downvote-count">0</span>
                 </div>
 
                 <div class="commentreply-delete">
-                    <button class="comment-reply">Reply</button>
+                    <div class="comment-reply">Reply</div>
                     <p id="commentreply"></p>
-                    <button class="comment-delete">Delete</button>
+                    <div class="comment-delete">Delete</div>
                     <p id="commentdelete"></p>
                 </div>
             </div>
@@ -71,7 +73,7 @@
                             <h5> {{username}} says..</h5>
                         </div>
                         <div class="comment-datetime text-muted">
-                            <h6>Date: {{commentDate}}</h6>
+                            <h6>Posted on: {{commentDate}}</h6>
                         </div>
 
                         <div class="comment-content">
@@ -80,15 +82,15 @@
                         <div class="vote-container">
                             <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
                             <span class="upvote-count">0</span>
-                            &emsp;
+                           
                             <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
                             <span class="downvote-count">0</span>
                         </div>
 
                         <div class="commentreply-delete">
-                            <button class="comment-reply">Reply</button>
+                            <div class="comment-reply">Reply</div>
                             <p id="commentreply"></p>
-                            <button class="comment-delete">Delete</button>
+                            <div class="comment-delete">Delete</div>
                             <p id="commentdelete"></p>
                         </div>
                     </div>
@@ -108,7 +110,7 @@
                                     <h5> {{username}} says..</h5>
                                 </div>
                                 <div class="comment-datetime text-muted">
-                                    <h6>Date: {{commentDate}}</h6>
+                                    <h6>Posted on: {{commentDate}}</h6>
                                 </div>
 
                                 <div class="comment-content">
@@ -117,15 +119,15 @@
                                 <div class="vote-container">
                                     <img src="/images/upvote.png" class="vote-icon" voteType="Upvote">
                                     <span class="upvote-count">0</span>
-                                    &emsp;
+                                
                                     <img src="/images/downvote.png" class="vote-icon" voteType="Downvote">
                                     <span class="downvote-count">0</span>
                                 </div>
 
                                 <div class="commentreply-delete">
-                                    <button class="comment-reply">Reply</button>
+                                    <div class="comment-reply">Reply</div>
                                     <p id="commentreply"></p>
-                                    <button class="comment-delete">Delete</button>
+                                    <div class="comment-delete">Delete</div>
                                     <p id="commentdelete"></p>
                                 </div>
                             </div>
