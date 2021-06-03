@@ -80,20 +80,20 @@ CREATE TABLE articleVotes (
 --users(userID, username, hashPassword, firstName, lastName, dateOfBirth, avatarImage, authToken, adminstratorLevel, introduction)
 INSERT INTO users (userID, username, hashPassword, firstName, lastName, dateOfBirth, avatarImage, authToken, adminstratorLevel, introduction) VALUES
    (1, 'XeroFounder', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Rodney', 'Drury', '1967-06-23', '01', null, 0, ''),
-   (2, 'salesForceField', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Marc', 'Benioff', '1964-09-25', '2', null, 0, 'I made sales force and lots of $'),
-   (3, 'datacomDude', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Bernard', 'Battersby', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (4, 'enigmaCracker', '$2b$10$rQAvdV7Ka58JUxUx5siKsusBcEF71QDmfsChx6B39reCfD2.FdxbS', 'Alan', 'Turing', '1912-06-23', '1', null, 0, ''),
-   (5, 'theAdmiral', '$2b$10$rQAvdV7Ka58JUxUx5siKsusBcEF71QDmfsChx6B39reCfD2.FdxbS', 'Grace', 'Hopper', '1906-12-09', '2', null, 0, ''),
-   (6, 'don', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Donald', 'Knuth', '1938-01-10', '3', null, 0, ''),
-   (7, 'SerkoGetsYouThere', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (8, 'DoNoEvil', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (9, 'Windows4Ever', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Bill', 'Gates', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (10, 'username10', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (11, 'username11', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (12, 'username12', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (13, 'username13', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (14, 'username14', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction'),
-   (15, 'username15', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '3', null, 0, 'this user does not yet have an introduction');
+   (2, 'salesForceField', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Marc', 'Benioff', '1964-09-25', '02', null, 0, 'I made sales force and lots of $'),
+   (3, 'datacomDude', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Bernard', 'Battersby', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (4, 'enigmaCracker', '$2b$10$rQAvdV7Ka58JUxUx5siKsusBcEF71QDmfsChx6B39reCfD2.FdxbS', 'Alan', 'Turing', '1912-06-23', '01', null, 0, ''),
+   (5, 'theAdmiral', '$2b$10$rQAvdV7Ka58JUxUx5siKsusBcEF71QDmfsChx6B39reCfD2.FdxbS', 'Grace', 'Hopper', '1906-12-09', '02', null, 0, ''),
+   (6, 'don', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Donald', 'Knuth', '1938-01-10', '03', null, 0, ''),
+   (7, 'SerkoGetsYouThere', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (8, 'DoNoEvil', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (9, 'Windows4Ever', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'Bill', 'Gates', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (10, 'username10', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (11, 'username11', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (12, 'username12', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (13, 'username13', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (14, 'username14', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction'),
+   (15, 'username15', '$2b$10$XTa37RWjSnaO87oB1udvueZW0w6cj/l3KjTI4Yled0miNpoiWoTqq', 'fname', 'lname', '1990-01-01', '03', null, 0, 'this user does not yet have an introduction');
  
 
 --articles(articleID, title, publishDate, lastEditDate, bodyContentOrLinkToContent, *authorID*)

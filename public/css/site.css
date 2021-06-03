@@ -77,6 +77,7 @@ img {
 body {
     margin: 0;
     padding: 0;
+    min-width: 800px;
 }
 
 .container {
@@ -517,6 +518,7 @@ form .form-group {
 
 .new-comment-box {
     grid-area: cmb;
+
 } 
 
 .comments-level-1 {
