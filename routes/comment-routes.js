@@ -75,9 +75,9 @@ router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req
 
     //console.log("parent commentID is: " + commentParentID);
     const parentComment = await commentDao.retrieveCommentbyParentCommentID(commentParentID);
-    //console.log("parent comment is:");
+    console.log("parent comment is:");
 
-    //console.log(parentComment);
+    console.log(parentComment);
     const parentCommentLevel = parentComment[0].commentLevel;
     //console.log(parentCommentLevel);
     const commentLevel = (parentCommentLevel + 1) ;

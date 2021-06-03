@@ -198,14 +198,14 @@ router.get("/article-details", async function (req, res) {
     for (let i = 0; i < commentList.length; i++) {
         let comment = commentList[i];
         if (comment.commentLevel == 0) {
-            output.push(comment);
+            output.unshift(comment);
             removeItemOnce(commentList, comment);
             i--;
             addChildren(comment, commentList, output);
         }
     }
 
-
+    //console.log(output);
 
     res.locals.commentlist = output;
 
