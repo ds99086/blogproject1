@@ -1,3 +1,5 @@
+/*A simple module to return the date in a useful format*/
+
 function getDate() {
     let now = new Date();
     let dd = now.getDate();
