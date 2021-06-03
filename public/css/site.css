@@ -291,8 +291,8 @@ form .form-group {
 /*****************************************************************/
 * {
     border: 1px solid black;
-    background-size: contain;
-    display: inline-block:
+    /* background-size: contain; */
+    /* display: inline-block; */
 }
 
 .comment-container {
@@ -303,7 +303,7 @@ form .form-group {
     height: 100%;
     margin: auto;
     padding: 0 10%;
-    background-color: rgb(224, 244, 252);
+
     border: 1px solid transparent;
 }
 
@@ -313,17 +313,17 @@ form .form-group {
 
  .comment-body {
     display: grid;  
-    grid-template-columns: 20% auto ;
-    grid-template-rows: Y 100px auto auto;
+    grid-template-columns: 7em auto ;
+    grid-template-rows: 30px 30px auto auto;
     grid-template-areas:
     "a name "
     "a d  "
     "v ct "
-    "rd rd "
+    "rd ct "
     "cmb cmb";
-    border: solid 3px orange;
+    /* border: solid 3px orange;
     border-radius: 15px;
-    padding: 3px;
+    padding: 3px; */
     /* height: 50px;
     font-size: 14px; */
 } 
@@ -334,12 +334,12 @@ form .form-group {
     word-wrap: break-word;
 } */
 
-.comment-title {
+/* .comment-title {
     grid-area: name;
     /* border: 2px blue solid; */
-    max-width: inherit;
+    /* max-width: inherit;
 
-}
+} */
 
 .comment-title>*{
     margin: 0;
@@ -352,61 +352,66 @@ form .form-group {
 
 .comment-datetime>* {
     /* background-color: lightgreen; */
-    display: inline;
+
     margin: 0;
 }
 
 .user-avatar {
     grid-area: a;
-    height: 15%;
-
     /* border: 5px red dashed; */
 }
 
+.commentAvatarIcon {
+    height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 .comment-content {
     grid-area: ct;
     /* border: 5px violet dashed; */
-    overflow: hidden;
+    /* overflow: hidden; */
     height: auto;
+    overflow-wrap: break-word;
+    overflow-x: auto; 
 
 }
 
 .comment-content>* {
     /* background-color: red; */
-    word-wrap: break-word;
+    /* word-wrap: break-word; */
     margin: 5px;
 }
 
 .vote-container {
     grid-area: v;
     display: flex;
+    justify-content: center;
     /* border: 5px purple dotted; */
 }
 
 .commentreply-delete {
     grid-area:rd;
-    display: flex;
-    /* flex-direction: column ; */
+    display:flex;
+    flex-direction: row;
 }
 
 .child-comment {
     grid-area: cc;
 }
 
-.commentAvatarIcon {
-    height: 100%;
-}
+
 
 .new-comment-box {
     grid-area: cmb;
-}
+} 
 
 .comments-level-1 {
-    padding: 1em 1em 3em 2em;
+    padding-left: 15%;
 }
 
 .comments-level-2 {
-    padding: 1em 1em 3em 4em;
+    padding-left: 15%;
 }
 
 /* .commentreply-delete, .vote-buttons{
@@ -414,10 +419,7 @@ form .form-group {
 
 } */
 
-.commentAvatarIcon {
-    height: 100px;
-    justify-items: center;
-}
+
 
 /* .comments-list {
     padding-top: 5%;
@@ -471,9 +473,9 @@ form .form-group {
 
 
 
-    .comment-container {
+    /* .comment-container {
         width: 
-    }
+    } */
 
 
 

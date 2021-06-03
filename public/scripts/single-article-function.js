@@ -126,7 +126,7 @@ window.addEventListener("load", async function () {
             <img class="commentAvatarIcon" src="/images/Avatars/Avatars Set Flat Style-${newComment.avatarImage}.png">
         </div>
         <div class="comment-title">
-            <h5> ${newComment.username}says..</h5>
+            <h5> ${newComment.username} says..</h5>
         </div>
         <div class="comment-datetime text-muted">
             <h6>Date: ${newComment.commentDate}</h6>
@@ -341,12 +341,12 @@ window.addEventListener("load", async function () {
         `;
 
         } 
-        //else if (e.target.innerText == "Cancel") {
-        //     buttonDiv.innerHTML = "Reply";
-        //     let replyDiv = e.target.parentElement.parentElement.lastChild;
-        //     replyDiv.remove();
-        // } else {
-        //     console.log("Error! Unexpcted button text.");
-        // }
+        else if (e.target.innerText == "Cancel") {
+            buttonDiv.innerHTML = "Reply";
+            let replyDiv = e.target.parentElement.parentElement.lastChild;
+            replyDiv.remove();
+        } else {
+            console.log("Error! Unexpcted button text.");
+        }
     }
 })
