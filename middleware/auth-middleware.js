@@ -47,5 +47,6 @@ async function apiVerifyAdminIdentity(req, res, next) {
 module.exports = {
     addUserToLocals,
     verifyAuthenticated,
-    verifyAuthenticatedWithAlertOnly
+    verifyAuthenticatedWithAlertOnly,
+    apiVerifyAdminIdentity
 }
