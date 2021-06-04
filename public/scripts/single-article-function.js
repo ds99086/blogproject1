@@ -108,12 +108,8 @@ window.addEventListener("load", async function () {
 
     async function newCommentSubmitFunction(e) {
         const newComment = await getNewComment();
-        console.log("newcomment is: ");
-        console.log(newComment);
-        const commentContainer = document.getElementsByClassName("comment-container")[0];
-        console.log("commentContainer is: ");
-        console.log(commentContainer);
 
+        const commentContainer = document.getElementsByClassName("comment-container")[0];
         let commentsList = commentContainer.querySelector(".comments-list")
         if ((!commentsList)) {
             let commentsList = document.createElement("div");
@@ -244,35 +240,20 @@ window.addEventListener("load", async function () {
     };
 
     async function addListenersToSubmitBtn(e) {
-        console.log("I am in listener");
+
         const submitbtn = e.target;        
         const targetDiv = submitbtn.parentElement.parentElement.parentElement.parentElement;
-        console.log("targetdiv is: ");
-        console.log(targetDiv);
-        
         const parentCommentDiv = targetDiv.firstElementChild;
-        console.log("parentCommentDiv is: ");
-        console.log(parentCommentDiv);
-        
+
         const parentCommentId = parentCommentDiv.getAttribute("commentid");
-        console.log("parentCommentID is: ");
-        console.log(parentCommentId);
-        
         const childCommentDiv = targetDiv.getElementsByClassName("child-comment")[0];
-        console.log("childCommentDiv is: ");
-        console.log(childCommentDiv);
 
         replybtn = targetDiv.getElementsByClassName("comment-reply")[0];
-        console.log("replybtn is: ");
-        console.log(replybtn);
-
         if (replybtn.innerHTML != "Reply") {
             replybtn.innerHTML = "Reply";
         }
 
         const replyText = targetDiv.getElementsByClassName("reply-textbox")[0];
-        console.log("replyText is: ");
-        console.log(replyText);
         const replyContent = replyText.value;
         const parentComment = parentCommentId;
         const articleID = getCookie("articleID");
@@ -285,8 +266,6 @@ window.addEventListener("load", async function () {
 
         const replyDiv = document.createElement("div");
         replyDiv.classList.add(`comments-level-${reply.commentLevel}`);
-        console.log("childCommentDiv is");
-        console.log(childCommentDiv);
 
         childCommentDiv.prepend(replyDiv);
 
@@ -328,12 +307,12 @@ window.addEventListener("load", async function () {
     function replyButtonFunction(e) {
         const buttonDiv = e.target;
         const targetDiv = buttonDiv.parentElement.parentElement;
-        //let buttonTargetDiv = targetDiv.getElementsByClassName("commentreply-delete")[0];
+
         if (e.target.innerText == "Reply") {
             e.target.innerHTML = "Cancel";
             const replyDiv = document.createElement("div");
             replyDiv.classList.add("new-comment-box");
-            //console.log(buttonDiv.parentElement.parentElement);
+            
             targetDiv.appendChild(replyDiv);
 
             replyDiv.innerHTML = `
