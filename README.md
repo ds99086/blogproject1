@@ -1,6 +1,31 @@
-Final project &ndash; A personal blogging system &ndash; Starter project
-==========
-This repository contains a starting point for your team's final project.
 
-Your team should update this README to include the information required, as presented in the project handout available on Canvas.
+# Final Project (Group 3: ABY) 
+
+
+by Nick Berg, Yiwei Dao and Allie Lim
+
+## Installation
+
+---
+
+Use the package manager to install modules
+
+```
+npm install
+```
+
+## Existing User Detail
+
+---
+
+```
+UserID:
+Password:
+```
+
+## Other Comments
+
+---
+
+
 
