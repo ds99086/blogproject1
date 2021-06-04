@@ -52,13 +52,15 @@ router.get("/api/users", verifyAuthenticated, async function (req, res) {
     res.status(204).send(users);
 });
 
-router.delete("/api/users/:userID", verifyAuthenticated, async function (req, res) {
+router.delete("/api/users/:userID", async function (req, res) {
     //Need some logic here where we confirm user is an admin
     //e.g. const user = res.locals.user;
     // adminStatus = userDao.checkUserAdminStatus(user.userID)
     // if adminStatus (show the things) else (send error)
     const user = req.userID;
     console.log("request to delete user " + user);
+    await commentDao.updateCommentsAfterUserAccountDelete(user);
+    await articleDao.updateArticlesAfterUserAccountDelete(user);
     await userDao.deleteUser(user);
     //Some logic to confirm the deletion was successful
     const deleteSuccess = true;
