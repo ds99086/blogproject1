@@ -138,6 +138,27 @@ async function retrieveUserWithAuthToken(authToken) {
     }
 }
 
+async function checkUserAdminStatusByAuthToken(authToken) {
+    const db = await dbPromise;
+    try {
+        const adminstratorLevelObject = await db.get(SQL`
+        SELECT adminstratorLevel 
+        FROM users 
+        WHERE authToken = ${authToken}`);
+
+        let adminstratorLevel = adminstratorLevelObject.adminstratorLevel;
+
+        if (!(adminstratorLevel > 0)) {
+            return 0;
+        } else { 
+            return adminstratorLevel;
+        };
+    }catch (e) {
+        console.error("Error "+e.name+" in function [getUserPassword] in [user-dao]"+e.message);
+        return undefined;
+    }
+}
+
 module.exports = {
     createUser,
     retrieveAllUsers,
@@ -147,5 +168,6 @@ module.exports = {
     retrieveUserByUserID,
     getUserPassword,
     retrieveUserWithAuthToken,
-    retrieveUsernameByUserID
+    retrieveUsernameByUserID,
+    checkUserAdminStatusByAuthToken
 };
