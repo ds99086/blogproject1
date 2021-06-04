@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
+const articleDao = require("../modules/article-dao");
 const userDao = require("../modules/user-dao.js");
 const commentDao = require("../modules/comment-dao.js");
 const { verifyAuthenticatedWithAlertOnly } = require("../middleware/auth-middleware.js");
@@ -45,11 +46,15 @@ router.get("/checkAuthor", verifyAuthenticatedWithAlertOnly, async function(req,
     const user = res.locals.user;
     const commentID = req.query.commentID;
     const userID = user.userID;
+    const articleID = req.cookies.articleID;  
+
+    const articleAuthor = await articleDao.readAuthorID(articleID);
+    const articleAuthorID = articleAuthor.authorID;
 
     const commentDetail = await commentDao.retrieveCommentbyCommentID(commentID);
     const commentAuthor = commentDetail.authorID;
 
-    if (userID == commentAuthor) {
+    if (userID == commentAuthor || userID == articleAuthorID) {
         result = {
             response: "Comment deleted"
         }
@@ -73,13 +78,9 @@ router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req
     const username = commentAuthor.username;
     const avatarImage = commentAuthor.avatarImage;
 
-    //console.log("parent commentID is: " + commentParentID);
     const parentComment = await commentDao.retrieveCommentbyParentCommentID(commentParentID);
- 
     const parentCommentLevel = parentComment[0].commentLevel;
-    //console.log(parentCommentLevel);
     const commentLevel = (parentCommentLevel + 1) ;
-    //console.log(commentLevel);
 
     const reply = {
         commentText: replyContent, 
@@ -91,15 +92,12 @@ router.get("/replyComment", verifyAuthenticatedWithAlertOnly, async function(req
         avatarImage: avatarImage
     };
     
-    //console.log(reply);
     const replyID = await commentDao.createComment(reply);
     const commentMade = await commentDao.retrieveCommentbyCommentID(replyID);
     const commentDate = commentMade.commentDate
 
-    //console.log(replyID);
     reply.commentID = replyID;
     reply.commentDate = commentDate;
-    //console.log(reply);
 
     res.json(reply);
 });
