@@ -1,10 +1,10 @@
 window.addEventListener("load", function () {
     const naviBar = document.querySelector(".nav")
     naviBar.addEventListener('click', e => {
-        if (e.target && e.target.matches("#home-link")) {
-            setCookie("userSortingOwnArticles", false, 10)
-        } else if (e.target && e.target.matches("#user-articles-link")) {
-            setCookie("userSortingOwnArticles", true, 10)        } 
+        if (e.target && e.target.matches("#user-articles-link")) {
+            setCookie("userSortingOwnArticles", true, 10)
+        } else {
+            setCookie("userSortingOwnArticles", false, 10)        } 
 
 
     });
