@@ -75,8 +75,11 @@ window.addEventListener("load", async function () {
                 for (avatarIcon of avatarIcons) {
                     if (avatarIcon == e.target) {
                         avatarIcon.style.backgroundColor = "#ff0505"
+                        avatarIcon.classList.remove("avatar-gallery-icon-grey-out")
+
                     } else {
-                        avatarIcon.style.backgroundColor = "transparent"
+                        avatarIcon.style.backgroundColor = "transparent";
+                        avatarIcon.classList.add("avatar-gallery-icon-grey-out")
                     }
                 }
             }

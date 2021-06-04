@@ -39,18 +39,7 @@ window.addEventListener("load", async function () {
         let use_password_checking_obj = await response.json();
         return use_password_checking_obj.result;
     };
-
-    //check the re-enter password is consist or not.
-    //if consist, return true, otherwise return false
-    function checkUserPasswordConsistency(password1_input, password2_input) {
-        const password1_value = password1_input.value;
-        const password2_value = password2_input.value;
-        if (password1_value != password2_value) {
-            return false;
-        } else {
-            return true
-        };
-    };
+ 
 
     function choiceAvatar() {
         const avatarIcons = document.querySelectorAll(".avatar-gallery-icon")
@@ -62,8 +51,10 @@ window.addEventListener("load", async function () {
                 for (avatarIcon of avatarIcons) {
                     if (avatarIcon == e.target) {
                         avatarIcon.style.backgroundColor = "#ff0505"
+                        avatarIcon.classList.remove("avatar-gallery-icon-grey-out")
                     } else {
                         avatarIcon.style.backgroundColor = "transparent"
+                        avatarIcon.classList.add("avatar-gallery-icon-grey-out")
                     }
                 }
             }
