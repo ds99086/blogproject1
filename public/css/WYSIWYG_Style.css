@@ -100,6 +100,11 @@
     height: 48vh;
     overflow-y: scroll;
  }
+
+ .visuell-view>ul{
+  list-style: circle;
+ }
+
   .editor .content-area .visuell-view p {
     margin: 12px 0;
  }
