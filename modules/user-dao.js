@@ -138,6 +138,40 @@ async function retrieveUserWithAuthToken(authToken) {
     }
 }
 
+async function checkUserAdminStatusByAuthToken(authToken) {
+    const db = await dbPromise;
+    try {
+        const adminstratorLevelObject = await db.get(SQL`
+        SELECT adminstratorLevel 
+        FROM users 
+        WHERE authToken = ${authToken}`);
+
+        let adminstratorLevel = adminstratorLevelObject.adminstratorLevel;
+
+        if (!(adminstratorLevel > 0)) {
+            return 0;
+        } else { 
+            return adminstratorLevel;
+        };
+    }catch (e) {
+        console.error("Error "+e.name+" in function [getUserPassword] in [user-dao]"+e.message);
+        return undefined;
+    }
+}
+
+async function userReport() {
+    const db = await dbPromise;
+    try {
+        return await db.all(SQL`SELECT userID, username, firstName, lastName, dateOfBirth, avatarImage, introduction, COUNT(articleID) AS 'Number of Articles' 
+        FROM users 
+        LEFT JOIN articles 
+        ON users.userID = articles.authorID
+        GROUP BY users.userID;`);
+    } catch(e) {
+        console.error("Error "+e.name+" in function [userReport] in [user-dao]"+e.message);
+    }
+}
+
 module.exports = {
     createUser,
     retrieveAllUsers,
@@ -147,5 +181,7 @@ module.exports = {
     retrieveUserByUserID,
     getUserPassword,
     retrieveUserWithAuthToken,
-    retrieveUsernameByUserID
+    retrieveUsernameByUserID,
+    checkUserAdminStatusByAuthToken,
+    userReport
 };

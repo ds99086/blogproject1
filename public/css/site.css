@@ -544,4 +544,12 @@ form .form-group {
     }
 }
 
+.homepage-article-body>ul {
+    list-style: circle;
+}
+
+#single-article>ul {
+    list-style: circle;
+}
+
 /*****************************************************************/

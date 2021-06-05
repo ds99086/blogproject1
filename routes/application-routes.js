@@ -1,9 +1,8 @@
 const { Router } = require("express");
 const router = Router();
 const userDao = require("../modules/user-dao");
-
-//const testDao = require("../modules/test-dao.js");
 const articleDao = require("../modules/article-dao.js");
+const { verifyAuthenticated } = require("../middleware/auth-middleware.js");
 
 router.get("/", async function(req, res) {
 
@@ -20,11 +19,6 @@ router.get("/", async function(req, res) {
     let sortingFilterName = req.query.sortingFilterName;
     let sortingFilter = req.query.sortingFilter;   
    
-    
-    // if(LoginedUser==undefined){
-    //     res.render("permission-denied")
-    // }
-
     if (sortingFilterName == undefined){
         sortingFilterName = "None";
     } else if (sortingFilterName == "authorID"&&LoginedUser!=undefined){
@@ -33,12 +27,6 @@ router.get("/", async function(req, res) {
         sortingFilter = -1;
     }
     
-
-
-
-    //get the sorting requirement from the query
-    //if there is no sorting requirement
-    //the default will be desc in publishDate
 
     if (sortingAttribute == undefined){
         sortingAttribute = "publishDate";

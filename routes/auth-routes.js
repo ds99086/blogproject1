@@ -113,18 +113,6 @@ router.get("/checkUserPassword", verifyAuthenticated, async function (req, res) 
     }
 });
 
-router.get("/checkAuthToken", async function (req, res) {
-    const authToken = req.query.authToken;
-    const user = await userDao.retrieveUserWithAuthToken(authToken);
-
-    const usernameAndID = {
-        username: user.username,
-        userID: user.userID
-    }
-    res.json(usernameAndID)    
-    
-});
-
 router.get("/login", async function(req, res) {
     res.render("login");
 });
