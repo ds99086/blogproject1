@@ -5,7 +5,7 @@
 // Setup Express
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 8080;
 
 // Setup Handlebars
 const handlebars = require("express-handlebars");
